@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <typeAliases>
+        <typeAlias alias="sellerVO" type="com.lunastore.vo.SellerVO"/>
+        <typeAlias alias="buyerVO" type="com.lunastore.vo.BuyerVO"/>
+        <typeAlias alias="cartVO" type="com.lunastore.vo.CartVO"/>
+        <typeAlias alias="addressVO" type="com.lunastore.vo.AddressVO"/>
+        <typeAlias alias="itemVO" type="com.lunastore.vo.ItemVO"/>
+        <typeAlias alias="searchVO" type="com.lunastore.vo.SearchVO"/>
+        <typeAlias alias="orderVO" type="com.lunastore.vo.OrderVO"/>
+        <typeAlias alias="orderStateVO" type="com.lunastore.vo.OrderStateVO"/>
+        <typeAlias alias="reviewVO" type="com.lunastore.vo.ReviewVO"/>
+        <typeAlias alias="orderDTO" type="com.lunastore.dto.OrderDTO"/>
+        <typeAlias alias="orderViewDTO" type="com.lunastore.dto.OrderViewDTO"/>
+        <typeAlias alias="settlementDTO" type="com.lunastore.dto.SettlementDTO"/>
+        <typeAlias alias="qnaVO" type="com.lunastore.vo.QnaVO"/>
+        <typeAlias alias="deliveryVO" type="com.lunastore.vo.DeliveryVO"/>
+    </typeAliases>
+</configuration>

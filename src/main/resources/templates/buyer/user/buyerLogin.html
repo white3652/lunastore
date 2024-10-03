@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title th:text="#{login.title}">Luna Login</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/global.css}">
+	<link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/user/buyerLogin.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var cart = {
+			cart: /*[[#{global.header.cart}]]*/ '장바구니',
+			cartEmpty: /*[[#{global.header.cartEmpty}]]*/ '장바구니가 비어 있습니다.',
+			productImageAlt: /*[[#{global.header.productImageAlt}]]*/ '상품이미지',
+			cartCheck: /*[[#{global.header.cartCheck}]]*/ '장바구니 확인',
+			cartViewMore: /*[[#{global.header.cartViewMore}]]*/ '개의 상품이 더 있습니다.',
+			loginPrompt: /*[[#{global.header.loginPrompt}]]*/ '저장해둔 항목이 있는지 확인하려면 ',
+			loginPrompt2: /*[[#{global.header.loginPrompt2}]]*/ '하세요. ',
+			login: /*[[#{global.header.login}]]*/ '로그인'
+
+		};
+		/*]]>*/
+	</script>
+	<script th:src="@{/js/buyer/buyerCartNavigation.js}"></script>
+	<script th:src="@{/js/buyer/user/loginNextPage.js}"></script>
+	<script th:src="@{/js/buyer/user/buyerLogin.js}"></script>
+	<script th:src="@{/js/buyer/user/buyerLoginMinor.js}"></script>
+	<script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+	<script th:src="@{/js/buyer/buyerCartNavigation.js}"></script>
+	<style th:if="${#locale.language == 'ja'}">
+		* {
+			font-family: 'Noto Sans JP', sans-serif;
+		}
+	</style>
+</head>
+
+<body>
+<div class="wrap">
+	<header th:replace="~{buyer/common/global_header :: global_header}"></header>
+
+	<section>
+		<!-- #region 상단 타이틀 -->
+		<div class="m_userLogin_title">
+			<div class="m_userLogin_tiregion">
+				<div class="m_userLogin_tiregionti" th:text="#{login.title}">Luna ID</div>
+				<div class="m_userLogin_tiregionre">
+					<a th:href="@{/buyer/login}" class="m_userLogin_tiregionss" th:text="#{login.login}">로그인</a>
+					<a th:href="@{/buyer/join}" class="m_userLogin_tiregionss" th:text="#{login.createAccount}">Luna ID 생성</a>
+				</div>
+			</div>
+		</div>
+		<!-- #endregion -->
+
+		<!-- #region 페이지1 -->
+		<div class="m_userLogin_mainlogoregion">
+			<div class="m_userLogin_main_log">
+				<!-- #region svg로고 -->
+				<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" fill="none" id="mainLog">
+					<defs>
+						<linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%">
+							<stop offset="0%" stop-color="#6A11CB"/>
+							<stop offset="100%" stop-color="#2575FC"/>
+						</linearGradient>
+						<filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+							<feGaussianBlur stdDeviation="3" result="cb"/>
+							<feMerge>
+								<feMergeNode in="cb"/>
+								<feMergeNode in="SourceGraphic"/>
+							</feMerge>
+						</filter>
+					</defs>
+					<path d="M150 50C200 50 250 100 250 150S200 250 150 250 50 200 50 150 100 50 150 50Z" fill="url(#cg)" filter="url(#glow)"/>
+					<path d="M160 60C210 60 260 110 260 160S210 260 160 260 60 210 60 160 110 60 160 60Z" fill="#FFF" opacity="0.2"/>
+					<circle cx="120" cy="120" r="15" fill="#FFF" opacity="0.3"/>
+					<circle cx="180" cy="180" r="10" fill="#FFF" opacity="0.2"/>
+				</svg>
+				<!-- #endregion -->
+			</div>
+		</div>
+
+		<div id="joinPage1" class="m_userLogin_main">
+			<div class="m_userLogin_main_subtitle" th:text="#{login.subtitle}">Luna의 모든 서비스에 사용하는 계정입니다.</div>
+			<div class="m_userLogin_main_loginbtnregion">
+				<div id="nextPage" class="m_userLogin_main_loginbtn" th:text="#{login.login}">로그인</div>
+			</div>
+		</div>
+		<!-- #endregion -->
+
+		<!-- #region 페이지2 -->
+		<div id="joinPage2" class="m_userLogin_2page">
+			<div class="m_userLogin_2title" th:text="#{login.title}">Luna ID</div>
+			<div class="m_userLogin_2subtitle" th:text="#{login.manageAccount}">나의 Luna 계정 관리</div>
+
+			<div class="m_userLogin_2loginre">
+				<form name="buyerLogin" method="post" th:action="@{/buyer/buyerLoginProcess}">
+					<div class="m_userLogin_buyerEmailRegion">
+						<div class="_inputRegion" id="emailRegion">
+							<input placeholder=" " type="email" name="b_email" class="" id="emailInput">
+							<span class="" id="emailTitle" th:text="#{login.email}">이메일</span>
+							<div class="arrow_small" id="emailArrowSmall"></div>
+						</div>
+					</div>
+
+					<div class="_inputRegion1" id="pwRegion">
+						<input placeholder=" " type="password" name="b_pw" class="" id="pwInput">
+						<span class="" id="pwTitle" th:text="#{login.password}">암호</span>
+						<label>
+							<div class="arrow_small" id="pwArrowSmall"></div>
+							<input type="submit" class="m_userLogin_submit" id="loginSubmit" disabled="disabled">
+						</label>
+					</div>
+
+					<div class="m_userLogin_buyerIDSmg" id="buyerIDSmg"></div>
+				</form>
+			</div>
+
+			<div class="m_userLogin_2seletatag">
+				<a th:href="@{/seller/sellerLogin}" class="m_userLogin_2entuser" th:text="#{login.businessAccount}">기업 회원입니다.</a>
+				<a th:href="@{/buyer/findPw}" class="m_userLogin_2pwblive" th:text="#{login.forgotPassword}">암호를 잊으셨나요?</a>
+			</div>
+		</div>
+		<!-- #endregion -->
+	</section>
+</div>
+<script>
+	// 서버에서 전달된 오류 메시지를 확인하여 alert 표시
+	const errorMessage = "[[${errorMessage}]]";
+	if (errorMessage) {
+		alert(errorMessage);  // 오류 메시지가 있으면 alert 창 띄움
+	}
+</script>
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</body>
+
+</html>

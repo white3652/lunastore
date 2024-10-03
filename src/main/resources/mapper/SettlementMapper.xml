@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lunastore.mapper.SettlementMapper">
+
+    <!-- 정산 데이터 총 개수 조회 -->
+    <select id="countSettlementData" resultType="int">
+        SELECT COUNT(*)
+        FROM (
+                 SELECT DATE(bo.bo_orderdate)
+            FROM tb_buyer_order bo
+            JOIN tb_buyer_order_state bos ON bo.bo_idx = bos.bo_idx
+            JOIN tb_item i ON bos.i_idx = i.i_idx
+            JOIN tb_seller_info si ON i.s_idx = si.s_idx
+        WHERE bo.bo_orderdate BETWEEN #{startDate} AND #{endDate}
+          AND si.s_idx = #{s_idx}
+        GROUP BY DATE(bo.bo_orderdate)
+            ) AS settlement_counts
+    </select>
+
+    <!-- 페이징 처리된 정산 데이터 조회 -->
+    <select id="getSettlementDataPaged" resultType="settlementDTO">
+        SELECT
+            DATE(bo.bo_orderdate) AS date,
+            COUNT(CASE WHEN latest.bos_state = 10 THEN 1 END) AS confirmedOrders,
+            COUNT(CASE WHEN latest.bos_state IN (1, 2, 3, 4) THEN 1 END) AS pendingOrders,
+            SUM(CASE WHEN latest.bos_state = 10 THEN latest.bos_price * latest.bos_count ELSE 0 END) AS todaySettlement,
+            SUM(CASE WHEN latest.bos_state NOT IN (5, 6, 7, 10) THEN latest.bos_price * latest.bos_count ELSE 0 END) AS scheduledSettlement
+        FROM tb_buyer_order bo
+            JOIN (
+            SELECT bos1.bo_idx, bos1.bos_state, bos1.bos_price, bos1.bos_count
+            FROM tb_buyer_order_state bos1
+            WHERE bos1.bos_postdate = (
+            SELECT MAX(bos2.bos_postdate)
+            FROM tb_buyer_order_state bos2
+            WHERE bos2.bo_idx = bos1.bo_idx
+            )
+            ) latest ON bo.bo_idx = latest.bo_idx
+            JOIN tb_buyer_order_state bos ON bo.bo_idx = bos.bo_idx
+            JOIN tb_item i ON bos.i_idx = i.i_idx
+            JOIN tb_seller_info si ON i.s_idx = si.s_idx
+        WHERE bo.bo_orderdate BETWEEN #{startDate} AND CONCAT(#{endDate}, ' 23:59:59')
+          AND si.s_idx = #{s_idx}
+        GROUP BY DATE(bo.bo_orderdate)
+        ORDER BY DATE(bo.bo_orderdate) DESC
+            LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 모든 정산 데이터 조회 (필요 시) -->
+    <select id="getSettlementData" resultType="settlementDTO">
+        SELECT
+            DATE(bo.bo_orderdate) AS date,
+            COUNT(CASE WHEN latest.bos_state = 10 THEN 1 END) AS confirmedOrders,
+            COUNT(CASE WHEN latest.bos_state IN (1, 2, 3, 4) THEN 1 END) AS pendingOrders,
+            SUM(CASE WHEN latest.bos_state = 10 THEN latest.bos_price * latest.bos_count ELSE 0 END) AS todaySettlement,
+            SUM(CASE WHEN latest.bos_state NOT IN (5, 6, 7, 10) THEN latest.bos_price * latest.bos_count ELSE 0 END) AS scheduledSettlement
+        FROM tb_buyer_order bo
+            JOIN tb_buyer_order_state bos ON bo.bo_idx = bos.bo_idx
+            JOIN tb_item i ON bos.i_idx = i.i_idx
+            JOIN tb_seller_info si ON i.s_idx = si.s_idx
+            JOIN (
+            SELECT bos1.bo_idx, bos1.bos_state, bos1.bos_price, bos1.bos_count
+            FROM tb_buyer_order_state bos1
+            WHERE bos1.bos_postdate = (
+            SELECT MAX(bos2.bos_postdate)
+            FROM tb_buyer_order_state bos2
+            WHERE bos2.bo_idx = bos1.bo_idx
+            )
+            ) latest ON bo.bo_idx = latest.bo_idx AND bos.bos_postdate = latest.bos_postdate
+        WHERE bo.bo_orderdate BETWEEN #{startDate} AND #{endDate}
+          AND si.s_idx = #{s_idx}
+        GROUP BY DATE(bo.bo_orderdate)
+        ORDER BY DATE(bo.bo_orderdate) DESC
+    </select>
+
+    <!-- 정산 데이터 업데이트 -->
+    <update id="updateSettlement" parameterType="settlementDTO">
+        UPDATE tb_settlement
+        SET
+            confirmed_orders = #{confirmedOrders},
+            pending_orders = #{pendingOrders},
+            today_settlement = #{todaySettlement},
+            scheduled_settlement = #{scheduledSettlement}
+        WHERE s_idx = #{s_idx} AND DATE(date) = #{date}
+    </update>
+
+    <!-- 기타 쿼리들 ... -->
+
+</mapper>

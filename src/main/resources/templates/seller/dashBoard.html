@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>판매자 페이지</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link th:href="@{/css/icon/icon.css}" rel="stylesheet">
+    <link th:href="@{/css/global.css}" rel="stylesheet">
+    <link th:href="@{/css/seller/service/main_section.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_section.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:inline="javascript">
+        window.messages = {
+            currencySymbol: /*[[#{currencySymbol}]]*/ '₩',
+            todayText: /*[[#{sales.today}]]*/ '오늘',
+            todayTexts: /*[[#{sales.todays}]]*/ '오늘',
+            loginRequired: /*[[#{login.required}]]*/ '로그인이 필요합니다.',
+            dataFetchError: /*[[#{data.fetch.error}]]*/ '데이터를 가져오는 데 실패했습니다.',
+            salesDataError: /*[[#{sales.data.error}]]*/ '매출 데이터 가져오기 오류:',
+            timestampBasis: /*[[#{timestamp.basis}]]*/ '기준'
+        };
+    </script>
+
+    <script th:src="@{/js/seller/service/mainSection.js}"></script>
+    <script th:src="@{/js/seller/service/main.js}"></script>
+    <script th:src="@{/js/seller/common/globalNavigation.js}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var s_idx = /*[[${seller.s_idx}]]*/ null;
+        var getItemProcessUrl = /*[[@{/seller/getItemProcess}]]*/ '/seller/getItemProcess';
+        var getOrderProcessUrl = /*[[@{/seller/getOrderProcess}]]*/ '/seller/getOrderProcess';
+
+        function getItem() {
+            $.ajax({
+                type: 'post',
+                url: getItemProcessUrl,
+                data: {
+                    s_idx: s_idx
+                },
+                success: function (data) {
+                    let sellingItems = 0;
+                    let waitingItems = 0;
+                    let soldOutItems = 0;
+
+                    for (let i = 0; i < data.length; i++) {
+                        if (data[i].i_state == 1) {
+                            sellingItems++;
+                        } else if (data[i].i_state == 2) {
+                            waitingItems++;
+                        } else if (data[i].i_state == 3) {
+                            soldOutItems++;
+                        }
+                    }
+                    $("#selling").text(sellingItems);
+                    $("#waiting").text(waitingItems);
+                    $("#soldOut").text(soldOutItems);
+                },
+                error: function () {
+                    console.log("상품 정보 가져오기 실패");
+                }
+            });
+        }
+
+        function getOrder() {
+            $.ajax({
+                type: 'post',
+                url: getOrderProcessUrl,
+                data: {
+                    s_idx: s_idx
+                },
+                success: function (data) {
+                    let order1 = 0, order2 = 0, order3 = 0, order4 = 0, order6 = 0, order7 = 0, order8 = 0;
+
+                    for (let i = 0; i < data.length; i++) {
+                        if (data[i].bos_state == 1) order1++;
+                        else if (data[i].bos_state == 2) order2++;
+                        else if (data[i].bos_state == 3) order3++;
+                        else if (data[i].bos_state == 4) order4++;
+                        else if (data[i].bos_state == 6) order6++;
+                        else if (data[i].bos_state == 7) order7++;
+                        else if (data[i].bos_state == 8) order8++;
+                    }
+
+                    $("#order1").text(order1);
+                    $("#order2").text(order2);
+                    $("#order3").text(order3);
+                    $("#order4").text(order4);
+                    $("#order6").text(order6);
+                    $("#order7").text(order7);
+                    $("#order8").text(order8);
+                },
+                error: function () {
+                    console.log("주문 정보 가져오기 실패");
+                }
+            });
+        }
+
+        async function fetchOrderStatusCounts() {
+            try {
+                const apiUrl = `/api/orderStatusCounts`;
+                console.log('Fetching data from:', apiUrl);
+
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    credentials: 'include' // 세션 쿠키를 포함하도록 설정
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        alert('로그인이 필요합니다.');
+                        window.location.href = '/seller/login';
+                        return;
+                    } else {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                }
+
+                const counts = await response.json();
+                console.log('Received data:', counts);
+
+                updateOrderStatusCounts(counts);
+            } catch (error) {
+                console.error('Error in fetchOrderStatusCounts:', error);
+                alert('데이터 가져오기에 실패했습니다.');
+            }
+        }
+
+        function updateOrderStatusCounts(counts) {
+            const purchaseConfirmedElement = document.querySelector('.purchaseConfirmedCount');
+            if (purchaseConfirmedElement) {
+                purchaseConfirmedElement.textContent = counts.purchaseConfirmed;
+            }
+            const confirmationWaitingElement = document.querySelector('.confirmationWaitingCount');
+            if (confirmationWaitingElement) {
+                confirmationWaitingElement.textContent = counts.confirmationWaiting;
+            }
+        }
+
+        $(function () {
+            getItem();
+            getOrder();
+            fetchOrderStatusCounts();
+        });
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="wrap">
+    <header th:replace="~{seller/common/header :: sellerHeader}"></header>
+
+    <section>
+        <div class="seller_global_section">
+            <nav th:replace="~{seller/common/navigation :: sellerNavigation}"></nav>
+
+            <div class="seller_main_contents">
+                <div class="seller_main_contents_time">
+                    <span></span>
+                </div>
+
+                <div class="seller_main_contents_top">
+                    <div class="seller_main_contents_top_box">
+                        <div class="seller_main_contents_top_box_items">
+                            <span th:text="#{order.newOrders}">신규주문</span>
+                            <span><a href="" th:text="${newOrders}"></a> <span th:text="#{unit.count}">건</span></span>
+                        </div>
+                    </div>
+                    <div class="seller_main_contents_top_box">
+                        <div class="seller_main_contents_top_box_items">
+                            <span th:text="#{shipment.preparing}">배송준비</span>
+                            <span><a href="" th:text="${preparingShipment}"></a> <span th:text="#{unit.count}">건</span></span>
+                        </div>
+                        <div class="seller_main_contents_top_box_items">
+                            <span th:text="#{shipment.shipping}">배송중</span>
+                            <span><a href="" th:text="${shipping}"></a> <span th:text="#{unit.count}">건</span></span>
+                        </div>
+                        <div class="seller_main_contents_top_box_items">
+                            <span th:text="#{shipment.delivered}">배송완료</span>
+                            <span><a href="" th:text="${delivered}"></a> <span th:text="#{unit.count}">건</span></span>
+                        </div>
+                    </div>
+                    <div class="seller_main_contents_top_box">
+                        <div class="seller_main_contents_top_box_items">
+                            <span th:text="#{refund.requests}">환불요청</span>
+                            <span><a href="" th:text="${refundRequests}"></a> <span th:text="#{unit.count}">건</span></span>
+                        </div>
+                        <div class="seller_main_contents_top_box_items">
+                            <span th:text="#{return.requests}">반품요청</span>
+                            <span><a href="" th:text="${returnRequests}"></a> <span th:text="#{unit.count}">건</span></span>
+                        </div>
+                        <div class="seller_main_contents_top_box_items">
+                            <span th:text="#{exchange.requests}">교환요청</span>
+                            <span><a href="" th:text="${exchangeRequests}"></a> <span th:text="#{unit.count}">건</span></span>
+                        </div>
+                    </div>
+                    <div class="seller_main_contents_top_box">
+                        <div class="seller_main_contents_top_box_items">
+                            <span th:text="#{settlement.today}">오늘정산</span>
+                            <span><a href="" th:text="${formattedTodaySettlement}"></a> <span th:text="#{unit.currency}">원</span></span>
+                        </div>
+                        <div class="seller_main_contents_top_box_items">
+                            <span th:text="#{settlement.upcoming}">정산예정</span>
+                            <span><a href="" th:text="${formattedUpcomingSettlement}"></a> <span th:text="#{unit.currency}">원</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="seller_main_contents_middle">
+                    <div class="seller_main_contents_graph">
+                        <div class="seller_main_contents_graph_title">
+                            <span th:text="#{sales.amount}">매출액</span>
+                            <div>
+                                <span th:text="#{sales.today}">오늘 매출액</span>
+                                <span id="todaySalesAmount" th:text="|#{currencySymbol} ${#numbers.formatDecimal(todaySalesAmount, 1, 'COMMA', 0, 'POINT')}|">₩ 0</span>
+                            </div>
+                            <a href="" th:title="#{view.details}"><span class="arrow_small"></span></a>
+                        </div>
+
+                        <div class="seller_main_contents_graph_box"></div>
+
+                        <div class="seller_main_contents_graph_date"></div>
+                    </div>
+
+                    <div class="seller_main_contents_board">
+                        <div>
+                            <span th:text="#{store.status}">스토어 현황</span>
+                        </div>
+                        <table class="seller_main_contents_board_table">
+                            <tr class="seller_main_contents_board_table_title">
+                                <th th:text="#{table.header.productName}">상품명</th>
+                                <th th:text="#{table.header.date}">일자</th>
+                                <th th:text="#{table.header.orderCount}">주문수</th>
+                                <th th:text="#{table.header.inquiry}">문의</th>
+                                <th th:text="#{table.header.review}">리뷰</th>
+                                <th th:text="#{table.header.salesAmount}">매출액</th>
+                            </tr>
+                            <tr th:each="item, iterStat : ${items}" th:if="${iterStat.index < 8}">
+                                <td th:text="${item.i_name}"></td>
+                                <td th:text="${item.i_modifydate != null ? #dates.format(item.i_modifydate, 'yyyy-MM-dd') : '날짜 없음'}"></td>
+                                <td><a href="#" th:text="|${item.orderCount} #{unit.count}|"></a></td>
+                                <td><a href="#" th:text="|${item.inquiryCount} #{unit.count}|"></a></td>
+                                <td><a href="#" th:text="|${item.reviewCount} #{unit.count}|"></a></td>
+                                <td><a href="#" th:text="|${item.formattedSalesAmount} #{unit.currency}|"></a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="seller_main_contents_bottom">
+                    <div class="seller_main_contents_bottom_summary">
+                        <div class="seller_main_contents_bottom_summary_box">
+                            <div class="seller_main_contents_bottom_summary_box_items">
+                                <div><span th:text="#{summary.product}">상품</span></div>
+                                <div class="seller_main_contents_bottom_summary_box_item">
+                                    <div><span th:text="#{summary.selling}">판매중</span><span><a href="" id="selling"></a>  <span th:text="#{unit.count}">건</span></span></div>
+                                    <div><span th:text="#{summary.waiting}">판매 대기</span><span><a href="" id="waiting"></a> <span th:text="#{unit.count}">건</span></span></div>
+                                    <div><span th:text="#{summary.soldOut}">품절</span><span><a href="" id="soldOut"></a> <span th:text="#{unit.count}">건</span></span></div>
+                                </div>
+                            </div>
+                            <!--                            <div class="seller_main_contents_bottom_summary_box_items top">-->
+                            <!--                                <div><span>패널티</span></div>-->
+                            <!--                                <div class="seller_main_contents_bottom_summary_box_item">-->
+                            <!--                                    <div><span>수정 요청</span><span><a href="">3</a> 건</span></div>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                        </div>
+                        <div class="seller_main_contents_bottom_summary_box">
+                            <div class="seller_main_contents_bottom_summary_box_items">
+                                <div><span th:text="#{summary.purchaseConfirmation}">구매확정</span></div>
+                                <div class="seller_main_contents_bottom_summary_box_item">
+                                    <div><span th:text="#{summary.purchaseConfirmed}">구매확정</span><span><a href="" class="purchaseConfirmedCount">0</a> <span th:text="#{unit.count}">건</span></span></div>
+                                    <div><span th:text="#{summary.confirmationWaiting}">확정대기</span><span><a href="" class="confirmationWaitingCount">0</a> <span th:text="#{unit.count}">건</span></span></div>
+                                </div>
+                            </div>
+                            <!--                            <div class="seller_main_contents_bottom_summary_box_items top">-->
+                            <!--                                <div><span>찜</span></div>-->
+                            <!--                                <div class="seller_main_contents_bottom_summary_box_item">-->
+                            <!--                                    <div><span>스토어찜(어제 누적)</span><span><a href="">15</a> 건</span></div>-->
+                            <!--                                    <div><span>상품찜(어제 누적)</span><span><a href="">29</a> 건</span></div>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                        </div>
+                    </div>
+                    <!-- 이미지, 상품명은 데이터에서 값 받아올 예정 -->
+                    <div class="seller_main_contents_bottom_inquiry">
+                        <div class="seller_main_contents_bottom_inquiry_box">
+                            <div class="seller_main_contents_bottom_inquiry_title">
+                                <span th:text="#{inquiry.productReviews}">상품리뷰</span>
+                                <a href=""><span class="arrow_small"></span></a>
+                            </div>
+                            <div class="seller_main_contents_bottom_inquiry_items">
+                                <div th:each="review : ${reviews}">
+                                    <a href="">
+                                        <img th:src="@{'/images/' + ${review.imageSrc}}" alt="상품 이미지">
+                                        <span class="seller_main_contents_bottom_inquiry_item" th:text="${review.i_name}"></span>
+                                        <span class="arrow_small"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="seller_main_contents_bottom_inquiry_box">
+                            <div class="seller_main_contents_bottom_inquiry_title">
+                                <span th:text="#{inquiry.productInquiries}">상품문의</span>
+                                <a href=""><span class="arrow_small"></span></a>
+                            </div>
+                            <div class="seller_main_contents_bottom_inquiry_items">
+                                <div th:each="inquiry : ${inquiries}">
+                                    <a href="">
+                                        <img th:src="@{'/images/' + ${inquiry.imageSrc}}" alt="상품 이미지">
+                                        <span class="seller_main_contents_bottom_inquiry_item" th:text="${inquiry.i_name}"></span>
+                                        <span class="arrow_small"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+
+</body>
+
+</html>

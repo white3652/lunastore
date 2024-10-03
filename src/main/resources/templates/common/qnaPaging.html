@@ -1,0 +1,81 @@
+<!-- fragments/pagination.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        /* 페이지네이션 스타일 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            color: #007bff;
+            padding: 8px 16px;
+            text-decoration: none;
+            margin: 0 4px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+<th:block th:fragment="qnaFragment">
+<div class="pagination" th:if="${pageNav.totalPageNum > 1}">
+    <!-- 첫 페이지 및 이전 페이지 링크 -->
+    <span th:if="${pageNav.pageNum > 1}">
+            <a th:href="@{${baseUrl}(pageNum=1, viewNum=${pageNav.viewNum},
+                                    productNum=${productNum}, memberNum=${memberNum},
+                                    answeredStatus=${answeredStatus},
+                                    startDate=${startDate != null ? #dates.format(startDate, 'yyyy-MM-dd') : ''},
+                                    endDate=${endDate != null ? #dates.format(endDate, 'yyyy-MM-dd') : ''})}">&laquo; 첫 페이지</a>
+        </span>
+    <span th:if="${pageNav.pageNum > 1}">
+            <a th:href="@{${baseUrl}(pageNum=${pageNav.pageNum - 1}, viewNum=${pageNav.viewNum},
+                                    productNum=${productNum}, memberNum=${memberNum},
+                                    answeredStatus=${answeredStatus},
+                                    startDate=${startDate != null ? #dates.format(startDate, 'yyyy-MM-dd') : ''},
+                                    endDate=${endDate != null ? #dates.format(endDate, 'yyyy-MM-dd') : ''})}">이전</a>
+        </span>
+
+    <!-- 페이지 번호 링크 -->
+    <span th:each="p : ${#numbers.sequence(pageNav.startPage, pageNav.endPage)}">
+            <a th:href="@{${baseUrl}(pageNum=${p}, viewNum=${pageNav.viewNum},
+                                    productNum=${productNum}, memberNum=${memberNum},
+                                    answeredStatus=${answeredStatus},
+                                    startDate=${startDate != null ? #dates.format(startDate, 'yyyy-MM-dd') : ''},
+                                    endDate=${endDate != null ? #dates.format(endDate, 'yyyy-MM-dd') : ''})}"
+               th:classappend="${p == pageNav.pageNum} ? 'active' : ''"
+               th:text="${p}">1</a>
+        </span>
+
+    <!-- 다음 페이지 및 마지막 페이지 링크 -->
+    <span th:if="${pageNav.pageNum < pageNav.totalPageNum}">
+            <a th:href="@{${baseUrl}(pageNum=${pageNav.pageNum + 1}, viewNum=${pageNav.viewNum},
+                                    productNum=${productNum}, memberNum=${memberNum},
+                                    answeredStatus=${answeredStatus},
+                                    startDate=${startDate != null ? #dates.format(startDate, 'yyyy-MM-dd') : ''},
+                                    endDate=${endDate != null ? #dates.format(endDate, 'yyyy-MM-dd') : ''})}">다음</a>
+        </span>
+    <span th:if="${pageNav.pageNum < pageNav.totalPageNum}">
+            <a th:href="@{${baseUrl}(pageNum=${pageNav.totalPageNum}, viewNum=${pageNav.viewNum},
+                                    productNum=${productNum}, memberNum=${memberNum},
+                                    answeredStatus=${answeredStatus},
+                                    startDate=${startDate != null ? #dates.format(startDate, 'yyyy-MM-dd') : ''},
+                                    endDate=${endDate != null ? #dates.format(endDate, 'yyyy-MM-dd') : ''})}">마지막 페이지 &raquo;</a>
+        </span>
+</div>
+</th:block>
+</body>
+</html>

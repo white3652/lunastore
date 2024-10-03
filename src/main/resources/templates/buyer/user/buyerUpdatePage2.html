@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Luna account</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/global.css}">
+	<link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/user/buyerUpdatePage2.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/user/buyerUpdateSideMenu.css}">
+
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var cart = {
+			cart: /*[[#{global.header.cart}]]*/ '장바구니',
+			cartEmpty: /*[[#{global.header.cartEmpty}]]*/ '장바구니가 비어 있습니다.',
+			productImageAlt: /*[[#{global.header.productImageAlt}]]*/ '상품이미지',
+			cartCheck: /*[[#{global.header.cartCheck}]]*/ '장바구니 확인',
+			cartViewMore: /*[[#{global.header.cartViewMore}]]*/ '개의 상품이 더 있습니다.',
+			loginPrompt: /*[[#{global.header.loginPrompt}]]*/ '저장해둔 항목이 있는지 확인하려면 ',
+			loginPrompt2: /*[[#{global.header.loginPrompt2}]]*/ '하세요. ',
+			login: /*[[#{global.header.login}]]*/ '로그인'
+
+		};
+		var invalidMessage = {
+			invalidEmail: /*[[#{error.invalid.email}]]*/ '이메일 형식이 올바르지 않습니다.',
+			emailInUse: /*[[#{error.email.in.use}]]*/ '사용중인 이메일입니다.',
+			emailCheckFailed: /*[[#{error.email.check.failed}]]*/ '이메일 중복 확인 실패',
+			telEmpty: /*[[#{error.tel.empty}]]*/ '입력 되어 있지 않습니다.',
+			telInvalid: /*[[#{error.tel.invalid}]]*/ '번호가 유효하지 않습니다.',
+			nameTooLong: /*[[#{error.name.too.long}]]*/ '길이가 너무 깁니다.',
+			nameInvalid: /*[[#{error.name.invalid}]]*/ '한글 또는 일본어만 입력이 가능합니다.',
+			nameEmpty: /*[[#{error.name.empty}]]*/ '입력 되어 있지 않습니다.',
+			birthInvalid: /*[[#{error.birth.invalid}]]*/ '생년월일이 유효하지 않습니다.',
+			passwordTooShort: /*[[#{error.password.too.short}]]*/ '암호 길이는 최소 8자 이상입니다.',
+			passwordInvalid: /*[[#{error.password.invalid}]]*/ '암호는 대소문자, 숫자, 특수문자를 포함해야 합니다.',
+			passwordMismatch: /*[[#{error.password.mismatch}]]*/ '암호가 일치하지 않습니다.',
+			date: {
+				yearSuffix: /*[[#{date.year}]]*/ '년',
+				monthSuffix: /*[[#{date.month}]]*/ '월',
+				daySuffix: /*[[#{date.day}]]*/ '일'
+			}
+		};
+		/*]]>*/
+	</script>
+	<script th:src="@{/js/buyer/user/buyerUpdateSideMenu.js}"></script>
+	<script>
+		const messages = {
+			telDuplicate: "[[#{tel.duplicate}]]",
+			passwordInvalid: "[[#{password.current.invalid}]]",
+			ajaxFailure: "[[#{error.ajaxFailure}]]",
+			passwordLength: "[[#{password.min.length}]]"
+		};
+
+		// 전역 변수 선언
+		window.telCheckValid = false;
+		window.duplicatePw = false;
+
+		$(document).ready(function () {
+			console.log("페이지 로드 완료");
+
+			// 전화번호 입력 시 AJAX 호출
+			$("#telInput").keyup(function () {
+				var telInput = $('#telInput').val();
+
+				$.ajax({
+					type: 'POST',
+					url: "/buyer/telCheckProcess",
+					data: { b_tel: telInput },
+					dataType: "text",
+					success: function (data) {
+						if (data == 1) {
+							$('#telInput').css("border", "1px solid #F74848");
+							$("#telSmg").text(messages.telDuplicate);
+							window.telCheckValid = false;
+						} else {
+							window.telCheckValid = true;
+							$('#telInput').css("border", "1px solid #848484");
+							$("#telSmg").text("");
+						}
+						globaldisable();
+					},
+					error: function () {
+						console.log(messages.ajaxFailure);
+					}
+				});
+			});
+
+			// 기존 암호 입력 시 AJAX 호출
+			$("#existingPwInput").keyup(function () {
+				var b_idx = $('#hiddenB_idx').val();
+				var existingPwInput = $('#existingPwInput').val();
+
+				if (existingPwInput.length < 6) {
+					window.duplicatePw = false;
+					$("#existingPwMsg").text(messages.passwordLength);
+					$('#existingPwInput').css("border", "1px solid #F74848");
+					globaldisable();
+					return;
+				}
+
+				$.ajax({
+					type: 'POST',
+					url: "/buyer/passwordCheckProcess",
+					data: {
+						b_pw: existingPwInput,
+						b_idx: b_idx
+					},
+					dataType: "text",
+					success: function (data) {
+						console.log("Password Check Response:", data);
+						var result = parseInt(data, 10);
+						console.log("Parsed Result:", result);
+
+						if (result === 1) {
+							window.duplicatePw = true;
+							$('#existingPwInput').css("border", "1px solid #858585");
+							$("#existingPwMsg").text("");
+							$('#newPwInput').prop('disabled', false);
+							$('#ckeckPwInput').prop('disabled', false);
+						} else {
+							window.duplicatePw = false;
+							$("#existingPwMsg").text(messages.passwordInvalid);
+							$('#existingPwInput').css("border", "1px solid #F74848");
+							$('#newPwInput').prop('disabled', true);
+							$('#ckeckPwInput').prop('disabled', true);
+						}
+						console.log("duplicatePw:", window.duplicatePw);
+						globaldisable();
+					},
+					error: function () {
+						console.log("AJAX 요청 실패");
+					}
+				});
+			});
+
+			function globaldisable() {
+				if (window.telCheckValid && window.duplicatePw && window.newPwValid && window.ckeckPwValid && window.telValid) {
+					$('#pwSubmit').prop('disabled', false);
+				} else {
+					$('#pwSubmit').prop('disabled', true);
+				}
+			}
+		});
+	</script>
+	<script th:src="@{/js/publicRegex/telRegex.js}"></script>
+	<script th:src="@{/js/publicRegex/emailRegex.js}"></script>
+	<script th:src="@{/js/publicRegex/passwordRegex.js}"></script>
+	<script th:src="@{/js/buyer/user/checkemailtel.js}"></script>
+	<script th:src="@{/js/buyer/user/telAutoHyphen.js}"></script>
+	<script th:src="@{/js/buyer/user/buyerUpdatePage2.js}"></script>
+	<script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+	<script th:src="@{/js/buyer/buyerCartNavigation.js}"></script>
+	<script th:src="@{/js/buyer/user/buyerUpdateSideMenu.js}"></script>
+	<script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+
+
+</head>
+
+<body>
+<div class="wrap">
+	<header th:replace="~{buyer/common/global_header :: global_header}"></header>
+	<section>
+		<div class="m_buyerUpdateSideMenu_header1">
+			<div class="m_buyerUpdateSideMenu_header">
+				<div class="m_buyerUpdateSideMenu_header_acc">
+					<a th:href="@{/buyer/buyerServiceInfo(b_idx=${buyer.b_idx})}" th:text="#{account.title}">계정</a>
+					| <span th:text="#{luna.id.management}">Luna ID 관리</span>
+				</div>
+				<div class="m_buyerUpdateSideMenu_loar">
+					<a th:href="@{/buyer/buyerLogout}" class="m_buyerUpdateSideMenu_logout" th:text="#{logout}">로그아웃
+						<div class="arrow_small a12"></div>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="m_buyerUpdateSideMenu_mainregion">
+			<div class="m_buyerUpdateSideMenu_sideregion">
+				<img th:src="@{/uploads/{buyerProfile}(buyerProfile=${buyer.b_profile})}"
+					 class="m_buyerUpdateSideMenu_proflie" alt="이미지를 찾을 수 없음">
+				<div class="m_buyerUpdateSideMenu_username" th:text="${buyer.b_nickname}"></div>
+				<div class="m_buyerUpdateSideMenu_useremail" th:text="${buyer.b_email}"></div>
+				<div class="m_buyerUpdateSideMenu_side_region"></div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<a th:href="@{/buyer/buyerUpdatePage}" class="m_buyerUpdateSideMenu_sidemanu" id="page" th:text="#{profile.public}">공개 프로필</a>
+				</div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<a th:href="@{/buyer/buyerUpdatePage1(b_idx=${buyer.b_idx})}" class="m_buyerUpdateSideMenu_sidemanu" id="page1" th:text="#{personal.info}">개인 정보</a>
+				</div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<a th:href="@{/buyer/buyerUpdatePage2}" class="m_buyerUpdateSideMenu_sidemanu" id="page2" th:text="#{login.security}">로그인 및 보안</a>
+				</div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<a th:href="@{/buyer/buyerUpdatePage3}" class="m_buyerUpdateSideMenu_sidemanu" id="page3" th:text="#{payment.management}">결제 관리</a>
+				</div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<div class="m_buyerUpdateSideMenu_sidemanu_cancel" id="cancelOpenBtn" th:text="#{membership.withdrawal}">회원 탈퇴</div>
+				</div>
+			</div>
+			<div class="m_buyerUpdateSideMenu_cancelBlur" id="cancelBlur"></div>
+			<!-- #region 메인 컨텐츠 메뉴 -->
+			<div class="m_userinfosclo_mainPage">
+				<div class="m_userinfosclo_main_title" th:text="#{login.security}">로그인 및 보안</div>
+				<div class="m_userinfosclo_main_content" th:text="#{login.security.description}">
+					계정 로그인, 계정 보안 및 로그인하는 데 문제가 있을 경우 데이터를 복구하는 방법과 관련된 설정을 관리합니다.
+				</div>
+				<div class="m_userinfosclo_main_content_region">
+					<div class="m_userinfosclo_content" id="m_userinfosclo_contentname">
+						<div class="m_userinfosclo_content_nametitle" th:text="#{tel.title}">전화번호</div>
+						<div class="m_userinfosclo_content_namesub" th:text="${buyer.b_tel}"></div>
+					</div>
+					<div class="m_userinfosclo_content" id="m_userinfosclo_contentday">
+						<div class="m_userinfosclo_content_nametitle" th:text="#{password.title}">암호</div>
+						<div class="m_userinfosclo_content_namesub">
+							<span th:text="#{password.recentUpdate}">최근 업데이트:</span>
+							<span th:text="${#dates.format(buyer.b_pwmodifydate, 'yyyy.MM.dd HH:mm:ss')}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="m_buyerUpdateSideMenu_cancelRegion" id="cancelRegion">
+				<form name="buyerCancel" method="get" th:action="@{/buyer/buyerCancelProcess}">
+					<div class="m_buyerUpdateSideMenu_cancelTitle" th:text="#{membership.withdrawal}">회원탈퇴</div>
+					<div id="cancelPage1">
+						<div class="m_buyerUpdateSideMenu_cancelSubTitle" th:text="#{membership.delete.prompt}">계정을 삭제하시려면 암호를 입력해 주세요.</div>
+						<div class="m_buyerUpdateSideMenu_exPwRegion" id="exPwRegion">
+							<label>
+								<input type="password" class="m_buyerUpdateSideMenu_exPwInput" id="exPwInput">
+								<div class="m_buyerUpdateSideMenu_exPwTitle" id="exPwTitle" th:text="#{current.password}">현재암호</div>
+							</label>
+							<div class="m_buyerUpdateSideMenu_exPwMsg" id="exPwMsg"></div>
+						</div>
+						<div class="m_buyerUpdateSideMenu_cancelNextBtn">
+							<label>
+								<div class="m_buyerUpdateSideMenu_cancelNextBtnName" th:text="#{account.delete}">계정삭제</div>
+								<input type="button" class="m_buyerUpdateSideMenu_none" id="nextCancelBtn" disabled="disabled">
+							</label>
+						</div>
+					</div>
+					<div id="cancelPage2" class="m_buyerUpdateSideMenu_none">
+						<div class="m_buyerUpdateSideMenu_checkTitle" th:text="#{membership.delete.confirm}">정말 계정을 삭제하시겠습니까?</div>
+						<div class="m_buyerUpdateSideMenu_cancelNextBtn">
+							<label>
+								<div class="m_buyerUpdateSideMenu_cancelSubmitBtn" th:text="#{delete}">삭제</div>
+								<input type="submit" class="m_buyerUpdateSideMenu_none" disabled="disabled" id="cancelOkBtn" th:value="#{delete}">
+							</label>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+
+
+		<!-- #endregion -->
+
+		<!-- #region 이메일 암호 수정 박스 -->
+		<div class="m_userinfosclo_updatename_region_buer" id="m_userinfosclo_updatename_region_buer"></div>
+		<div class="m_userinfosclo_updatename_region" id="m_userinfosclo_updatename_region_name">
+			<div class="m_userinfosclo_updatename_region_name" th:text="#{tel.title}">전화번호</div>
+			<form name="buyerUpdate" method="post" th:action="@{/buyer/buyerUpdateProcess}">
+				<input type="hidden" name="b_idx" th:value="${buyer.b_idx}">
+				<div class="_inputRegion" id="telRegion">
+					<input placeholder=" " type="tel" class="" name="b_tel" id="telInput" maxlength="13">
+					<span class="" id="telTitle" th:text="#{tel.title}">전화번호</span>
+					<div class="m_userinfosclo_pwMsg" id="telSmg"></div>
+				</div>
+				<div class="m_userinfosclo_updatename_region_submit m_userinfosclo_updatename_region_hr2" id="edsubmit1">
+					<label>
+						<div class="m_userinfosclo_updatename_region_submited" th:text="#{edit}">수정</div>
+						<input type="submit" disabled="disabled" class="m_userinfosclo_updatename_region_submit1" id="emailsubmit1">
+					</label>
+				</div>
+			</form>
+		</div>
+
+		<div class="m_userinfosclo_updatename_region" id="m_userinfosclo_updatename_region_bday">
+			<div class="m_userinfosclo_updatename_region_bdaytitle" th:text="#{password.title}">암호 변경</div>
+			<div class="m_userinfosclo_content_namesub1"><span th:text="#{password.recentUpdate}">최근 업데이트:</span>
+				<span th:text="${#dates.format(buyer.b_pwmodifydate, 'yyyy.MM.dd HH:mm:ss')}"></span>
+			</div>
+
+			<div class="m_userinfosclo_updatename_region_inbday">
+
+
+				<form name="buyerUpdate" method="post" th:action="@{/buyer/buyerUpdateProcess}">
+					<div class="_inputRegion" id="updateExPwRegion">
+						<input type="hidden" id="hiddenB_idx" name="b_idx" th:value="${buyer.b_idx}">
+						<input placeholder=" " type="password" class="m_userinfosclo_updatename_region_inputyyyy" id="existingPwInput" name="existingPw">
+						<span class="m_userinfosclo_updatename_region_subyyyy" id="updateExPwTitle" th:text="#{password.current}">현재 암호</span>
+						<div class="m_userinfosclo_pwMsg" id="existingPwMsg"></div>
+					</div>
+					<input type="hidden" name="b_idx" th:value="${buyer.b_idx}">
+					<div class="_inputRegion" id="newPwRegion">
+						<input placeholder=" " type="password" class="m_userinfosclo_updatename_region_inputyyyy" id="newPwInput" name="b_pw">
+						<span class="m_userinfosclo_updatename_region_subyyyy" id="newPwTitle" th:text="#{password.new}">새로운 암호</span>
+						<div class="m_userinfosclo_pwMsg" id="newPwMsg"></div>
+					</div>
+					<div class="_inputRegion" id="ckeckPwRegion">
+						<input placeholder=" " type="password" class="m_userinfosclo_updatename_region_inputyyyy" id="ckeckPwInput">
+						<span class="m_userinfosclo_updatename_region_subyyyy" id="ckeckPwTitle" th:text="#{password.confirm}">새 암호 확인</span>
+						<div class="m_userinfosclo_pwMsg" id="ckeckPwMsg"></div>
+					</div>
+					<div class="m_userinfosclo_updatename_region_submit m_userinfosclo_updatename_region_hr2" id="ckeckSubmit">
+						<label>
+							<div class="m_userinfosclo_updatename_region_submited" th:text="#{edit}">수정</div>
+							<input type="submit" id="pwSubmit" disabled="disabled" class="m_userinfosclo_updatename_region_submit1" th:value="#{edit}">
+						</label>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+</div>
+
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</body>
+
+</html>

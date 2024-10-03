@@ -1,0 +1,232 @@
+/* #region 상단 타이틀 */
+.m_buyerUpdateSideMenu_header1 {
+	width: 100%;
+	height: 60px;
+	background-color: #ffffff;
+}
+
+.arrow_small {
+	rotate: -90deg;
+	display: -webkit-inline-box;
+}
+
+.m_buyerUpdateSideMenu_header {
+	margin: 0 auto;
+	width: 1200px;
+	height: 60px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #ffffff;
+}
+
+.m_buyerUpdateSideMenu_header_acc {
+	font-size: 20px;
+	font-family: 'NEXONLv1GothicBold';
+	margin-left: 20px;
+}
+
+.m_buyerUpdateSideMenu_logout {
+	text-decoration: none;
+	color: #0071e3;
+	font-size: 12px;
+	font-weight: 100;
+}
+
+.a12 {
+	width: 12px;
+	height: 10px;
+	margin-right: 20px;
+	background-size: 12px;
+	filter: invert(28%) sepia(26%) saturate(6131%) hue-rotate(195deg)
+		brightness(102%) contrast(107%);
+}
+
+/* #endregion */
+.m_buyerUpdateSideMenu_mainregion {
+	display: flex;
+	margin: 0 auto;
+	width: 1200px;
+}
+
+/* #region 사이드 메뉴 */
+.m_buyerUpdateSideMenu_sideregion {
+	width: 120px;
+	margin-left: 20px;
+	margin-right: 100px;
+	height: 500px;
+}
+
+.m_buyerUpdateSideMenu_proflie {
+	margin-top: 40px;
+	width: 100px;
+	height: 100px;
+	background-color: #0071e3;
+	border-radius: 50%;
+}
+
+.m_buyerUpdateSideMenu_username {
+	font-size: 16px;
+	font-family: 'NEXONLv1GothicBold';
+	margin-top: 20px;
+}
+
+.m_buyerUpdateSideMenu_useremail {
+	font-size: 14px;
+	margin-top: 10px;
+	color: #858585;
+}
+
+.m_buyerUpdateSideMenu_side_region {
+	margin-top: 60px;
+}
+
+.m_buyerUpdateSideMenu_side {
+	margin-top: 20px;
+	transition: 0.4s;
+}
+
+.m_buyerUpdateSideMenu_side {
+	color: #0071e3;
+}
+
+.m_buyerUpdateSideMenu_sidemanu {
+	font-size: 16px;
+	color: #111111;
+	transition: 0.4s;
+}
+
+.m_buyerUpdateSideMenu_sidemanu:hover {
+	color: #0071e3;
+}
+
+.m_buyerUpdateSideMenu_sidemanu_cancel {
+	font-size: 10px;
+	color: #111111;
+	transition: 0.4s;
+	cursor: pointer;
+}
+
+.m_buyerUpdateSideMenu_sidemanu_cancel:hover {
+	color: #F74848;
+}
+
+.select {
+	font-size: 16px;
+	color: #0071e3;
+}
+
+/* #endregion */
+.m_buyerUpdateSideMenu_cancelBlur {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background-color: #11111140;
+	top: 0;
+	left: 0;
+	display: none;
+	text-transform: 0.4s;
+}
+
+.m_buyerUpdateSideMenu_cancelRegion {
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 440px;
+	min-height: 100px;
+	background-color: #ffffff;
+	border-radius: 10px;
+	position: fixed;
+	box-shadow: 0px 0px 4px 0px rgba(247, 72, 72, 0.504);
+	text-transform: 0.4s;
+	z-index: 110;
+	transform: 0.4s;
+	display: none;
+}
+
+.m_buyerUpdateSideMenu_cancelTitle {
+	font-family: 'NEXONLv1GothicBold';
+	font-size: 24px;
+	margin: 20px;
+	text-align: center;
+}
+
+.m_buyerUpdateSideMenu_cancelSubTitle {
+	color: #F74848;
+	font-size: 14px;
+	text-align: center;
+}
+
+.m_buyerUpdateSideMenu_exPwRegion {
+	width: 400px;
+	height: 60px;
+	border: 1px solid #858585;
+	border-radius: 10px;
+	margin: 0 auto;
+	margin-top: 20px;
+	transition: 0.4s;
+	position: relative;
+}
+
+.m_buyerUpdateSideMenu_exPwInput {
+	width: 360px;
+	height: 40px;
+	margin-left: 20px;
+	margin-top: 16px;
+	font-size: 16px;
+	outline: none;
+	border: none;
+}
+
+.m_buyerUpdateSideMenu_exPwTitle {
+	position: absolute;
+	left: 20px;
+	bottom: 20px;
+	transition: 0.4s;
+	color: #858585;
+	font-size: 16px;
+}
+
+.m_buyerUpdateSideMenu_exPwMsg {
+	padding-top: 4px;
+	transition: 0.6s;
+}
+
+.m_buyerUpdateSideMenu_exPwMsg {
+	font-size: 10px;
+	margin-left: 20px;
+	color: #F74848;
+	position: relative;
+	margin-top: 4px;
+}
+
+.m_buyerUpdateSideMenu_cancelNextBtn {
+	width: 100px;
+	height: 40px;
+	border-radius: 20px;
+	background-color: #F74848;
+	margin: 20px auto;
+}
+
+.m_buyerUpdateSideMenu_cancelNextBtnName {
+	color: #ffffff;
+	padding: 11px 18px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.m_buyerUpdateSideMenu_cancelSubmitBtn {
+	color: #ffffff;
+	padding: 11px 18px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.m_buyerUpdateSideMenu_checkTitle {
+	text-align: center;
+	font-size: 18px;
+}
+
+.m_buyerUpdateSideMenu_none {
+	display: none;
+}

@@ -1,0 +1,113 @@
+footer {
+    width: 100%; 
+    background-color: #222426;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    transform : translateY(-100%);
+    overflow:hidden;
+}
+
+footer .notice {
+    width: 100%;
+    padding: 25px 40px;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+}
+
+#notice {
+    width: 700px;
+    height: 23px;
+}
+ 
+.social {
+    text-align: right;
+    width: 300px;
+    height: 23px;
+}
+
+.notice a {
+    text-decoration: none;
+    color: white;
+    font-size: 12px;
+    transition: 0.3s;
+}
+
+.footerIcon {
+    display: inline-block;
+    height: 19px;
+    background-image: url(../../../icon/set_footer.png);
+    background-color: #F8F9FA;
+    margin-right: 10px;
+    transition: 0.3s;
+}
+
+.footerIcon:hover {
+    background-color: #0077FF;
+}
+
+#Youtube {
+    width: 19px;
+    background-position: 0 -50px;
+}
+
+#Twitter {
+    width: 18px;
+    background-position: 0 -100px;
+}
+
+#Facebook {
+    width: 9px;
+    background-position: 0 -150px;
+}
+
+.address {
+    width: 1600px;
+}
+
+footer .nav {
+    padding: 20px 96px 0 40px;
+    width: 1600px;
+    height: 20px;
+}
+
+.nav li {
+    float: left;
+    font-size: 12px;
+}
+
+.nav li::after {
+    content: "";
+    display: inline-block;
+    width: 1px;
+    height: 12px;
+    margin: 2px 12px 0;
+    background-color: hsla(0, 0%, 100%, .2);
+}
+
+.nav li a {
+    text-decoration: none;
+    color: lightgray;
+    transition: 0.3s;
+}
+
+address {
+    padding: 20px 96px 0 40px;
+    font: 11px NEXON Light;
+    color: #4A4E57;
+    width: 1600px;
+    height: 80px;
+}
+
+address a {
+    color: #4A4E57;
+    transition: 0.3s;
+}
+
+.nav li a:hover,
+address a:hover,
+#notice a:hover,
+.navbutton:hover {
+    color: #0077FF;
+}

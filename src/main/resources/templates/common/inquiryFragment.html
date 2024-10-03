@@ -1,0 +1,19 @@
+<div th:fragment="inquiryFragment (pageNav, baseUrl, productNum, memberNum, status, startDate, endDate)">
+    <!-- 페이징 네비게이션 구현 -->
+    <div class="pagination">
+        <ul>
+            <li th:if="${pageNav.pageNum > pageNav.pages_pageBlock}">
+                <a th:href="@{${baseUrl}(pageNum=${pageNav.pageNum - 1}, productNum=${productNum}, memberNum=${memberNum}, status=${status}, startDate=${startDate}, endDate=${endDate})}">&laquo; 이전</a>
+            </li>
+            <!-- 페이지 번호 목록 -->
+            <li th:each="i : ${#numbers.sequence(pageNav.startNum, pageNav.endNum)}"
+                th:classappend="${i == pageNav.pageNum} ? 'active'">
+                <a th:href="@{${baseUrl}(pageNum=${i}, productNum=${productNum}, memberNum=${memberNum}, status=${status}, startDate=${startDate}, endDate=${endDate})}"
+                   th:text="${i}">1</a>
+            </li>
+            <li th:if="${pageNav.pageNum < pageNav.total_pageNum}">
+                <a th:href="@{${baseUrl}(pageNum=${pageNav.pageNum + 1}, productNum=${productNum}, memberNum=${memberNum}, status=${status}, startDate=${startDate}, endDate=${endDate})}">다음 &raquo;</a>
+            </li>
+        </ul>
+    </div>
+</div>

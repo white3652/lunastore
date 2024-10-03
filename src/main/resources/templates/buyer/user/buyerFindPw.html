@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luna account | findPassword</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/user/buyerFindPw.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:src="@{/js/buyer/user/telAutoHyphen.js}"></script>
+    <script th:src="@{/js/buyer/user/buyerFindPw.js}"></script>
+    <script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+    <script th:src="@{/js/buyer/buyerCartNavigation.js}"></script>
+    <script>
+        $(function(){
+            $("#findBtn").click(function(e){
+                e.preventDefault();
+                var formData = $("form[name='buyerFindPW']").serialize();
+
+                $.ajax({
+                    url: "[[@{/buyer/findPwProcess}]]",
+                    type: "POST",
+                    data: formData,
+                    success: function(result) {
+                        console.log(result);
+                        alert(result);
+                    },
+                });
+
+                e.preventDefault();
+            });
+        });
+    </script>
+    <style th:if="${#locale.language == 'ja'}">
+        * {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+<div class="warp">
+    <header>
+
+    </header>
+    <section>
+        <div class="m_buyerFindPw_header1">
+            <div class="m_buyerFindPw_header">
+                <div class="m_buyerFindPw_header_acc">Luna ID</div>
+                <div class="m_buyerFindPw_loar">
+                    <a th:href="@{/buyer/login}" class="m_buyerFindPw_logout" th:text="#{findPw.login}">
+                        로그인
+                        <div class="arrow_small a12"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="_hr"></div>
+        <form name="buyerFindPW" method="post" th:action="@{/buyer/findPwProcess}">
+            <div class="m_buyerFindPw_findPage1" id="findPage1">
+                <div class="m_buyerFindPw_findPwTitle" th:text="#{findPw.title}">암호 재설정</div>
+                <div class="m_buyerFindPw_findPwSubTitle" th:text="#{findPw.subTitle}">계속하려면 계정에서 사용하는 전화번호를 입력하십시오.</div>
+                <div class="m_buyerFindPw_telRegion" id="telRegion">
+                    <label>
+                        <input type="tel" name="b_tel" class="m_buyerFindPw_telInput" id="telInput" maxlength="13">
+                        <div class="m_buyerFindPw_teltitle" id="telTitle" th:text="#{findPw.phoneLabel}">전화번호</div>
+                    </label>
+                </div>
+                <div class="m_buyerFindPw_nextRegion">
+                    <div class="m_buyerFindPw_nextBtn" id="nextBtn" th:text="#{findPw.nextButton}">다음</div>
+                </div>
+            </div>
+
+            <div class="m_buyerFindPw_findPage2" id="findPage2">
+                <div class="m_buyerFindPw_findPwTitle" th:text="#{findPw.emailTitle}">이메일를 입력해 주세요</div>
+                <div class="m_buyerFindPw_emailRegion" id="emailRegion">
+                    <label>
+                        <input type="email" name="b_email" class="m_buyerFindPw_emailInput" id="emailInput">
+                        <div class="m_buyerFindPw_emailTitle" id="emailTitle" th:text="#{findPw.emailLabel}">이메일 주소</div>
+                    </label>
+                </div>
+                <div class="m_buyerFindPw_submitRegion">
+                    <div class="m_buyerFindPw_returnBtn" id="returnBtn" th:text="#{findPw.cancelButton}">취소</div>
+                    <label>
+                        <div class="m_buyerFindPw_submitBtn" th:text="#{findPw.confirmButton}">확인</div>
+                        <input type="submit" class="m_buyerFindPw_submit" id="findBtn">
+                    </label>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>
+<footer>
+
+</footer>
+</body>
+
+</html>

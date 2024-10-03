@@ -1,0 +1,182 @@
+ /* #region ----------------------------------------- section ----------------------------------------- */
+
+ section {
+    background-color: #ffffff;
+}
+
+.seller_global_section {
+    display: flex;
+    width: 1200px;
+    margin: 0 auto;
+}
+
+/* ------------------------------ category ------------------------------ */
+
+.seller_global_category {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+    height: 730px;
+    background-color: #ffffff;
+    border-right: 1px solid #f2f2f2;
+}
+
+/* ------------------------- category(profile) ------------------------- */
+
+.seller_global_category_profile {
+    box-sizing: border-box;
+    width: 200px;
+    height: 213px;
+    padding-top: 40px;
+}
+
+.seller_global_category_profile div:nth-child(1) {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.seller_global_category_profile div:nth-child(1)>img {
+    width: 120px;
+    height: 120px;
+}
+
+.seller_global_category_profile div:nth-child(2) {
+    width: 120px;
+    height: 18px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.seller_global_category_profile div:nth-child(2)>span {
+    width: 120px;
+    height: 18px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* ------------------------- category(dropdown) ------------------------- */
+
+.seller_global_category_btn {
+    display: flex;
+    justify-content: space-between;
+    width: 160px;
+    height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+    background-color: #ffffff;
+    color: black;
+    border-style: none;
+    border-bottom: 1px solid #E5E5E5;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.seller_global_category_btn .arrow_small {
+    width: 16px;
+    height: 16px;
+    background-size: 16px;
+    margin-top: 13px;
+    filter: invert(51%) sepia(0%) saturate(0%) hue-rotate(11deg) brightness(103%) contrast(92%);
+    transition: 0.5s;
+}
+
+.seller_global_category_btn .arrow_small.active{
+    rotate: 180deg;
+    filter: invert(47%) sepia(72%) saturate(2462%) hue-rotate(91deg) brightness(106%) contrast(109%);
+}
+
+.seller_global_category_btn span {
+    line-height: 40px;
+    text-align: center;
+}
+
+.seller_global_category_drop_list {
+    width: 160px;
+    z-index: 1;
+    height: 0;
+    overflow: hidden;
+    transition: 0.5s;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.seller_global_category_drop_list.active {
+    height: 64px;
+}
+
+.seller_global_category_drop_list a {
+    cursor: pointer;
+}
+
+.seller_global_category_drop_list a:hover {
+    font-weight: bold;
+    color: #00CD08;
+}
+
+.seller_global_category_list {
+    display: block;
+    width: 160px;
+    height: 32px;
+    line-height: 32px;
+    margin: 0;
+    padding: 0;
+    float: left;
+    font-size: 14px;
+}
+
+.seller_global_category_list a {
+    color: black;
+}
+
+/* ------------------------------ footer ------------------------------ */
+
+.seller_contents_table_pasing {
+    text-align: center;
+    font-size: 12px;
+}
+
+.selle_contents_table_pasing span {
+    margin: 0px 5px;
+}
+
+.seller_contents_table_pasing span:hover {
+    color: #00CD08;
+    font-weight: bold;
+}
+
+.seller_contents_table_pasing .active{
+    color: #00CD08;
+    font-weight: bold;
+}
+
+/* ------------------------------ editButton ------------------------------ */
+
+.stateList {
+	display: none;
+	text-align: center;
+	background-color: #ffffff;
+	border: 1px solid #00CD08;
+	border-radius: 4px;
+}
+
+.stateList span {
+	font-size: 13px;
+	cursor: pointer;
+}
+
+.stateList span:hover {
+	text-decoration: underline;
+}
+
+.changeState {
+	width: 120px;
+	height: 23px;
+}

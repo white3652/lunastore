@@ -1,0 +1,320 @@
+body {
+    background-color: #f9f9f9;
+}
+
+/* #region 상단 타이틀 */
+.m_userinfosclo_header1 {
+    width: 100%;
+    height: 60px;
+    background-color: #ffffff;
+}
+
+.m_userinfosclo_header {
+    margin: 0 auto;
+    width: 1200px;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.m_userinfosclo_header_acc {
+    font-size: 20px;
+    font-family: 'NEXONLv1GothicBold';
+    margin-left: 20px;
+}
+
+.m_userinfosclo_logout {
+    text-decoration: none;
+    color: #0071e3;
+    font-size: 12px;
+    font-weight: 100;
+}
+
+.a12 {
+    width: 12px;
+    height: 10px;
+    margin-right: 20px;
+    background-size: 12px;
+    filter: invert(28%) sepia(26%) saturate(6131%) hue-rotate(195deg) brightness(102%) contrast(107%);
+}
+
+/* #endregion */
+
+.m_userinfosclo_mainregion {
+    display: flex;
+    margin: 0 auto;
+    width: 1200px;
+}
+
+/* #region 사이드 메뉴 */
+.m_userinfosclo_sideregion {
+    width: 120px;
+    margin-left: 20px;
+    margin-right: 100px;
+    height: 500px;
+}
+
+.m_userinfosclo_proflie {
+    margin-top: 40px;
+    width: 100px;
+    height: 100px;
+    background-color: #0071e3;
+    border-radius: 50%;
+}
+
+.m_userinfosclo_username {
+    font-size: 16px;
+    font-family: 'NEXONLv1GothicBold';
+    margin-top: 20px;
+}
+
+.m_userinfosclo_useremail {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.m_userinfosclo_side_region {
+    margin-top: 60px;
+}
+
+.m_userinfosclo_side {
+    margin-top: 20px;
+    transition: 0.4s;
+}
+
+.m_userinfosclo_side {
+    color: #0071e3;
+}
+
+.m_userinfosclo_sidemanu {
+    font-size: 16px;
+    color: #111111;
+    transition: 0.4s;
+}
+
+.m_userinfosclo_sidemanu:hover {
+    color: #0071e3;
+}
+
+.m_userinfosclo_sidemanu_select {
+    font-size: 16px;
+    color: #0071e3;
+}
+
+/* #endregion */
+
+/* #region 메인 컨텐츠 메뉴 */
+.m_userinfosclo_mainPage {
+    width: 940px;
+    height: 500px;
+}
+
+.m_userinfosclo_main_title {
+    font-size: 24px;
+    font-family: 'NEXONLv1GothicBold';
+    margin-top: 40px;
+}
+
+.m_userinfosclo_main_content {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.m_userinfosclo_main_content_region {
+    display: flex;
+}
+
+.m_userinfosclo_content {
+    width: 440px;
+    height: 180px;
+    margin-top: 40px;
+    margin-right: 40px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    color: #111111;
+    transition: 0.8s;
+    cursor: pointer;
+}
+
+.m_userinfosclo_content:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.m_userinfosclo_content_nametitle {
+    font-size: 20px;
+    padding-top: 30px;
+    margin-left: 20px;
+    font-family: 'NEXONLv1GothicBold';
+}
+
+.m_userinfosclo_content_namesub {
+    font-size: 14px;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.m_userinfosclo_content_namesub1 {
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+/* #endregion */
+
+/* #region 이름 생일 수정 박스 */
+.m_userinfosclo_updatename_region_buer {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: #ffffff90;
+    top: 0;
+    left: 0;
+    display: none;
+    text-transform: 0.4s;
+}
+
+.m_userinfosclo_pwMsg{
+    font-size: 10px;
+    margin-left: 20px;
+    color: #F74848;
+    position: absolute;
+    margin-top: 4px;
+}
+
+.m_userinfosclo_updatename_region {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    position: fixed;
+    box-shadow: 0px 0px 4px 0px rgba(117, 117, 117, 0.504);
+    display: none;
+    text-transform: 0.4s;
+}
+
+.m_userinfosclo_updatename_region_name {
+    font-size: 24px;
+    font-family: 'NEXONLv1GothicBold';
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 40px;
+}
+
+.m_userinfosclo_updatename_region_fname {
+    width: 400px;
+    height: 60px;
+    border: 1px solid #858585;
+    border-radius: 10px;
+    position: relative;
+    margin: 0 auto;
+    transition: 0.4s;
+}
+
+.m_userinfosclo_updatename_region_infname {
+    width: 360px;
+    height: 30px;
+    margin-left: 20px;
+    margin-top: 26px;
+    outline: none;
+    font-size: 20px;
+    border: none;
+}
+
+.m_userinfo_updatename_region_reuslt{
+    font-size: 10px;
+    margin-left: 20px;
+    color: #F74848;
+    position: relative;
+    margin-top: 10px;
+}
+
+.m_userinfosclo_updatename_region_plfname {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    font-size: 16px;
+    color: #858585;
+    transition: 0.4s;
+}
+
+.m_userinfosclo_updatename_region_submit {
+    width: 100px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #80befb;
+    margin: 0 auto;
+    transition: 0.2s;
+    margin-bottom: 60px;
+}
+
+.m_userinfosclo_updatename_region_submit:hover {
+    background-color: #0071e3;
+}
+
+.m_userinfosclo_updatename_region_hr {
+    margin-top: 10px;
+}
+
+.m_userinfosclo_updatename_region_hr2 {
+    margin-top: 40px;
+}
+
+.m_userinfosclo_updatename_region_bdaytitle {
+    font-size: 24px;
+    font-family: 'NEXONLv1GothicBold';
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 20px;
+}
+
+.m_userinfosclo_updatename_region_submited {
+    color: #ffffff;
+    text-align: center;
+    padding-top: 12px;
+}
+
+.m_userinfosclo_updatename_region_submit1 {
+    display: none;
+}
+
+.m_userinfosclo_updatename_region_bdaysub {
+    font-size: 14px;
+    text-align: center;
+}
+
+._inputRegion{
+    width: 360px;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+._inputRegion input{
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #858585;
+    padding: 20px;
+    padding-bottom: 0px;
+    background-color:#ffffff00;
+}
+
+._inputRegion input+span{
+    position: absolute;
+    pointer-events: none;
+    color: #858585;
+    transition: all 0.3s ease;
+    left: 20px;
+    bottom: 20px;
+}
+
+._inputRegion input:focus + span,
+._inputRegion input:not(:placeholder-shown) + span{
+    bottom: 36px;
+    font-size: 14px;
+}
+/* #endregion */

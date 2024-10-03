@@ -1,0 +1,1087 @@
+section {
+    box-sizing: border-box;
+    width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.m_l_view_stick {
+    color: lightgray;
+}
+/* 수량 선택기 컨테이너 */
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; /* 아래쪽 여백 추가 */
+}
+
+/* 수량 컨트롤러 컨테이너 */
+.quantity-controls {
+    margin-top: -50px;
+    margin-left: 110px;
+    display: flex;
+    align-items: center;
+}
+/* 증가 및 감소 버튼 */
+.quantity-controls button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #cccccc;
+    background-color: #f9f9f9;
+    color: #444444;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.quantity-controls button:hover {
+    background-color: #0071E3;
+    color: white;
+}
+
+/* 수량 입력 필드 */
+.quantity-controls .quantity-input {
+    width: 60px;
+    text-align: center;
+    border: 1px solid #cccccc;
+    border-left: none;
+    border-right: none;
+    margin: 0 5px;
+    border-radius: 0;
+    font-size: 16px;
+    padding: 5px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* 입력 필드 포커스 상태 */
+.quantity-controls .quantity-input:focus {
+    border-color: #0071E3;
+    box-shadow: 0 0 5px rgba(0, 113, 227, 0.3);
+    outline: none;
+}
+
+/* 기본 스피너 제거 */
+.quantity-controls .quantity-input::-webkit-inner-spin-button,
+.quantity-controls .quantity-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.quantity-controls .quantity-input {
+    -moz-appearance: textfield; /* Firefox에서 스피너 제거 */
+}
+/* 수량 라벨 */
+.quantity-label {
+    font-size: 16px;
+    color: #444444;
+    margin-right: 10px; /* 라벨과 입력 필드 간의 간격 */
+    min-width: 50px; /* 라벨의 최소 너비 */
+}
+
+/* 수량 입력 필드 */
+.quantity-input {
+    width: 60px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* 입력 필드 포커스 상태 */
+.quantity-input:focus {
+    border-color: #0071E3;
+    box-shadow: 0 0 5px rgba(0, 113, 227, 0.3);
+    outline: none;
+}
+
+/* 브라우저 기본 스피너 제거 */
+.quantity-input::-webkit-inner-spin-button,
+.quantity-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.quantity-input {
+    -moz-appearance: textfield; /* Firefox에서 스피너 제거 */
+}
+.arrow_small {
+    width: 18px;
+    height: 18px;
+    background-size: 18px;
+    rotate: -90deg;
+    vertical-align: top;
+    filter: invert(0%) sepia(1%) saturate(2514%) hue-rotate(223deg) brightness(0%) contrast(87%);
+}
+
+.m_l_view_category_link {
+    font-weight: bold;
+    font-size: 14px;
+    color: #444444;
+    transition: color 0.3s;
+}
+
+.m_l_view_category_link:hover {
+    color: #111111;
+}
+
+.m_l_view_star_box {
+    display: inline-block;
+    margin: 10px 0 5px;
+    height: 17px;
+    width: 89px;
+}
+
+.m_l_view_star {
+    position: relative;
+    display: block;
+    height: 17px;
+    background-repeat: no-repeat;
+}
+
+.m_l_view_star.full {
+    bottom: 17px;
+    width: 50%;
+    background-image: url('/css/img/star.png');
+    background-position: 0 -245px;
+}
+
+.m_l_view_star.empty {
+    width: 100%;
+    background-image: url('/css/img/star2.png');
+    background-position: 0 -270px;
+    opacity: 0.5;
+}
+
+label[for="m_l_view_btn_review"] {
+    box-sizing: border-box;
+    display: inline-block;
+    font-size: 10px;
+    border: 0;
+    background-color: transparent;
+    padding: 9px 0;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+.m_l_view_itemimg img {
+    width: 600px;
+    height: auto;
+}
+.m_l_view_storename {
+    display: block;
+    color: #444444;
+}
+
+.m_l_view_item_title {
+    display: block;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.m_l_view_itemsimpleinfo {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.m_l_view_itemimg {
+    height: 700px;
+}
+
+.m_l_view_itemimg_box {
+    width: 600px;
+    height: 600px;
+
+}
+
+.m_l_view_itemimg_box img {
+    width: 600px;
+    height: 600px;
+    border-radius: 10px;
+    position: absolute;
+}
+
+.m_l_view_itemimg_btn {
+    width: 600px;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.m_l_view_itemimg_btn button {
+    width: 64px;
+    height: 64px;
+    border: 2px solid #F9F9F9;
+    border-radius: 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border 0.3s;
+}
+
+.m_l_view_itemimg_btn button img {
+    width: 100%;
+    height: 100%;
+}
+
+.m_l_view_itemoption {
+    box-sizing: border-box;
+    width: 360px;
+    padding: 0 20px;
+}
+
+.m_l_view_itemprice_box {
+    box-sizing: border-box;
+    height: 45px;
+    border-bottom: 1px solid gray;
+}
+
+.m_l_view_itemprice {
+    font-size: 28px;
+}
+
+.m_l_view_firstoption {
+    position: relative;
+    width: 320px;
+    height: 50px;
+    z-index: 5;
+    border: 1px solid lightgray;
+    border-top: 0;
+    background-color: white;
+    transition: opacity 0.3s;
+    cursor: pointer;
+}
+
+.m_l_view_checkedoption {
+    color: black;
+    font-size: 16px;
+}
+
+.m_l_view_firstoption .reset {
+    color: gray;
+    font-size: 10px;
+}
+
+.m_l_view_firstoption.hide {
+    opacity: 0;
+    cursor: default;
+}
+
+.m_l_view_itemoption_box {
+    position: relative;
+    width: 320px;
+    height: 515px;
+    padding: 20px 0;
+    overflow: hidden;
+    margin-top: -50px;
+}
+
+.m_l_view_option {
+    height: 515px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.m_l_view_option h4 {
+    font-size: 16px;
+    margin-left: 10px;
+    margin-top: -28px;
+}
+
+.m_l_view_option input[type="radio"] {
+    display: none;
+}
+
+.m_l_view_option label {
+    box-sizing: border-box;
+    background-color: white;
+    color: gray;
+    display: block;
+    width: 300px;
+    padding: 20px 15px;
+    border: 1px solid gray;
+    outline: 1px solid transparent;
+    border-radius: 10px;
+    transition: border 0.3s, outline 0.3s, color 0.3s;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 5px auto;
+}
+
+.m_l_view_option input[type="radio"]:checked+label {
+    color: black;
+    border: 1px solid #0071E3;
+    outline: 1px solid #0071E3;
+}
+
+.m_l_view_getitem_box {
+    width: 100%;
+    height: 315px;
+    position: absolute;
+    left: 0;
+    background-color: #E7E7E7;
+}
+
+.m_l_view_getitem {
+    box-sizing: border-box;
+    position: absolute;
+    padding: 42px 0;
+    width: 960px;
+    height: 315px;
+}
+
+.m_l_view_getitem .m_l_view_checkedoption{
+    font-size:12px;
+    color: gray;
+}
+
+.m_l_view_getitem_itemname {
+    font-size: 20px;
+}
+
+.m_l_view_getitem_itemprice {
+    display: block;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px 0 45px;
+}
+
+.m_l_view_getitem_cart {
+    margin-top: -22px;
+    font-size: 14px;
+    display: block;
+    width: 160px;
+    height: 40px;
+    color: white;
+    border: 0;
+    background-color: #0071E3;
+    text-align: center;
+    border-radius: 10px;
+    float: right;
+}
+
+.m_l_view_getitem_cart span {
+    line-height: 40px;
+}
+
+.m_l_view_getitem_save {
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+    color: #0071E3;
+    margin-bottom: 20px;
+}
+
+.m_l_view_getitem_span {
+    display: block;
+    font-size: 14px;
+    margin: 0 0 10px;
+}
+
+.m_l_view_dummy {
+    height: 365px;
+}
+
+.m_l_view_itemdetail {
+    margin-left: -20px;
+}
+
+.m_l_view_btn {
+    height: 50px
+}
+
+.m_l_view_btn_box {
+    width: 1000px;
+    height: 50px;
+    font-size: 0;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    top: 0;
+    z-index: 10;
+}
+
+.m_l_view_btn_box.fixed {
+    position: fixed;
+}
+
+.m_l_view_btn_box button {
+    box-sizing: border-box;
+    width: 250px;
+    height: 50px;
+    vertical-align: top;
+    background-color: #f9f9f9;
+    border: 0;
+    border-bottom: 1px solid lightgray;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+}
+
+.m_l_view_btn_box button.active {
+    background-color: white;
+    border: 1px solid lightgray;
+    border-bottom: 0;
+}
+
+.page-section {
+    box-sizing: border-box;
+    padding: 20px;
+    background-color: white;
+    width: 1000px;
+}
+
+.m_l_view_itemexplain {
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+
+}
+
+.m_l_view_itemexplain img {
+    width: 100%;
+}
+
+.m_l_view_itemreview {
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    background-color: white;
+}
+
+    .m_l_view_itemreview h2 {
+        padding: 20px 0 20px;
+    }
+
+    .m_l_view_simplereview {
+        display: flex;
+        text-align: center;
+        margin: 0 0 20px;
+        border-top: 1px solid lightgray;
+        border-bottom: 1px solid lightgray;
+    }
+
+    .m_l_view_simple_stars {
+        box-sizing: border-box;
+        width: 400px;
+        height: 200px;
+        margin: 20px 0;
+        padding: 30px;
+        border-right: 1px solid lightgray;
+    }
+
+    .m_l_view_simple_stars h3 {
+        margin-bottom: 10px;
+    }
+
+    .m_l_view_simple_stars h1 {
+        font-size: 35px;
+        margin-bottom: 10px;
+    }
+
+    .m_l_view_simple_star_box {
+        display: block;
+        margin: 0 auto 10px;
+        height: 30px;
+        width: 166px;
+    }
+
+    .m_l_view_simple_star {
+        position: relative;
+        display: block;
+        height: 100%;
+        background-repeat: no-repeat;
+    }
+
+    .m_l_view_simple_star.full {
+        bottom: 30px;
+        width: 50%;
+        background-image: url('/css/img/star.png');
+        background-position: 0 -106px;
+    }
+
+    .m_l_view_simple_star.empty {
+        width: 100%;
+        background-image: url('/css/img/star2.png');
+        background-position: 0 -145px;
+        opacity: 0.5;
+    }
+
+    .m_l_view_simple_statistics {
+        box-sizing: border-box;
+        flex: 1;
+        margin: 20px 0;
+    }
+
+    .m_l_view_simple_statistics li {
+        display: block;
+        padding: 18px 0 0;
+    }
+
+    .m_l_view_simple_statistics li .num {
+        color: gray;
+        font-size: 14px;
+    }
+
+    .m_l_view_simple_statistics li div {
+        display: inline-block;
+        width: 250px;
+        height: 18px;
+        border-radius: 9px;
+        background-color: rgba(211, 211, 211, 0.3);
+        vertical-align: top;
+        text-align: left;
+    }
+
+    .m_l_view_simple_statistics li div>span {
+        display: inline-block;
+        height: 18px;
+        border-radius: 9px;
+        background-color: #0071E399;
+    }
+
+    .m_l_view_simple_statistics li .percent {
+        color: #0071E3;
+        font-size: 14px;
+    }
+
+    .m_l_view_review_search {
+        padding: 30px;
+        border-top: 1px solid lightgray;
+        font-size: 0;
+    }
+
+    .m_l_view_review_search input[type="radio"] {
+        display: inline-block;
+        vertical-align: top;
+        margin-top: 3px;
+    }
+
+    .m_l_view_review_search span {
+        font-size: 14px;
+    }
+
+    .m_l_view_review_search label {
+        display: inline-block;
+        margin: 0 10px 25px;
+        height: 17px;
+        vertical-align: top;
+    }
+
+    .m_l_view_review_search input[type="submit"] {
+        display: none;
+    }
+
+    label[for="search_submit"] {
+        margin: 0 5px 0 10px;
+    }
+
+    label[for="search_submit"] .search {
+        width: 20px;
+        height: 20px;
+        background-size: 20px;
+        filter: invert(0%) sepia(100%) saturate(5%) hue-rotate(145deg) brightness(0%) contrast(100%);
+    }
+
+    .m_l_view_review_search input[type="text"] {
+        width: 300px;
+        font-size: 20px;
+        border: 0;
+    }
+
+    .m_l_view_notFoundBuyer {
+        display: block;
+        line-height: 100px;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .m_l_view_notFoundBuyer a{
+        color:#0071E3;
+        text-decoration: underline;
+    }
+
+
+
+    .m_l_view_starorder {
+        position: relative;
+        display: inline-block;
+        height: 17px;
+        background-repeat: no-repeat;
+        background-image: url('/css/img/star.png');
+        background-position: 0 -245px;
+    }
+
+    label[for="star5"] .m_l_view_starorder {
+        width: 88px;
+    }
+
+    label[for="star4"] .m_l_view_starorder {
+        width: 71px;
+    }
+
+    label[for="star3"] .m_l_view_starorder {
+        width: 52px;
+    }
+
+    label[for="star2"] .m_l_view_starorder {
+        width: 34px;
+    }
+
+    label[for="star1"] .m_l_view_starorder {
+        width: 17px;
+    }
+
+    .m_l_view_review{
+        font-size: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 20px 0;
+        border-top: 1px solid lightgray;
+    }
+
+    .m_l_view_notFoundReview{
+        display: block;
+        line-height: 300px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .m_l_view_reviewImg{
+        display: inline-block;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+    }
+
+    .m_l_view_reviewNickname{
+        font-size: 17px;
+        line-height: 52px;
+        vertical-align: top;
+        margin-left: 10px;
+        font-weight: bold;
+    }
+
+    .m_l_view_reviewModifydate{
+        color:gray;
+        font-size: 13px;
+        line-height: 52px;
+        vertical-align: top;
+        float: right;
+    }
+
+
+    .m_l_view_reviewOption{
+        color:gray;
+        display: block;
+        margin: 10px 0 0 62px;
+        font-size: 15px;
+    }
+
+    .m_l_view_review .m_l_view_star_box{
+        margin-left: 62px;
+    }
+
+    .m_l_view_reviewContent{
+        display: block;
+        margin: 10px 0 0 62px;
+        font-size: 15px;
+    }
+
+    .m_l_view_itemQandA {
+        height: 1200px;
+        border-left: 1px solid lightgray;
+        border-right: 1px solid lightgray;
+    }
+
+    .m_l_view_itemsellerinfo {
+        height: 1200px;
+        border: 1px solid lightgray;
+        border-top: 0 solid lightgray;
+    }
+
+    .m_l_view_review textarea{
+        box-sizing: border-box;
+        height: 200px;
+        padding: 20px 120px 20px 20px;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    .m_l_view_reviewBtn{
+        position: relative;
+        bottom: 60px;
+        right: 10px;
+        height: 50px;
+        width: 100px;
+        border: 0;
+        background-color: dimgray;
+        font-weight: bold;
+        color: white;
+        float: right;
+    }
+
+    .m_l_view_buyerOrder{
+        display:inline-block;
+        height: 30px;
+        vertical-align: top;
+        max-width: 500px;
+        margin: 10px 0 0 5px;
+    }
+
+    .m_l_view_buyerOrders{
+        font-size: 12px;
+        color: gray;
+        margin-left: 10px;
+        line-height: 52px;
+        vertical-align: top;
+    }
+
+    #m_l_view_buyerStar{
+        display:inline-block;
+        height: 30px;
+        vertical-align: top;
+        margin: 10px 0 0 5px;
+}
+/* Q&A Container */
+.qna-container {
+    max-width: 960px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Q&A Header */
+.qna-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+/* Q&A List */
+.qna-list {
+    margin-bottom: 30px;
+}
+
+/* Q&A Item */
+.qna-item {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 0;
+}
+
+/* Q&A Question */
+.qna-question {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+}
+
+.qna-question p {
+    margin: 0;
+    font-size: 16px;
+    color: #555;
+    flex: 1;
+    transition: color 0.3s ease;
+}
+
+.qna-toggle-icon {
+    font-size: 20px;
+    width: 25px;
+    height: 25px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 23px;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+}
+
+/* Q&A Answer */
+.qna-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.qna-answer p {
+    margin: 10px 0 0 40px;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* src/main/resources/static/css/qna.css */
+.qna-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.qna-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    font-weight: 600;
+    color: #333333;
+}
+
+/* 플래시 메시지 스타일 */
+.flash-message {
+    background-color: #e6f7ff;
+    border-left: 6px solid #1890ff;
+    padding: 15px 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    color: #0050b3;
+    font-size: 1em;
+}
+
+/* Q&A 리스트 아이템 스타일 */
+.qna-item {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 20px 0;
+}
+
+.qna-item:last-child {
+    border-bottom: none;
+}
+
+/* 질문 제목 스타일 */
+.qna-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.4em;
+    font-weight: 500;
+    color: #333333; /* 파란색에서 어두운 회색으로 변경 */
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.qna-title:hover {
+    color: #555555; /* 호버 시 더 어두운 회색으로 변경 */
+}
+
+.toggle-icon {
+    font-size: 1em;
+    transition: transform 0.3s ease;
+}
+
+.qna-title.active .toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* Q&A 내용 스타일 */
+.qna-content {
+    display: none;
+    padding: 15px 0 0 0;
+    animation: fadeIn 0.3s ease-in-out;
+    white-space: normal; /* 텍스트 여러 줄로 표시 */
+    word-wrap: break-word; /* 긴 단어 줄 바꿈 */
+    word-break: break-word; /* 긴 단어 줄 바꿈 */
+}
+
+.question, .answer-section p {
+    white-space: normal; /* 텍스트 여러 줄로 표시 */
+    word-wrap: break-word; /* 긴 단어 줄 바꿈 */
+    word-break: break-word; /* 긴 단어 줄 바꿈 */
+}
+
+.question {
+    font-size: 1.1em;
+    color: #555555;
+}
+
+.answer-section {
+    margin-top: 10px;
+}
+
+.answer-section p {
+    font-size: 1.1em;
+    color: #333333;
+}
+
+.answer-section .answer-form {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.answer-section .answer-form textarea {
+    resize: vertical;
+    padding: 12px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+    min-height: 80px;
+}
+
+.answer-section .answer-form button {
+    align-self: flex-end;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #0071e3;
+    border: none;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.answer-section .answer-form button:hover {
+    background-color: #005bb5;
+}
+
+/* Q&A 제출 폼 스타일 */
+.qna-submit {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #f0f0f0;
+}
+
+.qna-submit h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    font-weight: 600;
+    color: #333333;
+}
+
+.qna-submit form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.qna-submit input[type="text"],
+.qna-submit textarea {
+    padding: 15px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+}
+
+.qna-submit input[type="text"]::placeholder,
+.qna-submit textarea::placeholder {
+    color: #a0a0a0;
+}
+
+.qna-submit button {
+    width: 150px;
+    align-self: center;
+    padding: 12px;
+    background-color: #0071e3;
+    border: none;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.qna-submit button:hover {
+    background-color: #005bb5;
+}
+/* 판매자 정보 섹션 스타일 */
+.m_l_view_itemsellerinfo {
+    padding: 60px 0;
+    /* background-color: #f5f5f7; */ /* 배경색 제거 */
+    text-align: left; /* 텍스트 좌측 정렬 */
+}
+
+.m_l_view_itemsellerinfo h3 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #1d1d1f;
+    margin-bottom: 40px;
+    padding-left: 20px; /* 좌측 패딩 추가 */
+}
+
+.seller-info-container {
+    display: flex;
+    flex-direction: row; /* 항상 가로 배치 */
+    align-items: flex-start;
+    max-width: 1000px; /* 콘텐츠 너비 제한 */
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+.seller-profile {
+    margin-right: 40px;
+    margin-left: 20px; /* 좌측 패딩 추가 */
+}
+
+.seller-profile img {
+    width: 200px;
+    height: 200px;
+    border-radius: 100px;
+    object-fit: cover;
+}
+
+.seller-details {
+    flex: 1; /* 남은 공간 차지 */
+}
+
+.seller-details .store-name {
+    font-size: 28px;
+    font-weight: 600;
+    color: #1d1d1f;
+    margin-bottom: 10px;
+}
+
+.seller-details .store-intro {
+    font-size: 18px;
+    color: #515154;
+    margin-bottom: 30px;
+}
+
+.seller-additional-info {
+    font-size: 16px;
+    color: #6e6e73;
+}
+
+.seller-additional-info p {
+    margin: 5px 0;
+}
+
+.seller-additional-info span {
+    color: #515154;
+}
+
+/* 애니메이션 효과 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .qna-container {
+        padding: 30px 15px;
+    }
+
+    .qna-container h2 {
+        font-size: 2em;
+    }
+
+    .qna-title {
+        font-size: 1.2em;
+    }
+
+    .qna-submit h3 {
+        font-size: 1.5em;
+    }
+}
+

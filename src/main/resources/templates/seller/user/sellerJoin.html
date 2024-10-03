@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title th:text="#{title.entLunaIdCreation}">ENT Luna ID 생성 - Luna</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+	<!-- Stylesheets -->
+	<link th:href="@{/css/global.css}" rel="stylesheet">
+	<link th:href="@{/css/icon/icon.css}" rel="stylesheet">
+	<link th:href="@{/css/seller/user/sellerJoin.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+
+	<!-- JavaScript Files -->
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var invalidMessage = {
+			invalidEmail: /*[[#{error.invalid.email}]]*/ '이메일 형식이 올바르지 않습니다.',
+			emailInUse: /*[[#{error.email.in.use}]]*/ '사용중인 이메일입니다.',
+			emailCheckFailed: /*[[#{error.email.check.failed}]]*/ '이메일 중복 확인 실패',
+			telEmpty: /*[[#{error.tel.empty}]]*/ '입력 되어 있지 않습니다.',
+			telInvalid: /*[[#{error.tel.invalid}]]*/ '번호가 유효하지 않습니다.',
+			nameTooLong: /*[[#{error.name.too.long}]]*/ '길이가 너무 깁니다.',
+			nameInvalid: /*[[#{error.name.invalid}]]*/ '한글 또는 일본어만 입력이 가능합니다.',
+			nameEmpty: /*[[#{error.name.empty}]]*/ '입력 되어 있지 않습니다.',
+			birthInvalid: /*[[#{error.birth.invalid}]]*/ '생년월일이 유효하지 않습니다.',
+			passwordTooShort: /*[[#{error.password.too.short}]]*/ '암호 길이는 최소 8자 이상입니다.',
+			passwordInvalid: /*[[#{error.password.invalid}]]*/ '암호는 대소문자, 숫자, 특수문자를 포함해야 합니다.',
+			passwordMismatch: /*[[#{error.password.mismatch}]]*/ '암호가 일치하지 않습니다.',
+			date: {
+				yearSuffix: /*[[#{date.year}]]*/ '년',
+				monthSuffix: /*[[#{date.month}]]*/ '월',
+				daySuffix: /*[[#{date.day}]]*/ '일'
+			}
+		};
+		/*]]>*/
+	</script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script th:src="@{/js/seller/user/sellerjoinService.js}"></script>
+	<script th:src="@{/js/publicRegex/telRegex.js}"></script>
+	<script th:src="@{/js/buyer/user/daumMapAPI.js}"></script>
+	<script th:src="@{/js/publicRegex/taxidRegex.js}"></script>
+	<script th:src="@{/js/buyer/user/telAutoHyphen.js}"></script>
+	<script th:src="@{/js/seller/user/taxidAutoHyphen.js}"></script>
+	<script th:src="@{/js/seller/user/joinNextPage.js}"></script>
+	<script th:src="@{/js/buyer/user/birthdayIO.js}"></script>
+	<script th:src="@{/js/publicRegex/nameRegex.js}"></script>
+	<script th:src="@{/js/publicRegex/birthdayRegex.js}"></script>
+	<script th:src="@{/js/publicRegex/emailRegex2.js}"></script>
+	<script th:src="@{/js/publicRegex/passwordRegex2.js}"></script>
+	<script th:src="@{/js/seller/user/sellercheckjoin.js}"></script>
+	<script th:src="@{/js/buyer/user/terms.js}"></script>
+	<script th:src="@{/js/publicRegex/addressRegex.js}"></script>
+
+	<!-- Inline JavaScript with Thymeleaf URL and Internationalized Messages -->
+	<script>
+		window.emailCheckValid = false;
+		window.telCheckValid = false;
+		window.taxidCheckValid = false;
+
+		$(function(){
+			$("#telInput").keyup(function() {
+				var telInput = $('#telInput').val();
+
+				$.ajax({
+					type: 'post',
+					url:  "[[@{/seller/telCheckProcess(s_tel=${telInput})}]]",
+					data: {s_tel: telInput},
+					dataType: "text",
+					success: function(data) {
+						if (data == 1) {
+							$("#telSmg").text(/*[[#{message.telInUse}]]*/ 'Phone number in use');
+							$('#telInput').css("border", "1px solid #F74848");
+							telCheckValid = false;
+						} else {
+							telCheckValid = true;
+						}
+					},
+					error: function() {
+						console.log(/*[[#{message.failure}]]*/ 'Operation failed');
+						alert(/*[[#{alert.telCheckError}]]*/ 'Error checking phone number');
+					}
+				});
+				try {
+					globaldisable();
+				} catch (Exception) {}
+			});
+		});
+
+		$(function(){
+			$("#taxidInput").keyup(function() {
+				var taxidInput = $('#taxidInput').val();
+
+				$.ajax({
+					type: 'post',
+					url: "/seller/businessnumCheckProcess",
+					data: {s_businessnum: taxidInput},
+					dataType: "text",
+					success: function(data) {
+						if (data == 1) {
+							$("#taxidMsg").text(/*[[#{message.taxidInUse}]]*/ 'Tax ID in use');
+							$('#taxidInput').css("border", "1px solid #F74848");
+							taxidCheckValid = false;
+						} else {
+							taxidCheckValid = true;
+						}
+					},
+					error: function() {
+						console.log(/*[[#{message.failure}]]*/ 'Operation failed');
+						alert(/*[[#{alert.taxidCheckError}]]*/ 'Error checking Tax ID');
+					}
+				});
+				try {
+					globaldisable();
+				} catch (Exception) {}
+			});
+		});
+
+		$(function(){
+			$("#emailInput").keyup(function() {
+				var emailInput = $('#emailInput').val();
+
+				$.ajax({
+					type: 'post',
+					url: "[[@{/seller/emailCheckProcess(s_email=${emailInput})}]]",
+					data: {s_email: emailInput},
+					dataType: "text",
+					success: function(data) {
+						if (data == 1) {
+							$("#emailMsg").text(/*[[#{message.emailInUse}]]*/ 'Email in use');
+							$('#emailInput').css("border", "1px solid #F74848");
+							emailCheckValid = false;
+						} else {
+							emailCheckValid = true;
+						}
+					},
+					error: function() {
+						console.log(/*[[#{message.failure}]]*/ 'Operation failed');
+						alert(/*[[#{alert.emailCheckError}]]*/ 'Error checking email');
+					}
+				});
+				try {
+					globaldisable();
+				} catch (Exception) {}
+			});
+		});
+	</script>
+</head>
+<body>
+<div class="wrap">
+	<header th:replace="~{buyer/common/global_header :: global_header}"></header>
+
+	<section>
+		<!-- #region 상단 타이틀 -->
+		<div class="m_sellerJoin_title">
+			<div class="m_sellerJoin_tiregion">
+				<div class="m_sellerJoin_tiregionti" th:text="#{title.entLunaId}">ENT Luna ID</div>
+				<div class="m_sellerJoin_tiregionre">
+					<a th:href="@{/seller/sellerLogin}" class="m_sellerJoin_tiregionss" th:text="#{button.login}">로그인</a>
+					<a th:href="@{/seller/sellerJoin}" class="m_sellerJoin_tiregionss" th:text="#{button.createEntLunaId}">ENT Luna ID 생성</a>
+				</div>
+			</div>
+		</div>
+		<!-- #endregion -->
+
+		<div class="m_sellerJoin_mainRegion">
+			<form name="sellerJoin" method="post" th:action="@{/seller/sellerJoinProcess}">
+				<!-- #region 페이지1 -->
+				<div class="m_sellerJoin_maintitle" th:text="#{title.entLunaIdCreation}">ENT Luna ID 생성</div>
+				<div class="m_sellerJoin_subtitle" th:text="#{subtitle.entLunaIdBenefits}">
+					하나의 ENT Luna ID로 모든 Luna 서비스를 이용할 수 있습니다.
+				</div>
+
+				<div id="joinPage1" class="m_sellerJoin_page1">
+					<div class="_inputRegion" id="telRegion">
+						<input placeholder=" " type="tel" name="s_tel" id="telInput" maxlength="13" required>
+						<span id="telTitle" th:text="#{label.phoneNumber}">전화번호</span>
+						<div class="m_sellerJoin_telMsg" id="telSmg"></div>
+					</div>
+
+					<div id="active"></div>
+
+					<div class="m_sellerJoin_content" th:text="#{message.phoneNumberInfo}">
+						항상 사용할 수 있는 전화번호를 입력하십시오. 새 기기나 웹 브라우저에 로그인할 때 해당 전화번호를 사용하여 신원을 확인합니다. 메시지 또는 데이터 요금이 적용될 수 있습니다.
+					</div>
+
+					<div class="m_sellerJoin_checkregion">
+						<label>
+							<input type="checkbox" name="s_terms" id="terms" value="Y">
+							<span class="m_sellerJoin_rula">
+                                    <a href="#" class="m_sellerJoin_atag" th:text="#{link.privacyPolicy}">Luna의 개인정보 처리방침</a>
+                                    <span th:text="#{message.agreeTerms}"> 에 따라 개인정보를 수집, 사용, 타사에 대한 제공 및 처리하는 데 동의합니다.</span>
+                                </span>
+						</label>
+					</div>
+
+					<div class="m_sellerJoin_pagebtn1">
+						<div class="m_sellerJoin_btn1Region" id="nextPageBtn">
+							<label>
+								<div class="m_sellerJoin_next1">
+									<span th:text="#{button.next}">다음</span>
+									<input type="button" class="m_sellerJoin_btn" id="nextPage" disabled="disabled">
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+				<!-- #endregion -->
+
+				<!--  #region 페이지2 -->
+				<div id="joinPage2" class="m_sellerJoin_page2">
+					<div class="m_sellerJoin_nameRegion">
+						<div class="_inputRegionName" id="firstNameRegion">
+							<input placeholder=" " type="text" name="s_firstname" id="firstNameInput" required>
+							<span class="" id="firstNametitle" th:text="#{label.firstName}">성</span>
+							<div class="m_sellerJoin_nameMsg" id="firstNameMsg"></div>
+						</div>
+
+						<div class="m_sellerJoin_updatename_region_hr" id="active"></div>
+
+						<div class="_inputRegionName" id="lastNameRegion">
+							<input placeholder=" " type="text" name="s_lastname" id="lastNameInput" required>
+							<span class="" id="lastNametitle" th:text="#{label.lastName}">이름</span>
+							<div class="m_sellerJoin_nameMsg" id="lastNameMsg"></div>
+						</div>
+					</div>
+
+					<div class="m_sellerJoin_updatename_region_taxid">
+						<div class="_inputRegion" id="taxidRegion">
+							<input placeholder=" " type="text" name="s_businessnum" id="taxidInput" maxlength="12" required>
+							<span class="" id="taxidTitle" th:text="#{label.businessNumber}">사업자번호</span>
+							<div class="m_sellerJoin_taxidMsg" id="taxidMsg"></div>
+						</div>
+					</div>
+
+					<div class="m_userinfo_updatename_region_inbday">
+						<div class="_inputRegionBir" id="yyyyregion">
+							<label>
+								<input placeholder=" " type="text" name="s_birth" id="yyyyinput" maxlength="8" autocomplete="off" required>
+								<span class="" id="yyyytext" th:text="#{label.birthDate}">생년월일</span>
+								<div id="result" class="m_sellerJoin_birthdayResult" th:text="#{message.birthDateFormat}">yyyy년 mm월 dd일</div>
+							</label>
+							<div class="m_sellerJoin_birthdayMsg" id="resultmsg"></div>
+						</div>
+					</div>
+
+					<div class="m_sellerJoin_pagebtn1">
+						<div class="m_sellerJoin_btn1Region" id="middlePageBtn">
+							<label>
+								<div class="m_sellerJoin_next1">
+									<span th:text="#{button.next}">다음</span>
+									<input type="button" class="m_sellerJoin_btn" id="middlePage" disabled="disabled">
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+				<!-- #endregion -->
+
+
+
+				<!-- #region 페이지4 -->
+				<div id="joinPage4" class="m_sellerJoin_page4">
+					<div class="_inputRegion" id="emailRegion">
+						<input placeholder=" " type="email" name="s_email" id="emailInput" required>
+						<span class="" id="emailTitle" th:text="#{label.emailAddress}">name@example.com</span>
+						<div class="m_sellerJoin_emailMsg" id="emailMsg"></div>
+						<div id="active"></div>
+					</div>
+
+					<div class="_inputRegion" id="newPwRegion">
+						<input placeholder=" " type="password" name="s_pw" id="newPwInput" required>
+						<span class="" id="passwordTitle" th:text="#{label.password}">암호</span>
+						<div class="m_sellerJoin_passwordMsg" id="newPwMsg"></div>
+					</div>
+
+					<div class="_inputRegion" id="ckeckPwRegion">
+						<input placeholder=" " type="password" id="ckeckPwInput" required>
+						<span class="" id="checkPasswordTitle" th:text="#{label.confirmPassword}">암호 확인</span>
+						<div class="m_sellerJoin_checkPasswordMsg" id="ckeckPwMsg"></div>
+					</div>
+
+					<div class="m_sellerJoin_pagebtn1">
+						<div class="m_sellerJoin_btn1Region" id="joinSubmitBtn">
+							<label>
+								<div class="m_sellerJoin_next1">
+									<span th:text="#{button.register}">가입하기</span>
+									<input type="submit" class="m_sellerJoin_btn" id="joinSubmit" disabled="disabled"
+										   th:value="#{button.register}">
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+				<!-- #endregion -->
+
+				<!-- #region 페이지3 -->
+				<div id="joinPage3" class="m_sellerJoin_page3">
+					<div class="_inputRegion" id="zonecodeRegion">
+						<input placeholder=" " type="text" name="s_zipcode" id="zonecodeInput" required>
+						<span class="" id="zonecodetitle" th:text="#{label.zipCode}">우편번호</span>
+						<div class="m_sellerJoin_zonecodeMsg" id="zonecodeMsg"></div>
+					</div>
+
+					<div class="_inputRegion" id="addressRegion">
+						<input placeholder=" " type="text" name="s_address" id="addressInput" required>
+						<span class="" id="addresstitle" th:text="#{label.address}">주소</span>
+						<div class="m_sellerJoin_addressMsg" id="addressMsg"></div>
+					</div>
+
+					<div class="_inputRegion" id="addAddressRegion">
+						<input placeholder=" " type="text" name="s_restaddress" id="addAddressInput" required>
+						<span class="" id="addAddresstitle" th:text="#{label.detailAddress}">상세 주소</span>
+						<div class="m_sellerJoin_addAddressMsg" id="addAddressMsg"></div>
+					</div>
+
+					<div class="m_sellerJoin_pagebtn1">
+						<div class="m_sellerJoin_btn1Region" id="lastPageBtn">
+							<label>
+								<div class="m_sellerJoin_next1">
+									<span th:text="#{button.next}">다음</span>
+									<input type="button" class="m_sellerJoin_btn" id="lastPage" disabled="disabled">
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+				<!-- #endregion -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<!-- JavaScript for Form Submission with Internationalized Alerts -->
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		document.getElementById("joinSubmitBtn").addEventListener("click", function(event) {
+			event.preventDefault();  // 기본 제출을 막음
+
+			var email = document.getElementById("emailInput").value;
+
+			if (email === "") {
+				alert("이메일을 입력하세요.");
+				return;
+			}
+
+			// 이메일 값을 form에 hidden input으로 추가
+			var form = document.forms['sellerJoin'];
+			var hiddenEmailInput = document.createElement("input");
+			hiddenEmailInput.setAttribute("type", "hidden");
+			hiddenEmailInput.setAttribute("name", "s_email");
+			hiddenEmailInput.setAttribute("value", email);
+			form.appendChild(hiddenEmailInput);
+
+			// 폼을 POST 방식으로 제출
+			form.submit();
+		});
+	});
+</script>
+
+</script>
+
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+
+</body>
+
+</html>

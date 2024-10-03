@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Luna account</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/global.css}">
+	<link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/user/buyerUpdateSideMenu.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/user/buyerUpdatePage3.css}">
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var cart = {
+			cart: /*[[#{global.header.cart}]]*/ '장바구니',
+			cartEmpty: /*[[#{global.header.cartEmpty}]]*/ '장바구니가 비어 있습니다.',
+			productImageAlt: /*[[#{global.header.productImageAlt}]]*/ '상품이미지',
+			cartCheck: /*[[#{global.header.cartCheck}]]*/ '장바구니 확인',
+			cartViewMore: /*[[#{global.header.cartViewMore}]]*/ '개의 상품이 더 있습니다.',
+			loginPrompt: /*[[#{global.header.loginPrompt}]]*/ '저장해둔 항목이 있는지 확인하려면 ',
+			loginPrompt2: /*[[#{global.header.loginPrompt2}]]*/ '하세요. ',
+			login: /*[[#{global.header.login}]]*/ '로그인'
+
+		};
+		var invalidMessage = {
+			invalidEmail: /*[[#{error.invalid.email}]]*/ '이메일 형식이 올바르지 않습니다.',
+			emailInUse: /*[[#{error.email.in.use}]]*/ '사용중인 이메일입니다.',
+			emailCheckFailed: /*[[#{error.email.check.failed}]]*/ '이메일 중복 확인 실패',
+			telEmpty: /*[[#{error.tel.empty}]]*/ '입력 되어 있지 않습니다.',
+			telInvalid: /*[[#{error.tel.invalid}]]*/ '번호가 유효하지 않습니다.',
+			nameTooLong: /*[[#{error.name.too.long}]]*/ '길이가 너무 깁니다.',
+			nameInvalid: /*[[#{error.name.invalid}]]*/ '한글 또는 일본어만 입력이 가능합니다.',
+			nameEmpty: /*[[#{error.name.empty}]]*/ '입력 되어 있지 않습니다.',
+			birthInvalid: /*[[#{error.birth.invalid}]]*/ '생년월일이 유효하지 않습니다.',
+			passwordTooShort: /*[[#{error.password.too.short}]]*/ '암호 길이는 최소 8자 이상입니다.',
+			passwordInvalid: /*[[#{error.password.invalid}]]*/ '암호는 대소문자, 숫자, 특수문자를 포함해야 합니다.',
+			passwordMismatch: /*[[#{error.password.mismatch}]]*/ '암호가 일치하지 않습니다.',
+			date: {
+				yearSuffix: /*[[#{date.year}]]*/ '년',
+				monthSuffix: /*[[#{date.month}]]*/ '월',
+				daySuffix: /*[[#{date.day}]]*/ '일'
+			}
+		};
+		/*]]>*/
+	</script>
+	<script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+	<script th:src="@{/js/buyer/buyerCartNavigation.js}"></script>
+	<script th:src="@{/js/buyer/user/buyerUpdateSideMenu.js}"></script>
+	<script th:src="@{/js/publicRegex/nameRegex.js}"></script>
+	<script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+</head>
+<body>
+<div class="wrap">
+	<header th:replace="~{buyer/common/global_header :: global_header}"></header>
+
+	<section>
+		<!-- 사이드 메뉴 -->
+		<div class="m_buyerUpdateSideMenu_header1">
+			<div class="m_buyerUpdateSideMenu_header">
+				<div class="m_buyerUpdateSideMenu_header_acc">
+					<a th:href="@{/buyer/buyerServiceInfo(b_idx=${buyer.b_idx})}" th:text="#{account.title}">계정</a>
+					| <span th:text="#{luna.id.management}">Luna ID 관리</span>
+				</div>
+				<div class="m_buyerUpdateSideMenu_loar">
+					<a th:href="@{/buyer/buyerLogout}" class="m_buyerUpdateSideMenu_logout"th:text="#{logout}">로그아웃
+						<div class="arrow_small a12"></div>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="m_buyerUpdateSideMenu_mainregion">
+			<div class="m_buyerUpdateSideMenu_sideregion">
+				<img th:src="@{/uploads/{buyerProfile}(buyerProfile=${buyer.b_profile})}"
+					 class="m_buyerUpdateSideMenu_proflie" alt="이미지를 찾을 수 없음">
+				<div class="m_buyerUpdateSideMenu_username" th:text="${buyer.b_nickname}"></div>
+				<div class="m_buyerUpdateSideMenu_useremail" th:text="${buyer.b_email}"></div>
+				<div class="m_buyerUpdateSideMenu_side_region"></div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<a th:href="@{/buyer/buyerUpdatePage}" class="m_buyerUpdateSideMenu_sidemanu" id="page"th:text="#{profile.public}">공개 프로필</a>
+				</div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<a th:href="@{/buyer/buyerUpdatePage1(b_idx=${buyer.b_idx})}" class="m_buyerUpdateSideMenu_sidemanu" id="page1"th:text="#{personal.info}">개인 정보</a>
+				</div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<a th:href="@{/buyer/buyerUpdatePage2}" class="m_buyerUpdateSideMenu_sidemanu" id="page2" th:text="#{login.security}">로그인 및 보안</a>
+				</div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<a th:href="@{/buyer/buyerUpdatePage3}" class="m_buyerUpdateSideMenu_sidemanu" id="page3" th:text="#{payment.management}">결제 관리</a>
+				</div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<div class="m_buyerUpdateSideMenu_sidemanu_cancel" id="cancelOpenBtn" th:text="#{membership.withdrawal}">회원 탈퇴</div>
+				</div>
+			</div>
+			<div class="m_buyerUpdateSideMenu_cancelBlur" id="cancelBlur"></div>
+			<!-- #region 메인 컨텐츠 메뉴 -->
+			<div class="m_userinfopayup_mainPage">
+				<div class="m_userinfopayup_main_title" th:text="#{payment.management}">결제 관리</div>
+				<div class="m_userinfopayup_main_content_region">
+					<div class="m_userinfopayup_content" id="m_userinfopayup_contentname1">
+						<div class="m_userinfopayup_content_nametitle" th:text="#{savedPaymentMethods}">저장된 결제 방법</div>
+						<div class="m_userinfopayup_content_namesub" th:text="#{cardNumber}">카드번호</div>
+					</div>
+					<div class="m_userinfopayup_content1">
+						<div class="m_userinfopayup_content_namesub" th:text="#{defaultPaymentMethodDescription}">구입에 사용하는 기본 결제 방법입니다.</div>
+						<div class="m_userinfopayup_content_namesuba">
+							<a href="#" class="m_userinfopayup_content_namesuba" th:text="#{viewDetails}">세부사항 보기</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="m_buyerUpdateSideMenu_cancelRegion" id="cancelRegion">
+				<form name="buyerCancel" method="get" th:action="@{/buyer/buyerCancelProcess}">
+					<div class="m_buyerUpdateSideMenu_cancelTitle" th:text="#{membership.withdrawal}">회원탈퇴</div>
+					<div id="cancelPage1">
+						<div class="m_buyerUpdateSideMenu_cancelSubTitle" th:text="#{membership.delete.prompt}">계정을 삭제하시려면 암호를 입력해 주세요.</div>
+						<div class="m_buyerUpdateSideMenu_exPwRegion" id="exPwRegion">
+							<label>
+								<input type="password" class="m_buyerUpdateSideMenu_exPwInput" id="exPwInput">
+								<div class="m_buyerUpdateSideMenu_exPwTitle" id="exPwTitle" th:text="#{current.password}">현재암호</div>
+							</label>
+							<div class="m_buyerUpdateSideMenu_exPwMsg" id="exPwMsg"></div>
+						</div>
+						<div class="m_buyerUpdateSideMenu_cancelNextBtn">
+							<label>
+								<div class="m_buyerUpdateSideMenu_cancelNextBtnName" th:text="#{account.delete}">계정삭제</div>
+								<input type="button" class="m_buyerUpdateSideMenu_none" id="nextCancelBtn" disabled="disabled">
+							</label>
+						</div>
+					</div>
+					<div id="cancelPage2" class="m_buyerUpdateSideMenu_none">
+						<div class="m_buyerUpdateSideMenu_checkTitle" th:text="#{membership.delete.confirm}">정말 계정을 삭제하시겠습니까?</div>
+						<div class="m_buyerUpdateSideMenu_cancelNextBtn">
+							<label>
+								<div class="m_buyerUpdateSideMenu_cancelSubmitBtn" th:text="#{delete}">삭제</div>
+								<input type="submit" class="m_buyerUpdateSideMenu_none" disabled="disabled" id="cancelOkBtn" th:value="#{delete}">
+							</label>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+
+		<!-- #endregion -->
+	</section>
+</div>
+
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</body>
+</html>

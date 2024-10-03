@@ -1,0 +1,241 @@
+section {
+    background-color: white;
+    transition: filter 0.5s, opacity 0.5s;
+}
+
+section.blur {
+    filter: blur(10px);
+    -webkit-filter: blur(10px);
+    opacity: 0.8;
+}
+
+.m_list_boundary {
+    box-sizing: border-box;
+    width: 100%;
+    height: 300px;
+    background-image: url(../../../css/img/list_img.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-align: center;
+    padding-top: 100px;
+    color: white;
+}
+
+.m_list_boundary h1 {
+    font-size: 45px;
+    font-family: 'NEXONLv1GothicBold';
+    padding-bottom: 30px;
+}
+
+.m_list_boundary span {
+    color: rgba(255, 255, 255, 0.8);
+    font-family: 'NEXONLv1GothicBold';
+}
+
+.m_list_search {
+    box-sizing: border-box;
+    width: 100%;
+    border-bottom: 1px solid lightgray;
+}
+
+.m_list_search_box {
+    width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.m_list_search_box input[type="submit"] {
+    display: none;
+}
+
+.m_list_search_box .search {
+    width: 24px;
+    height: 24px;
+    background-size: 24px;
+    padding-right: 10px;
+    margin-left: 20px;
+}
+
+.m_list_search_box input[type="text"] {
+    box-sizing: border-box;
+    height: 79px;
+    width: 500px;
+    font-size: 24px;
+    font-weight: bold;
+    border: 0;
+}
+
+.m_list_search_box select {
+    font-size: 14px;
+    margin: 30px 0 30px 40px;
+    border: 0;
+    font-weight: bold;
+}
+
+.m_list_search_list {
+    width: 1000px;
+    min-height: 730px;
+    margin: 0 auto;
+    display: flex;
+}
+
+.m_list_categoris {
+    box-sizing: border-box;
+    min-width: 200px;
+    border-right: 1px solid lightgray;
+    padding: 20px 20px 100px;
+}
+
+h2\.30 .active {
+       color: #0071E3;
+   }
+
+.m_list_categoris .active {
+    color: #0071E3;
+}
+
+.m_list_categoris h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1c1c1e;
+    margin-bottom: 20px;
+}
+.m_list_categoris>div{
+    height: 39px;
+    overflow: hidden;
+    transition: height 0.5s;
+}
+
+.m_list_categoris>div:hover {
+    height: 225px;
+}
+
+.m_list_categoris h4 {
+    box-sizing: border-box;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 10px 10px;
+    transition: color 0.3s;
+    cursor: pointer;
+}
+.m_list_categoris ul {
+    list-style: none;
+    padding-left: 15px;
+    margin-top: 10px;
+}
+
+.m_list_items {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.m_list_categoris ul li h4 {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6e6e73;
+    padding: 5px 0;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+.m_list_categoris ul li h4:hover {
+    color: #0071e3;
+}
+.m_list_notFoundItem{
+    display: block;
+    line-height: 300px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.m_list_item {
+    box-sizing: border-box;
+    position: relative;
+    border-radius: 20px;
+    margin: 20px 10px 0 10px;
+    padding: 20px;
+    width: 240px;
+    height: 350px;
+    transition: box-shadow 0.5s;
+}
+
+.m_list_item:hover {
+    box-shadow: 2px 4px 12px rgba(0, 0, 0, .3);
+}
+
+
+
+.m_list_item_info img {
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.m_list_star_box {
+    position: relative;
+    display: inline-block;
+    width: 89px;
+    height: 17px;
+    font-size: 0;
+    margin-bottom: 5px;
+}
+
+.m_list_star {
+    position: absolute;
+    display: inline-block;
+    height: 17px;
+    background-repeat: no-repeat;
+}
+
+.m_list_star.full {
+    background-image: url(../../../css/img/star.png);
+    background-position: 0 -245px;
+}
+
+.m_list_star.empty {
+    width: 100%;
+    background-image: url(../../../css/img/star2.png);
+    background-position: 0 -270px;
+    opacity: 0.3;
+}
+
+.m_list_review_cnt {
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 5px;
+    font-size: 10px;
+}
+
+.m_list_item_info h4 {
+    box-sizing: border-box;
+    margin-bottom: 5px;
+    height: 54px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.m_list_item_info h5 {
+    margin-bottom: 5px;
+    font-weight: lighter;
+}
+
+.m_list_item_info h6 {
+    font-weight: lighter;
+}
+
+#td_paging {
+    width: 800px;
+    height: 50px;
+    margin-top: 50px;
+    font: 12px Arial, sans-serif;
+    text-align: center;
+}
+
+#td_paging .active{
+    color: #0071E3;
+}

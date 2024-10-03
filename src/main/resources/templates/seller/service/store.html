@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{page.title}">스토어현황 페이지</title>
+
+    <!-- CSS 파일 링크 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/service/store_section.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_section.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <!-- JS 파일 링크 -->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:src="@{/js/seller/service/service.js}"></script>
+    <script th:src="@{/js/seller/service/serviceSection.js}"></script>
+    <script th:src="@{/js/seller/common/globalNavigation.js}"></script>
+</head>
+
+<body>
+<div class="wrap">
+    <!-- 헤더 포함 -->
+    <header th:replace="~{seller/common/header :: sellerHeader}"></header>
+
+    <section>
+        <div class="seller_global_section">
+            <!-- 네비게이션 포함 -->
+            <nav th:replace="~{seller/common/navigation :: sellerNavigation}"></nav>
+
+            <div class="seller_store_contents">
+                <div class="seller_store_contents_title">
+                    <span th:text="#{breadcrumb}">메인 &gt; 매장관리 &gt; 스토어 현황</span>
+                </div>
+
+                <div class="seller_store_contents_search">
+                    <form id="svec_search_form" method="get" th:action="@{/seller/storeStatus}">
+                        <div class="seller_store_contents_search_box">
+                            <div class="seller_store_contents_search_items">
+                                <span class="seller_store_contents_search_title" th:text="#{search.period}">조회기간</span>
+                                <div class="seller_store_contents_search_item1">
+                                    <input type="date" id="startDate" name="startDate" th:value="${startDate}">
+                                    <span> ~ </span>
+                                    <input type="date" id="endDate" name="endDate" th:value="${endDate}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="seller_store_contents_search_btns">
+                            <div>
+                                <input type="submit" th:value="#{search}" value="검색">
+                                <input type="reset" th:value="#{reset}" value="초기화">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="seller_store_contents_list">
+                    <span th:text="#{list.header(${totalItems})}">조회목록 (총 <span th:text="${totalItems}">0</span>개)</span>
+                    <table class="seller_store_contents_table">
+                        <tr class="seller_store_contents_table_title">
+                            <th th:text="#{category}">구분</th>
+                            <th th:text="#{date}">일자</th>
+                            <th th:text="#{orders}">주문수</th>
+                            <th th:text="#{inquiries}">문의</th>
+                            <th th:text="#{reviews}">리뷰</th>
+                            <th th:text="#{sales}">매출액</th>
+                        </tr>
+                        <tr th:each="item, iterStat : ${items}">
+                            <!-- 인덱스 -->
+                            <td>
+                                <span th:text="${(currentPage - 1) * pageSize + iterStat.index + 1}"></span>
+                            </td>
+                            <!-- 날짜 -->
+                            <td>
+                                <span th:text="${#temporals.format(item.date, 'yyyy.MM.dd')}"></span>
+                            </td>
+                            <!-- 주문수 -->
+                            <td>
+                                <span>
+                                    <a th:href="@{/seller/orders(date=${item.date})}" th:text="${item.orderCount}"></a> <span th:text="#{unit.orders}">건</span>
+                                </span>
+                            </td>
+                            <!-- 문의 -->
+                            <td>
+                                <span>
+                                    <a th:href="@{/seller/inquiries(date=${item.date})}" th:text="${item.inquiryCount}"></a> <span th:text="#{unit.orders}">건</span>
+                                </span>
+                            </td>
+                            <!-- 리뷰 -->
+                            <td>
+                                <span>
+                                    <a th:href="@{/seller/reviews(date=${item.date})}" th:text="${item.reviewCount}"></a> <span th:text="#{unit.orders}">건</span>
+                                </span>
+                            </td>
+                            <!-- 매출액 -->
+                            <td>
+                                <span>
+                                    <a th:href="@{/seller/sales(date=${item.date})}" th:text="${item.formattedSalesAmount}"></a> <span th:text="#{unit.currency}">원</span>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="seller_contents_table_pasing" id="td_paging">
+                    <span th:replace="~{common/salesPaging :: salesFragment}"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+
+</html>

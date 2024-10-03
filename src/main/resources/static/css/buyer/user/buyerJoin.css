@@ -1,0 +1,457 @@
+        /* #region 상단 타이틀 */
+        .m_userLogin_title {
+            width: 100%;
+            background-color: #ffffff;
+            border-bottom: 1px solid #E5E5E5;
+        }
+
+        .m_userLogin_tiregion {
+            width: 1200px;
+            height: 40px;
+            background-color: #ffffff;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .m_userLogin_tiregionti {
+            display: flex;
+            margin-left: 20px;
+            font-size: 24px;
+            align-items: center;
+            color: #111111;
+        }
+
+        .m_userLogin_tiregionre {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 6px;
+        }
+
+        .m_userLogin_tiregionss {
+            margin-right: 20px;
+            font-size: 10px;
+            color: #111111;
+        }
+
+        /* #endregion */
+
+        .m_userLogin_mainRegion {
+            width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* #region 페이지1 */
+        .m_userLogin_maintitle {
+            font-size: 40px;
+            font-family: 'NEXONLv1GothicBold';
+            margin-top: 140px;
+        }
+
+        .m_userLogin_subtitle {
+            font-size: 20px;
+            margin-top: 10px;
+            margin-bottom: 60px;
+        }
+
+
+        .m_userLogin_telMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            margin-top: 4px;
+            text-align: left;
+            position: absolute;
+        }
+
+        .m_userLogin_content {
+            font-size: 12px;
+            margin-top: 10px;
+            width: 700px;
+            text-align: left;
+            margin: 0 auto;
+        }
+
+        .m_userLogin_checkregion {
+            margin-top: 50px;
+            text-align: left;
+            margin-left: 250px;
+            display: flex;
+            font-size: 14px;
+        }
+
+        .m_userLogin_rula {
+            margin-left: 4px;
+            width: 100px;
+        }
+
+        .m_userLogin_atag {
+            text-decoration: none;
+            color: #0071e3;
+        }
+
+        .m_userLogin_pagebtn1 {
+            margin-top: 100px;
+        }
+
+        .m_userLogin_btn1Region {
+            width: 136px;
+            height: 48px;
+            margin: 0 auto;
+            /*background-color: #80befb;*/
+            border-radius: 24px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 300px;
+        }
+
+        .m_userLogin_next1 {
+            text-align: center;
+            margin: 0 auto;
+            width: 136px;
+            height: 48px;
+            display: grid;
+            align-items: center;
+        }
+
+        .m_userLogin_btn {
+            display: none;
+        }
+
+        .m_userLogin_page2 {
+            display: none;
+        }
+        .m_userLogin_page3 {
+            display: none;
+        }
+
+        /* #endregion */
+
+        /* #region 페이지 2 */
+        .m_userLogin_nameRegion{
+            display: flex;
+            width: 700px;
+            margin: 0 auto;
+            margin-top: 130px;
+            justify-content: space-between;
+        }
+
+        .m_userLogin_regionFirstName {
+            width: 340px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            transition: 0.4s;
+        }
+        
+        .m_userLogin_firstNameInput {
+            width: 300px;
+            height: 60px;
+            margin-left: 0px;
+            margin-top: 18px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+        
+        .m_userLogin_firstNametitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+
+        .m_userLogin_birthdayRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 40px;
+        }
+
+        .m_userLogin_birthdayInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            opacity: 0;
+            background-color: #f9f9f9;
+        }
+
+        .m_userLogin_nameMsg{
+            font-size: 10px;
+            color: #F74848;
+            position: relative;
+            text-align: left;
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .m_userLogin_birthdayMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            position: relative;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .m_userLogin_birthdayText {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+
+        .m_userLogin_birthdayResult{
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            font-size: 20px;
+            opacity: 0;
+            transition: 0.6s;
+            outline: none;
+            border: none;
+        }
+        
+        ._text{
+        	font-size:0px;
+        }
+        /* #endregion */
+
+        /* #region 페이지 3 */
+        .m_userLogin_emailRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 100px;
+        }
+
+        .m_userLogin_emailInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+
+        .m_userLogin_emailMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            position: relative;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .m_userLogin_emailSubTitle{
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .m_userLogin_emailTitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+
+        .m_userLogin_passwordRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 60px;
+        }
+
+        .m_userLogin_passwordInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+
+        .m_userLogin_passwordMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            position: relative;
+            margin-top: 6px;
+            text-align: left;
+        }
+
+        .m_userLogin_passwordTitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+
+        .m_userLogin_checkPasswordRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 20px;
+        }
+
+        .m_userLogin_checkPasswordInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+
+        .m_userLogin_checkPasswordMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            position: relative;
+            margin-top: 6px;
+            text-align: left;
+        }
+
+        .m_userLogin_checkPasswordTitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+        /* #endregion */
+        
+._inputRegion{
+    width: 700px;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+._inputRegion input{
+    width: 660px;
+    height: 60px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: 1px solid #858585;
+    padding: 20px;
+    background-color:#ffffff00;
+    padding-bottom: 0px;
+}
+
+._inputRegion input+span{
+    position: absolute;
+    pointer-events: none;
+    color: #858585;
+    transition: all 0.3s ease;
+    left: 20px;
+    top: 30px;
+    font-size: 20px;
+}
+
+._inputRegion input:focus + span,
+._inputRegion input:not(:placeholder-shown) + span{
+    top: 10px;
+    font-size: 14px;
+}
+
+._inputRegionBir{
+    width: 700px;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+._inputRegionBir input{
+    width: 660px;
+    height: 60px;
+    font-size: 10px;
+   	color:#ffffff00;
+    border-radius: 10px;
+    border: 1px solid #858585;
+    padding: 20px;
+    padding-bottom: 0px;
+    background-color:#ffffff00;
+}
+
+._inputRegionBir input+span{
+    position: absolute;
+    pointer-events: none;
+    color: #858585;
+    transition: all 0.3s ease;
+    left: 20px;
+    top: 30px;
+    font-size: 20px;
+}
+
+._inputRegionBir input:focus + span,
+._inputRegionBir input:not(:placeholder-shown) + span{
+    top: 10px;
+    font-size: 14px;
+}
+
+._inputRegionName{
+    width: 340px;
+    position: relative;
+    margin-bottom: 20px;
+}
+._inputRegionName input{
+    width: 300px;
+    height: 60px;
+    font-size: 22px;
+    border-radius: 10px;
+    border: 1px solid #858585;
+    padding: 20px;
+    background-color:#ffffff00;
+    padding-bottom: 0px;
+}
+
+._inputRegionName input+span{
+    position: absolute;
+    pointer-events: none;
+    color: #858585;
+    transition: all 0.3s ease;
+    left: 20px;
+    top: 30px;
+    font-size: 20px;
+}
+
+._inputRegionName input:focus + span,
+._inputRegionName input:not(:placeholder-shown) + span{
+    top: 10px;
+    font-size: 14px;
+}

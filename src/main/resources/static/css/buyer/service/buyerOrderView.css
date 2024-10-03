@@ -1,0 +1,209 @@
+.m_buyerOrderView_sectionRegion{
+    width: 1160px;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+.m_buyerOrderView_sectionTitle{
+    font-size: 34px;
+    font-family: 'NEXONLv1GothicBold';
+    margin: 40px 0px 20px 0px;
+}
+
+.m_buyerOrderView_sectionSubTitle{
+    font-size: 16px;
+    margin-bottom: 60px;
+}
+
+._displayFlex{
+    display: flex;
+}
+
+.m_buyerOrderView_orderDate{
+    font-size: 16px;
+    margin-right: 20px;
+    margin-bottom: 4px;
+}
+
+.m_buyerOrderView_orderNumber{
+    font-size: 16px;
+}
+
+._hr{
+    border: 1px solid #d8d8d8;
+    width: 100%;
+    margin: 20px 0px;
+}
+
+.m_buyerOrderView_status{
+    font-size: 24px;
+    font-family: 'NEXONLv1GothicBold';
+    margin-bottom: 40px;
+}
+
+.m_buyerOrderView_itemImg{
+    width: 250px;
+    height: 200px;
+    margin-right: 20px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.m_buyerOrderView_itemTitle{
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: 'NEXONLv1GothicBold';
+}
+
+.m_buyerOrderView_statuss{
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.m_buyerOrderView_itemRegion{
+    width: 100%;
+}
+.m_buyerOrderView_statuss div{
+    text-align: center;
+}
+.m_buyerOrderView_statusBarRegion{
+    position: relative;
+}
+
+.m_buyerOrderView_statusBarDefault{
+    border-radius: 10px;
+    background-color: #d8d8d8;
+    height: 10px;
+    margin-bottom: 10px;
+}
+
+.m_buyerOrderView_statusBar{
+    border-radius: 10px;
+    background-color: #457b32;
+    height: 10px;
+    margin-bottom: 10px;
+    margin-top: -20px;
+    width: 0%;
+    transition: 0.4s;
+}
+.m_buyerOrderView_optionTitle{
+    font-size: 14px;
+    margin-right: 20px;
+    width: 200px;
+}
+.m_buyerOrderView_optionName{
+    font-size: 14px;
+}
+.m_buyerOrderView_optionRegion{
+    margin-bottom: 20px;
+}
+.m_buyerOrderView_statusle{
+    font-size: 14px;
+    color:#848484;
+}
+.m_buyerOrderView_review{
+    font-size: 14px;
+    align-items: center;
+    display: grid;
+    color: #0e7ff0;
+}
+.arrow_small{
+    width: 24px;
+    height: 24px;
+    filter: invert(28%) sepia(26%) saturate(6131%) hue-rotate(195deg) brightness(102%) contrast(107%);
+    rotate: -90deg;
+}
+
+.m_buyerOrderView_reviewRegion{
+    opacity: 0;
+    transition: 0.4s;
+}
+
+.m_buyerOrderView_totalCount{
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.m_buyerOrderView_totalPrice{
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-family: 'NEXONLv1GothicBold';
+}
+
+._hrStrong{
+    border: 2px solid #848484;
+    margin: 10px 0px;
+}
+
+.m_buyerOrderView_titleName{
+    font-size: 18px;
+    font-family: 'NEXONLv1GothicBold';
+    margin-top: 40px;
+}
+
+.m_buyerOrderView_addressTitle{
+    font-size: 16px;
+    margin: 4px 20px 4px 0px;
+    width: 100px;
+}
+
+.m_buyerOrderView_addressName{
+    font-size: 16px;
+    margin: 4px 0px;
+}
+
+._bold{
+    font-family: 'NEXONLv1GothicBold';
+}
+
+.m_buyerOrderView_lastBtnRegion{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 100px;
+}
+
+.m_buyerOrdrView_returnPage{
+    color: #0e7ff0;
+    font-size: 14px;
+    border: 1px solid #0e7ff0;
+    border-radius: 10px;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.m_buyerOrdrView_returnPage:hover{
+    background-color: #0e7ff0;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+.m_buyerOrdrView_cancelBtn:hover{
+    color: #F74848;
+    border: 1px solid #F74848;
+}
+
+.m_buyerOrdrView_cancelBtn{
+    color: #0e7ff0;
+    font-size: 14px;
+    border: 1px solid #0e7ff0;
+    border-radius: 10px;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.m_buyerOrdrView_confirmBtn{
+    color: #0e7ff0;
+    font-size: 14px;
+    border: 1px solid #0e7ff0;
+    border-radius: 10px;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+.m_buyerOrdrView_confirmBtn:hover{
+     background-color: #0e7ff0;
+     color: #ffffff;
+     border: 1px solid #ffffff;
+}

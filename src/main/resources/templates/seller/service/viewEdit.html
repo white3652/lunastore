@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{page.item.title}">상품 조회/수정 페이지</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link th:href="@{/css/icon/icon.css}" rel="stylesheet">
+    <link th:href="@{/css/global.css}" rel="stylesheet">
+    <link th:href="@{/css/seller/service/viewEdit_section.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_section.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:src="@{/js/seller/service/service.js}"></script>
+    <script th:src="@{/js/seller/service/serviceSection.js}"></script>
+    <script th:src="@{/js/seller/common/globalNavigation.js}"></script>
+</head>
+
+<body>
+<div class="wrap">
+    <header th:replace="~{seller/common/header :: sellerHeader}"></header>
+
+    <section>
+        <div class="seller_global_section">
+            <nav th:replace="~{seller/common/navigation :: sellerNavigation}"></nav>
+
+            <div class="seller_view_edit_contents">
+                <div class="seller_view_edit_contents_title">
+                    <span th:text="#{breadcrumb.main.itemSearch}">메인 > 상품관리 > 상품 조회/수정</span>
+                </div>
+
+                <div class="seller_view_edit_contents_search">
+                    <form>
+                        <input type="hidden" name="s_idx" th:value="${seller.s_idx}">
+                        <input type="hidden" id="smallCategorys" th:value="${sVO.smallCategory}">
+                        <div class="seller_view_edit_contents_search_box">
+                            <div class="seller_view_edit_contents_search_items">
+                                <span class="seller_view_edit_contents_search_title" th:text="#{search.term}">검색어</span>
+                                <div class="seller_view_edit_contents_search_item1">
+                                    <span>
+                                        <span th:text="#{search.itemNumber}">상품번호</span>
+                                        <input type="text" name="itemNum" autocomplete="off" th:placeholder="#{placeholder.itemNumber}" placeholder="상품번호를 입력하세요." th:value="${sVO.itemNum}">
+                                    </span>
+                                    <span>
+                                        <span th:text="#{search.itemName}">상품명</span>
+                                        <input type="text" name="itemName" autocomplete="off" th:placeholder="#{placeholder.itemName}" placeholder="상품명을 입력하세요." th:value="${sVO.itemName}">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="seller_view_edit_contents_search_items">
+                                <span class="seller_view_edit_contents_search_title" th:text="#{search.saleStatus}">판매상태</span>
+                                <div class="seller_view_edit_contents_search_item2">
+                                    <input type="radio" id="all" name="itemState" value="0" th:checked="${sVO.itemState == 0 or sVO.itemState == ''}">
+                                    <label for="all"><span th:text="#{status.all}">전체</span></label>
+                                    <input type="radio" id="sale" class="restCheckBox" name="itemState" value="1" th:checked="${sVO.itemState == 1}">
+                                    <label for="sale"><span th:text="#{status.onSale}">판매중</span></label>
+                                    <input type="radio" id="waitSale" class="restCheckBox" name="itemState" value="2" th:checked="${sVO.itemState == 2}">
+                                    <label for="waitSale"><span th:text="#{status.waitingSale}">판매대기</span></label>
+                                    <input type="radio" id="stock" class="restCheckBox" name="itemState" value="3" th:checked="${sVO.itemState == 3}">
+                                    <label for="stock"><span th:text="#{status.soldOut}">품절</span></label>
+                                </div>
+                            </div>
+                            <div class="seller_view_edit_contents_search_items">
+                                <span class="seller_view_edit_contents_search_title" th:text="#{search.category}">카테고리</span>
+                                <div class="seller_view_edit_contents_search_item3">
+                                    <select id="largeCategory" name="largeCategory">
+                                        <option value="0" th:selected="${sVO.largeCategory == 0}" th:text="#{category.all}">전체</option>
+                                        <option value="1" th:selected="${sVO.largeCategory == 1}" th:text="#{category.digital}">디지털/가전</option>
+                                        <option value="2" th:selected="${sVO.largeCategory == 2}" th:text="#{category.interior}">인테리어</option>
+                                        <option value="3" th:selected="${sVO.largeCategory == 3}" th:text="#{category.food}">식품</option>
+                                        <option value="4" th:selected="${sVO.largeCategory == 4}" th:text="#{category.clothing}">의류</option>
+                                        <option value="5" th:selected="${sVO.largeCategory == 5}" th:text="#{category.living}">생활</option>
+                                    </select>
+                                    <select id="smallCategory" name="smallCategory">
+                                        <option value="0" selected th:text="#{category.all}">전체</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="seller_view_edit_contents_search_items">
+                                <span class="seller_view_edit_contents_search_title" th:text="#{search.registrationPeriod}">등록기간</span>
+                                <div class="seller_view_edit_contents_search_item4">
+                                    <input type="date" id="startDate" name="sDate" th:placeholder="#{placeholder.startDate}" th:value="${param.sDate}">
+                                    <span> ~ </span>
+                                    <input type="date" id="endDate" name="eDate" th:placeholder="#{placeholder.endDate}" th:value="${param.eDate}">
+                                </div>
+                            </div>
+
+                            <div class="seller_view_edit_contents_search_btns">
+                                <div>
+                                    <input type="submit" th:value="#{button.search}" value="검색">
+                                    <input type="reset" th:value="#{button.reset}" value="초기화">
+                                </div>
+                            </div>
+                            <div class="seller_view_edit_contents_list">
+                                <div th:if="${#lists.isEmpty(itemList)}">
+                                    <span th:text="#{product.listWithCountZero}">상품목록 (총 0개)</span>
+                                </div>
+                                <div th:unless="${#lists.isEmpty(itemList)}">
+                                    <span th:text="#{product.listWithCount(${pageNav.totalRows})}">상품목록 (총 [[${pageNav.totalRows}]]개)</span>
+                                </div>
+
+                                <table class="seller_view_edit_contents_table">
+                                    <tr class="seller_view_edit_contents_table_title">
+                                        <th th:text="#{table.header.type}">구분</th>
+                                        <th th:text="#{table.header.edit}">수정</th>
+                                        <th th:text="#{table.header.productName}">상품명</th>
+                                        <th th:text="#{table.header.productNumber}">상품번호</th>
+                                        <th th:text="#{table.header.saleStatus}">판매상태</th>
+                                        <th th:text="#{table.header.stockStatus}">재고상태</th>
+                                        <th th:text="#{table.header.price}">판매가</th>
+                                        <th></th>
+                                    </tr>
+
+                                    <tr th:if="${#lists.isEmpty(itemList)}">
+                                        <td colspan="7" th:text="#{message.noProducts}">등록된 상품이 없습니다.</td>
+                                    </tr>
+
+                                    <tr th:each="item, stat : ${itemList}" th:if="${item != null}">
+                                        <td><span th:text="${stat.index + pageNav.startNum}"></span></td>
+                                        <td class="seller_view_edit_contents_table_edit_btn">
+                                            <button type="button" class="editButton"><span th:text="#{button.edit}">수정</span></button>
+                                            <input type="hidden" class="i_idx" th:value="${item.i_idx}">
+                                        </td>
+                                        <td class="seller_view_edit_contents_table_product_name">
+                                            <span th:text="${item.i_name}"></span>
+                                        </td>
+                                        <td><span>P[[${#numbers.formatInteger(item.i_idx, 8)}]]</span></td>
+                                        <td>
+                                            <span th:switch="${item.i_state}">
+                                                <span th:case="1" th:text="#{status.onSale}">판매중</span>
+                                                <span th:case="2" th:text="#{status.waitingSale}">판매대기</span>
+                                                <span th:case="3" th:text="#{status.soldOut}">품절</span>
+                                                <span th:case="*" th:text="#{status.noStatus}">상태 없음</span> <!-- Default case -->
+                                            </span>
+                                        </td>
+                                        <td><span th:text="#{item.count(${item.i_count})}">개</span></td>
+                                        <td> <span class="price" th:text="#{currency.format(${#numbers.formatDecimal(item.i_price, 0, 3)})}">원</span></td>
+                                        <td>
+                                            <button class="itemDelete" th:attr="data-i_idx=${item.i_idx}"><span>X</span></button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div th:if="${not #lists.isEmpty(itemList)}">
+                                <div class="seller_contents_table_pasing" id="td_paging">
+                                    <span th:replace="~{common/salesPaging :: salesFragment}"></span>
+                                </div>
+                            </div>
+                            <div class="stateList">
+                                <div class="changeState" data-state="1"><span th:text="#{status.onSale}">판매중</span></div>
+                                <div class="changeState" data-state="2"><span th:text="#{status.waitingSale}">판매대기</span></div>
+                                <div class="changeState" data-state="3"><span th:text="#{status.soldOut}">품절</span></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    var msgConfirmDelete = /*[[#{message.confirmDelete}]]*/ '정말 삭제하시겠습니까?';
+
+    $(document).ready(function() {
+        let i_idx = 0;
+
+        $(".editButton").click(function(event) {
+            event.stopPropagation();
+            var buttonPosition = $(this).offset();
+            var topPosition = buttonPosition.top + $(this).outerHeight();
+            i_idx = parseInt($(this).siblings(".i_idx").val(), 10);
+
+            $(".stateList").css({
+                "position" : "absolute",
+                "top" : topPosition + "px",
+                "left" : buttonPosition.left + "px"
+            }).toggle();
+        });
+
+        $(".changeState").click(function(event) {
+            event.stopPropagation();
+            var i_state = $(this).data('state');
+            var itemState = {"i_idx": i_idx, "i_state": i_state};
+
+            $.ajax({
+                type: 'post',
+                url: "[[@{/seller/updateItemStateProcess}]]",
+                data: JSON.stringify(itemState),
+                contentType: "application/json;charset=utf-8;",
+                dataType: 'json',
+                success: function (data) {
+                    if(data == 1){
+                        window.location.reload();
+                    }
+                },
+                error: function () {
+                    console.log("실패");
+                }
+            });
+        });
+
+        $(".itemDelete").click(function(event) {
+            event.stopPropagation();
+            var i_idx = $(this).data('i_idx');
+
+            if(confirm(msgConfirmDelete)){
+
+                $.ajax({
+                    url: "[[@{/item/deleteItemProcess}]]",
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ i_idx: i_idx }),
+                    success: function(response) {
+                        if(response.success){
+                            alert(response.message);
+                            window.location.reload();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        console.log("실패");
+                        alert("삭제 중 오류가 발생했습니다.");
+                    }
+                });
+            }
+        });
+        // 문서 클릭 시 stateList 숨기기
+        $(document).click(function(event) {
+            if (!$(event.target).closest('.editButton').length && !$(event.target).closest('.stateList').length) {
+                $(".stateList").hide();
+            }
+        });
+
+        // 가격 포매팅 추가
+        $(".price").each(function() {
+            var price = parseFloat($(this).text());
+            var formattedPrice = price.toLocaleString('ko-KR', { minimumFractionDigits: 0 });
+            $(this).text(formattedPrice + "원");
+        });
+    });
+</script>
+
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</body>
+
+</html>

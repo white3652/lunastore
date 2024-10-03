@@ -1,0 +1,44 @@
+#td_paging {
+    width: 100%;
+    margin-top: 50px;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* 페이징을 가로로 배치하고 중앙에 정렬 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0;
+    gap: 10px; /* 요소 간 간격 */
+}
+
+/* 기본 페이지 번호 스타일 */
+.pagination a {
+    color: #0071E3; /* Apple 파란색 */
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 20px; /* 둥근 모서리 */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: 500;
+}
+
+/* 페이지 번호 호버 시 배경색 */
+.pagination a:hover {
+    background-color: #f1f1f1; /* 부드러운 배경 */
+    color: #0071E3;
+}
+
+/* 활성화된 페이지 */
+.pagination a.active {
+    background-color: #0071E3;
+    color: white;
+    font-weight: 600;
+}
+
+/* 비활성화된 페이지 (이전/다음 버튼 등) */
+.pagination a.disabled {
+    color: #ccc;
+    pointer-events: none;
+}

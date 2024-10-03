@@ -1,0 +1,651 @@
+        /* #region 상단 타이틀 */
+        .m_sellerJoin_title {
+            width: 100%;
+            background-color: #ffffff;
+            border-bottom: 1px solid #E5E5E5;
+        }
+
+        .m_sellerJoin_tiregion {
+            width: 1200px;
+            height: 40px;
+            background-color: #ffffff;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .m_sellerJoin_tiregionti {
+            display: flex;
+            margin-left: 20px;
+            font-size: 24px;
+            align-items: center;
+            color: #111111;
+        }
+
+        .m_sellerJoin_tiregionre {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 6px;
+        }
+
+        .m_sellerJoin_tiregionss {
+            margin-right: 20px;
+            font-size: 10px;
+            color: #111111;
+        }
+
+        /* #endregion */
+
+        .m_sellerJoin_mainRegion {
+            width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* #region 페이지1 */
+        .m_sellerJoin_maintitle {
+            font-size: 40px;
+            font-family: 'NEXONLv1GothicBold';
+            margin-top: 140px;
+        }
+
+        .m_sellerJoin_subtitle {
+            font-size: 20px;
+            margin-top: 10px;
+            margin-bottom: 60px;
+        }
+
+        .m_sellerJoin_telRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 100px;
+        }
+
+        .m_sellerJoin_telInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+
+        .m_sellerJoin_telMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .m_sellerJoin_teltitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+
+        .m_sellerJoin_telMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            margin-top: 6px;
+            text-align: left;
+        }
+
+        .m_sellerJoin_content {
+            font-size: 12px;
+            margin-top: 10px;
+            width: 680px;
+            text-align: left;
+            margin-left: 250px;
+        }
+
+        .m_sellerJoin_checkregion {
+            margin-top: 50px;
+            text-align: left;
+            margin-left: 250px;
+            display: flex;
+            font-size: 14px;
+        }
+
+        .m_sellerJoin_rula {
+            margin-left: 4px;
+            width: 100px;
+        }
+
+        .m_sellerJoin_atag {
+            text-decoration: none;
+            color: #0071e3;
+        }
+
+        .m_sellerJoin_pagebtn1 {
+            margin-top: 100px;
+        }
+
+        .m_sellerJoin_btn1Region {
+            width: 136px;
+            height: 48px;
+            margin: 0 auto;
+            background-color: #80befb;
+            border-radius: 24px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 300px;
+        }
+
+        .m_sellerJoin_next1 {
+            text-align: center;
+            margin: 0 auto;
+            width: 136px;
+            height: 48px;
+            display: grid;
+            align-items: center;
+        }
+
+        .m_sellerJoin_btn {
+            display: none;
+        }
+
+        .m_sellerJoin_page2 {
+            display: none;
+        }
+        .m_sellerJoin_page3 {
+            display: none;
+        }
+        
+        .m_sellerJoin_page4 {
+            display: none;
+        }
+
+        /* #endregion */
+
+        /* #region 페이지 2 */
+        .m_sellerJoin_nameRegion{
+            display: flex;
+            width: 700px;
+            margin: 0 auto;
+            margin-top: 130px;
+            justify-content: space-between;
+        }
+
+        .m_sellerJoin_regionFirstName {
+            width: 340px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            transition: 0.4s;
+        }
+        
+        .m_sellerJoin_firstNameInput {
+            width: 300px;
+            height: 60px;
+            margin-left: 0px;
+            margin-top: 18px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+        
+        .m_sellerJoin_firstNametitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+
+        .m_sellerJoin_taxidRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 40px;
+        }
+
+        .m_sellerJoin_taxidInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+
+        .m_sellerJoin_taxidMsg{
+            font-size: 10px;
+            color: #F74848;
+            position: relative;
+            text-align: left;
+            margin-left: 20px;
+            margin-top: 6px;
+        }
+
+        .m_sellerJoin_taxidTitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+
+        .m_sellerJoin_birthdayRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 20px;
+        }
+
+        .m_sellerJoin_birthdayInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            opacity: 0;
+            background-color: #f9f9f9;
+        }
+
+        .m_sellerJoin_nameMsg{
+            font-size: 10px;
+            color: #F74848;
+            position: relative;
+            text-align: left;
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .m_sellerJoin_birthdayMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            position: relative;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .m_sellerJoin_birthdayText {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+
+        .m_sellerJoin_birthdayResult{
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            font-size: 20px;
+            opacity: 0;
+            transition: 0.6s;
+            outline: none;
+            border: none;
+        }
+        /* #endregion */
+
+        /* #region 페이지 3 */
+        .m_sellerJoin_emailRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 100px;
+        }
+
+        .m_sellerJoin_emailInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+
+        .m_sellerJoin_emailMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            position: relative;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .m_sellerJoin_emailSubTitle{
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .m_sellerJoin_emailTitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+
+        .m_sellerJoin_passwordRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 60px;
+        }
+
+        .m_sellerJoin_passwordInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+
+        .m_sellerJoin_passwordMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            position: relative;
+            margin-top: 6px;
+            text-align: left;
+        }
+
+        .m_sellerJoin_passwordTitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+
+        .m_sellerJoin_checkPasswordRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 20px;
+        }
+
+        .m_sellerJoin_checkPasswordInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+
+        .m_sellerJoin_checkPasswordMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            position: relative;
+            margin-top: 6px;
+            text-align: left;
+        }
+
+        .m_sellerJoin_checkPasswordTitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+        /* #endregion */
+        
+                 /* #region 페이지 4 */
+        .m_sellerJoin_zonecodeRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 100px;
+        }
+
+        .m_sellerJoin_zonecodeInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+
+        .m_sellerJoin_zonecodeMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            position: relative;
+            margin-top: 6px;
+            text-align: left;
+        }
+
+        .m_sellerJoin_zonecodeTitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+
+        .m_sellerJoin_addressRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 20px;
+        }
+
+        .m_sellerJoin_addressInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+
+        .m_sellerJoin_addressMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            position: relative;
+            margin-top: 6px;
+            text-align: left;
+        }
+
+        .m_sellerJoin_addressTitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+
+        .m_sellerJoin_addAddressRegion {
+            width: 700px;
+            height: 80px;
+            border: 1px solid #858585;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            transition: 0.4s;
+            margin-top: 20px;
+        }
+
+        .m_sellerJoin_addAddressInput {
+            width: 660px;
+            height: 60px;
+            margin-top: 20px;
+            outline: none;
+            font-size: 20px;
+            border: none;
+            background-color: #f9f9f9;
+        }
+
+        .m_sellerJoin_addAddressMsg {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #F74848;
+            position: relative;
+            margin-top: 6px;
+            text-align: left;
+        }
+
+        .m_sellerJoin_addAddressTitle {
+            position: absolute;
+            left: 20px;
+            bottom: 28px;
+            font-size: 20px;
+            color: #858585;
+            transition: 0.4s;
+        }
+        /* #endregion */
+        
+        ._inputRegion{
+    width: 700px;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+._inputRegion input{
+    width: 660px;
+    height: 60px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: 1px solid #858585;
+    padding: 20px;
+    background-color:#ffffff00;
+    padding-bottom: 0px;
+}
+
+._inputRegion input+span{
+    position: absolute;
+    pointer-events: none;
+    color: #858585;
+    transition: all 0.3s ease;
+    left: 20px;
+    top: 30px;
+    font-size: 20px;
+}
+
+._inputRegion input:focus + span,
+._inputRegion input:not(:placeholder-shown) + span{
+    top: 10px;
+    font-size: 14px;
+}
+
+._inputRegionBir{
+    width: 700px;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+._inputRegionBir input{
+    width: 660px;
+    height: 60px;
+    font-size: 10px;
+   	color:#ffffff00;
+    border-radius: 10px;
+    border: 1px solid #858585;
+    padding: 20px;
+    padding-bottom: 0px;
+    background-color:#ffffff00;
+}
+
+._inputRegionBir input+span{
+    position: absolute;
+    pointer-events: none;
+    color: #858585;
+    transition: all 0.3s ease;
+    left: 20px;
+    top: 30px;
+    font-size: 20px;
+}
+
+._inputRegionBir input:focus + span,
+._inputRegionBir input:not(:placeholder-shown) + span{
+    top: 10px;
+    font-size: 14px;
+}
+
+._inputRegionName{
+    width: 340px;
+    position: relative;
+    margin-bottom: 20px;
+}
+._inputRegionName input{
+    width: 300px;
+    height: 60px;
+    font-size: 22px;
+    border-radius: 10px;
+    border: 1px solid #858585;
+    padding: 20px;
+    background-color:#ffffff00;
+    padding-bottom: 0px;
+}
+
+._inputRegionName input+span{
+    position: absolute;
+    pointer-events: none;
+    color: #858585;
+    transition: all 0.3s ease;
+    left: 20px;
+    top: 30px;
+    font-size: 20px;
+}
+
+._inputRegionName input:focus + span,
+._inputRegionName input:not(:placeholder-shown) + span{
+    top: 10px;
+    font-size: 14px;
+}

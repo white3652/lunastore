@@ -1,0 +1,44 @@
+        .mainRegion {
+            width: 1200px;
+            text-align: center;
+            margin: 0 auto;
+            margin-bottom: 500px;
+        }
+
+        .mainRegionTitle {
+            font-size: 24px;
+            font-family: 'NEXONLv1GothicBold';
+            margin-top: 60px;
+        }
+
+        .mainRegionSubTitle {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .emailNemberInput {
+            width: 200px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid #848484;
+            padding: 0px 20px;
+            margin-bottom: 20px;
+        }
+
+        .emailCheckBtn {
+            background-color: #0e7ff0;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #0e7ff0;
+            margin-right: 10px;
+        }
+        .reEmailBtn{
+            background-color: #848484;
+            border:  1px solid #848484;
+            border-radius: 10px;
+            padding: 10px;
+            color: #ffffff;
+            margin-left: 10px;
+        }

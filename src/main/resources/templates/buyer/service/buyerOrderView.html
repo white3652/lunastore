@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{order.thankYou}">주문 상세 내역</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/service/buyerOrderView.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var cart = {
+            cart: /*[[#{global.header.cart}]]*/ '장바구니',
+            cartEmpty: /*[[#{global.header.cartEmpty}]]*/ '장바구니가 비어 있습니다.',
+            productImageAlt: /*[[#{global.header.productImageAlt}]]*/ '상품이미지',
+            cartCheck: /*[[#{global.header.cartCheck}]]*/ '장바구니 확인',
+            cartViewMore: /*[[#{global.header.cartViewMore}]]*/ '개의 상품이 더 있습니다.',
+            loginPrompt: /*[[#{global.header.loginPrompt}]]*/ '저장해둔 항목이 있는지 확인하려면 ',
+            loginPrompt2: /*[[#{global.header.loginPrompt2}]]*/ '하세요. ',
+            login: /*[[#{global.header.login}]]*/ '로그인'
+
+        };
+        /*]]>*/
+    </script>
+    <script th:src="@{/js/buyer/common/globalNavigation.js}" defer></script>
+    <script th:src="@{/js/buyer/buyerCartNavigation.js}" defer></script>
+    <script th:src="@{/js/buyer/service/buyerOrderView.js}" defer></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var urls = {
+            buyerLogin: /*[[@{/buyer/login}]]*/ '/buyer/login',
+            insertCart: /*[[@{/cart/insertCart}]]*/ '/cart/insertCart',
+            cart: /*[[@{/cart/cart}]]*/ '/cart/cart',
+            findOrder: /*[[@{/order/findOrder}]]*/ '/order/findOrder',
+            insertReview: /*[[@{/item/insertReview}]]*/ '/item/insertReview',
+            submitAnswer: /*[[@{/buyer/service/qna/{qnaIdx}/answer}]]*/ '/buyer/service/qna/{qnaIdx}/answer'
+        };
+
+        var messages = {
+            confirmPurchase: /*[[#{confirm.purchase}]]*/ '구매를 확정하시겠습니까?',
+            confirmCancel: /*[[#{confirm.cancel}]]*/ '정말로 주문을 취소하시겠습니까?',
+            status: {
+                paymentCompleted: /*[[#{status.payment.completed}]]*/ '결제완료',
+                preparingShipment: /*[[#{status.preparing.shipment}]]*/ '배송준비',
+                shipmentInProgress: /*[[#{status.shipment.in.progress}]]*/ '배송중',
+                shipmentCompleted: /*[[#{status.shipment.completed}]]*/ '배송완료',
+                orderCanceled: /*[[#{status.order.canceled}]]*/ '주문취소',
+                refund: /*[[#{status.refund}]]*/ '환불',
+                exchange: /*[[#{status.exchange}]]*/ '교환',
+                purchaseConfirmed: /*[[#{status.purchase.confirmed}]]*/ '구매확정',
+                unknown: /*[[#{status.unknown}]]*/ '알 수 없음'
+            },
+            order: {
+                thankYou: /*[[#{order.thankYou}]]*/ '주문해 주셔서 감사합니다.',
+                updates: /*[[#{order.updates}]]*/ '주문에 대한 업데이트와 함께 알려드리겠습니다.',
+                recipientInfo: /*[[#{order.recipientInfo}]]*/ '받는사람 정보',
+                recipient: /*[[#{order.recipient}]]*/ '받는사람',
+                contact: /*[[#{order.contact}]]*/ '연락처',
+                address: /*[[#{order.address}]]*/ '받는주소',
+                paymentInfo: /*[[#{order.paymentInfo}]]*/ '결제 정보',
+                paymentMethod: /*[[#{order.paymentMethod}]]*/ '결제수단',
+                bank: /*[[#{order.bank}]]*/ '은행',
+                totalAmount: /*[[#{order.totalAmount}]]*/ '총 결제 금액',
+                returnList: /*[[#{order.returnList}]]*/ '주문목록 돌아가기',
+                confirmPurchase: /*[[#{order.confirmPurchase}]]*/ '구매확정',
+                cancelOrder: /*[[#{order.cancelOrder}]]*/ '주문취소'
+            },
+            review: {
+                writeReview: /*[[#{review.writeReview}]]*/ '리뷰 작성하기'
+            }
+        };
+        /*]]>*/
+    </script>
+    <style th:if="${#locale.language == 'ja'}">
+        * {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div class="warp">
+    <header th:replace="~{buyer/common/global_header :: global_header}"></header>
+    <section>
+        <div class="m_buyerOrderView_sectionRegion">
+            <div class="m_buyerOrderView_sectionTitle" th:text="#{order.thankYou}">주문해 주셔서 감사합니다.</div>
+            <div class="m_buyerOrderView_sectionSubTitle" th:text="#{order.updates}">주문에 대한 업데이트와 함께 알려드리겠습니다.</div>
+            <div class="m_buyerOrderView_orderDate" th:text="${#dates.format(order.bo_orderdate, 'yyyy.MM.dd')} + ' 주문'">2024.01.01 주문</div>
+            <div class="m_buyerOrderView_orderNumber" th:text="'주문번호 ' + ${order.bo_idx}">주문번호 435345353534</div>
+            <div class="_hr"></div>
+
+            <!-- 주문한 상품 목록 반복 -->
+            <div th:each="item : ${items}">
+                <div th:if="${item != null}" class="m_buyerOrderView_item">
+                    <div class="m_buyerOrderView_itemTitle" th:text="${item.i_name}">상품이름</div>
+                    <div class="_displayFlex">
+                        <img th:src="@{/uploads/{filename}(filename=${item.i_saveimg0})}" alt="상품 이미지" class="m_buyerOrderView_itemImg">
+                        <div class="m_buyerOrderView_itemRegion">
+                            <div class="m_buyerOrderView_status status" th:data-status="${item.bos_state}">
+                                <span th:switch="${item.bos_state}">
+                                    <span th:case="1" th:text="#{status.payment.completed}">결제완료</span>
+                                    <span th:case="2" th:text="#{status.preparing.shipment}">배송준비</span>
+                                    <span th:case="3" th:text="#{status.shipment.in.progress}">배송중</span>
+                                    <span th:case="4" th:text="#{status.shipment.completed}">배송완료</span>
+                                    <span th:case="5" th:text="#{status.order.canceled}">주문취소</span>
+                                    <span th:case="6" th:text="#{status.refund}">환불</span>
+                                    <span th:case="7" th:text="#{status.exchange}">교환</span>
+                                    <span th:case="10" th:text="#{status.purchase.confirmed}">구매확정</span>
+                                    <span th:case="*" th:text="#{status.unknown}">알 수 없음</span>
+                                </span>
+                            </div>
+                            <div class="m_buyerOrderView_statusBarRegion">
+                                <div class="m_buyerOrderView_statusBarDefault"></div>
+                                <div class="m_buyerOrderView_statusBar statusBar"></div>
+                            </div>
+                            <div class="m_buyerOrderView_statuss _displayFlex">
+                                <div class="m_buyerOrderView_statusle statusle1" th:text="#{status.payment.completed}">결제완료</div>
+                                <div class="m_buyerOrderView_statusle statusle2" th:text="#{status.preparing.shipment}">배송준비</div>
+                                <div class="m_buyerOrderView_statusle statusle3" th:text="#{status.shipment.in.progress}">배송중</div>
+
+                                <!-- 조건부 메시지 표시 -->
+                                <div class="m_buyerOrderView_statusle statusle4">
+                                    <span th:if="${item.bos_state == 10}" th:text="#{status.purchase.confirmed}">구매확정</span>
+                                    <span th:unless="${item.bos_state == 10}" th:text="#{status.shipment.completed}">배송완료</span>
+                                </div>
+                            </div>
+                            <div class="m_buyerOrderView_totalCount" th:text="${item.bos_count} + ' 개'">3 개</div>
+                            <div class="m_buyerOrderView_totalPrice">
+                                <!-- 소계: 각 아이템의 총 가격 -->
+                                <span th:text="${'₩' + #numbers.formatDecimal(item.bos_price * item.bos_count, 0, 'COMMA', 0, 'POINT')}"></span>
+                            </div>
+                            <label>
+                                <div class="m_buyerOrderView_reviewRegion review" style="display:none;">
+                                    <a th:href="@{/review/write(orderId=${order.bo_idx}, i_idx=${item.i_idx})}"
+                                       class="m_buyerOrderView_review"
+                                       th:text="#{review.writeReview}">리뷰 작성하기</a>
+                                    <div class="arrow_small"></div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="_hr"></div>
+                </div>
+            </div>
+
+            <!-- 받는사람 정보 -->
+            <div class="m_buyerOrderView_titleName" th:text="#{order.recipientInfo}">받는사람 정보</div>
+            <div class="_hrStrong"></div>
+            <div class="_displayFlex">
+                <div class="m_buyerOrderView_addressTitle" th:text="#{order.recipient}">받는사람</div>
+                <div class="m_buyerOrderView_addressName"
+                     th:text="${order.ba_firstname} + ' ' + ${order.ba_lastname}">이름</div>
+            </div>
+            <div class="_displayFlex">
+                <div class="m_buyerOrderView_addressTitle" th:text="#{order.contact}">연락처</div>
+                <div class="m_buyerOrderView_addressName" th:text="${order.ba_contact}">전화번호</div>
+            </div>
+            <div class="_displayFlex">
+                <div class="m_buyerOrderView_addressTitle" th:text="#{order.address}">받는주소</div>
+                <div class="m_buyerOrderView_addressName"
+                     th:text="'(' + ${order.ba_zipcode} + ') ' + ${order.ba_address}"> (23445) 모든주소</div>
+            </div>
+            <div class="_hr"></div>
+
+            <!-- 결제 정보 -->
+            <div class="m_buyerOrderView_titleName" th:text="#{order.paymentInfo}">결제 정보</div>
+            <div class="_hrStrong"></div>
+            <!-- 결제 수단과 은행을 국제화 -->
+            <div class="m_buyerOrderView_addressName"
+                 th:text="#{order.paymentMethod} + ': 카드결제'">결제수단: 카드결제</div>
+            <div class="m_buyerOrderView_addressName"
+                 th:text="#{order.bank} + ': 신한은행'">은행: 신한은행</div>
+            <div class="_displayFlex">
+                <div class="m_buyerOrderView_addressTitle _bold"
+                     th:text="#{order.totalAmount}">총 결제 금액</div>
+                <div class="m_buyerOrderView_addressName _bold">
+                    <span th:text="${formattedTotalPrice} + ' 원'">23434 원</span>
+                </div>
+            </div>
+            <div class="_hr"></div>
+
+            <!-- 마지막 버튼 영역: 주문 전체의 상태를 기준으로 버튼 표시 -->
+            <div class="m_buyerOrderView_lastBtnRegion">
+                <a th:href="@{/order/orderList}" class="m_buyerOrdrView_returnPage"
+                   th:text="#{order.returnList}">주문목록 돌아가기</a>
+
+                <!-- 구매확정 버튼: 상태가 배송완료(4)일 때만 표시 -->
+                <form th:if="${items.size() > 0 and items.get(0).bos_state == 4}"
+                      th:action="@{/order/confirmPurchase}" method="post" style="display:inline;">
+                    <input type="hidden" name="bo_idx" th:value="${order.bo_idx}"/>
+                    <button type="submit" class="m_buyerOrdrView_confirmBtn"
+                            th:text="#{order.confirmPurchase}">구매확정</button>
+                </form>
+
+                <!-- 주문취소 버튼: 상태가 결제완료(1) 또는 배송준비(2)일 때만 표시 -->
+                <form th:if="${items.size() > 0 and (items.get(0).bos_state == 1 || items.get(0).bos_state == 2)}"
+                      th:action="@{/order/cancel}" method="post" style="display:inline;">
+                    <input type="hidden" name="bo_idx" th:value="${order.bo_idx}"/>
+                    <button type="submit" class="m_buyerOrdrView_cancelBtn"
+                            th:text="#{order.cancelOrder}">주문취소</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</body>
+</html>

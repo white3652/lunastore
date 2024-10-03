@@ -1,0 +1,800 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lunastore.SellerMapper">
+
+    <insert id="join" parameterType="sellerVO">
+        insert into tb_seller (s_businessnum, s_pw, s_firstname, s_lastname, s_email, s_tel, s_birth, s_zipcode, s_address, s_restaddress)
+        values (#{s_businessnum}, #{s_pw}, #{s_firstname}, #{s_lastname}, #{s_email}, #{s_tel}, #{s_birth}, #{s_zipcode}, #{s_address}, #{s_restaddress})
+        <selectKey keyProperty="s_idx" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="info" parameterType="int">
+        INSERT INTO tb_seller_info (s_idx, s_profile, s_storename)
+        VALUES (#{s_idx}, '기본!@프로필.jpg', CONCAT('lunastore', #{s_idx}))
+    </insert>
+
+    <insert id="state" parameterType="int">
+        INSERT INTO tb_seller_state (s_idx)
+        VALUES (#{s_idx})
+    </insert>
+
+    <select id="getPassword" parameterType="string" resultType="string">
+        select s_pw from tb_seller where s_businessnum = #{s_businessnum}
+    </select>
+
+    <select id="login" parameterType="string" resultType="sellerVO">
+        select * from tb_seller s, tb_seller_state ss, tb_seller_info si
+        where s.s_idx = ss.s_idx
+        and s.s_idx = si.s_idx
+        and s_businessnum = #{s_businessnum}
+        and ss.s_cancel = 'N'
+    </select>
+
+    <update id="lastLoginDate" parameterType="int">
+        update tb_seller set s_lastlogindate = now() where s_idx = #{s_idx}
+    </update>
+
+    <update id="update" parameterType="sellerVO">
+        update tb_seller set
+        <choose>
+            <when test="s_pw != null">
+                s_pw = #{s_pw}, s_modifydate = now(), s_pwmodifydate = now()
+            </when>
+            <when test="s_firstname != null and s_lastname != null and s_tel != null and s_birth != null and s_zipcode != null and s_address != null">
+                s_firstname = #{s_firstname}, s_lastname = #{s_lastname}, s_tel = #{s_tel}, s_birth = #{s_birth}, s_zipcode = #{s_zipcode}, s_address = #{s_address}, s_restaddress = #{s_restaddress}, s_modifydate = now()
+            </when>
+        </choose>
+        where s_idx = #{s_idx}
+    </update>
+
+    <update id="infoUpdate" parameterType="sellerVO">
+        UPDATE tb_seller_info si
+        JOIN tb_seller s ON si.s_idx = s.s_idx
+        <choose>
+            <when test="s_profile != null">
+                SET si.s_profile = #{s_profile}, si.s_storename = #{s_storename}, si.s_storeintro = #{s_storeintro}, s.s_modifydate = NOW()
+            </when>
+            <otherwise>
+                SET si.s_profile = "기본!@프로필.jpg", si.s_storename = #{s_storename}, si.s_storeintro = #{s_storeintro}, s.s_modifydate = NOW()
+            </otherwise>
+        </choose>
+        WHERE s.s_idx = #{s_idx};
+    </update>
+
+    <select id="getSeller" parameterType="int" resultType="sellerVO">
+        select * from tb_seller s, tb_seller_state ss, tb_seller_info si
+        where s.s_idx = ss.s_idx
+        and s.s_idx = si.s_idx
+        and s.s_idx = #{s_idx}
+    </select>
+
+    <update id="cancel" parameterType="int">
+        UPDATE tb_seller_state ss
+        JOIN tb_seller s ON ss.s_idx = s.s_idx
+        SET ss.s_cancel = 'Y', s.s_modifydate = NOW()
+        WHERE s.s_idx = #{s_idx};
+    </update>
+
+    <select id="storenameCheck" parameterType="string" resultType="int">
+        select count(*) from tb_seller_info where s_storename = #{s_storename}
+    </select>
+
+    <select id="telCheck" parameterType="string" resultType="int">
+        select count(*) from tb_seller where s_tel = #{s_tel}
+    </select>
+
+    <select id="businessnumCheck" parameterType="string" resultType="int">
+        select count(*) from tb_seller where s_businessnum = #{s_businessnum}
+    </select>
+
+    <select id="emailCheck" parameterType="string" resultType="int">
+        select count(*) from tb_seller where s_email = #{s_email}
+    </select>
+
+    <update id="updatePassword" parameterType="sellerVO">
+        update tb_seller set s_pw = #{s_pw} where s_businessnum = #{s_businessnum}
+    </update>
+
+    <select id="matchBusinessnumEmail" parameterType="sellerVO" resultType="int">
+        SELECT count(*)
+        FROM tb_seller s, tb_seller_state ss, tb_seller_info si
+        WHERE s.s_idx = ss.s_idx
+        AND s.s_idx = si.s_idx
+        AND s.s_businessnum = #{s_businessnum}
+        AND s.s_email = #{s_email}
+    </select>
+
+    <select id="passwordCheck" parameterType="string" resultType="int">
+        select count(*) from tb_seller where s_pw = #{s_pw}
+    </select>
+
+    <select id="getPw" parameterType="int" resultType="string">
+        select s_pw from tb_seller where s_idx = #{s_idx}
+    </select>
+
+    <update id="verifyEmail" parameterType="int">
+        update tb_seller_state set s_check = 'Y' where s_check = 'N' and s_idx = #{s_idx}
+    </update>
+
+    <select id="getS_idx" parameterType="string" resultType="int">
+        SELECT s_idx FROM tb_seller WHERE s_email = #{s_email}
+    </select>
+
+    <select id="getItem" parameterType="int" resultType="itemVO">
+        SELECT * from vw_item where s_idx = #{s_idx}
+    </select>
+
+    <select id="getItems" parameterType="searchVO" resultType="itemVO">
+        <choose>
+            <when test="itemNum != '' or itemName != '' or itemState != 0 or largeCategory != 0 or smallCategory != 0 or startDate != null or endDate != null">
+                select * from vw_item where s_idx = #{s_idx}
+                <if test="itemNum != ''">
+                    and i_idx = #{itemNum}
+                </if>
+                <if test="itemName != ''">
+                    and i_name like CONCAT('%', #{itemName}, '%')
+                </if>
+                <if test="itemState != 0">
+                    <choose>
+                        <when test="itemState == 1">
+                            and i_state = #{itemState}
+                        </when>
+                        <when test="itemState == 2">
+                            and i_state = #{itemState}
+                        </when>
+                        <when test="itemState == 3">
+                            and i_state = #{itemState}
+                        </when>
+                    </choose>
+                </if>
+                <if test="largeCategory != 0">
+                    <choose>
+                        <when test='largeCategory == 1'>
+                            <choose>
+                                <when test="smallCategory == 0">
+                                    and c_idx BETWEEN 1 AND 5
+                                </when>
+                                <otherwise>
+                                    and c_idx = #{smallCategory}
+                                </otherwise>
+                            </choose>
+                        </when>
+                        <when test='largeCategory == 2'>
+                            <choose>
+                                <when test="smallCategory == 0">
+                                    AND c_idx BETWEEN 6 AND 10
+                                </when>
+                                <otherwise>
+                                    and c_idx = #{smallCategory}
+                                </otherwise>
+                            </choose>
+                        </when>
+                        <when test='largeCategory == 3'>
+                            <choose>
+                                <when test="smallCategory == 0">
+                                    AND c_idx BETWEEN 11 AND 15
+                                </when>
+                                <otherwise>
+                                    and c_idx = #{smallCategory}
+                                </otherwise>
+                            </choose>
+                        </when>
+                        <when test='largeCategory == 4'>
+                            <choose>
+                                <when test="smallCategory == 0">
+                                    AND c_idx BETWEEN 16 AND 20
+                                </when>
+                                <otherwise>
+                                    and c_idx = #{smallCategory}
+                                </otherwise>
+                            </choose>
+                        </when>
+                        <when test='largeCategory == 5'>
+                            <choose>
+                                <when test="smallCategory == 0">
+                                    AND c_idx BETWEEN 21 AND 25
+                                </when>
+                                <otherwise>
+                                    and c_idx = #{smallCategory}
+                                </otherwise>
+                            </choose>
+                        </when>
+                    </choose>
+                </if>
+                <if test="startDate != null">
+                    <![CDATA[
+                        and i_modifydate >= #{startDate}
+                     ]]>
+                </if>
+                <if test="startDate != null">
+                    <![CDATA[
+                        and i_modifydate <= #{endDate}
+                     ]]>
+                </if>
+                order by i_idx desc
+                limit 6 offset #{startIdx}
+            </when>
+
+            <otherwise>
+                select * from vw_item where s_idx = #{s_idx} order by i_idx desc limit 6 offset #{startIdx}
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getItemTotalCount" parameterType="searchVO" resultType="int">
+        <choose>
+            <when test="itemNum != '' or itemName != '' or itemState != 0 or largeCategory != 0 or smallCategory != 0 or startDate != null or endDate != null">
+                select count(*) from vw_item where s_idx = #{s_idx}
+                <if test="itemNum != ''">
+                    and i_idx = #{itemNum}
+                </if>
+                <if test="itemName != ''">
+                    and i_name like CONCAT('%', #{itemName}, '%')
+                </if>
+                <if test="itemState != 0">
+                    <choose>
+                        <when test="itemState == 1">
+                            and i_state = #{itemState}
+                        </when>
+                        <when test="itemState == 2">
+                            and i_state = #{itemState}
+                        </when>
+                        <when test="itemState == 3">
+                            and i_state = #{itemState}
+                        </when>
+                    </choose>
+                </if>
+                <if test="largeCategory != 0">
+                    <choose>
+                        <when test='largeCategory == 1'>
+                            <choose>
+                                <when test="smallCategory == 0">
+                                    and c_idx BETWEEN 1 AND 5
+                                </when>
+                                <otherwise>
+                                    and c_idx = #{smallCategory}
+                                </otherwise>
+                            </choose>
+                        </when>
+                        <when test='largeCategory == 2'>
+                            <choose>
+                                <when test="smallCategory == 0">
+                                    AND c_idx BETWEEN 6 AND 10
+                                </when>
+                                <otherwise>
+                                    and c_idx = #{smallCategory}
+                                </otherwise>
+                            </choose>
+                        </when>
+                        <when test='largeCategory == 3'>
+                            <choose>
+                                <when test="smallCategory == 0">
+                                    AND c_idx BETWEEN 11 AND 15
+                                </when>
+                                <otherwise>
+                                    and c_idx = #{smallCategory}
+                                </otherwise>
+                            </choose>
+                        </when>
+                        <when test='largeCategory == 4'>
+                            <choose>
+                                <when test="smallCategory == 0">
+                                    AND c_idx BETWEEN 16 AND 20
+                                </when>
+                                <otherwise>
+                                    and c_idx = #{smallCategory}
+                                </otherwise>
+                            </choose>
+                        </when>
+                        <when test='largeCategory == 5'>
+                            <choose>
+                                <when test="smallCategory == 0">
+                                    AND c_idx BETWEEN 21 AND 25
+                                </when>
+                                <otherwise>
+                                    and c_idx = #{smallCategory}
+                                </otherwise>
+                            </choose>
+                        </when>
+                    </choose>
+                </if>
+                <if test="startDate != null">
+                    <![CDATA[
+                        and i_modifydate >= #{startDate}
+                     ]]>
+                </if>
+                <if test="startDate != null">
+                    <![CDATA[
+                        and i_modifydate <= #{endDate}
+                     ]]>
+                </if>
+            </when>
+
+            <otherwise>
+                select count(*) from vw_item where s_idx = #{s_idx}
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getOrder" parameterType="int" resultType="orderStateVO">
+        select * from vw_item vi
+        INNER JOIN tb_buyer_order_state bos ON vi.i_idx = bos.i_idx
+        where vi.s_idx = #{s_idx}
+    </select>
+
+    <select id="getOrders" parameterType="searchVO" resultType="orderStateVO">
+        <choose>
+            <when test="orderNum != '' or orderNickname != '' or orderState != 0 or startDate != null or endDate != null">
+                SELECT * FROM tb_buyer_order_state bos
+                INNER JOIN tb_buyer_order bo ON bos.bo_idx = bo.bo_idx
+                INNER JOIN tb_buyer_info bi ON bi.b_idx = bo.b_idx
+                INNER JOIN tb_item i ON bos.i_idx = i.i_idx
+                INNER JOIN tb_seller s ON s.s_idx = i.s_idx
+                WHERE s.s_idx = #{s_idx}
+                <if test="orderNum != ''">
+                    and bo.bo_idx = #{orderNum}
+                </if>
+                <if test="orderNickname != ''">
+                    and b_nickname like CONCAT('%', #{orderNickname}, '%')
+                </if>
+                <if test="orderState != 0">
+                    <choose>
+                        <when test="orderState == 1">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 2">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 3">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 4">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 5">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 6">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 7">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 8">
+                            and bos_state = #{orderState}
+                        </when>
+                    </choose>
+                </if>
+                <if test="startDate != null">
+                    <![CDATA[
+                        and bo_orderdate >= #{startDate}
+                     ]]>
+                </if>
+                <if test="startDate != null">
+                    <![CDATA[
+                        and bo_orderdate <= #{endDate}
+                     ]]>
+                </if>
+                order by bos.bo_idx desc
+                limit 6 offset #{startIdx}
+            </when>
+
+            <otherwise>
+                SELECT * FROM tb_buyer_order_state bos
+                INNER JOIN tb_buyer_order bo ON bos.bo_idx = bo.bo_idx
+                INNER JOIN tb_buyer_info bi ON bi.b_idx = bo.b_idx
+                INNER JOIN tb_item i ON bos.i_idx = i.i_idx
+                INNER JOIN tb_seller s ON s.s_idx = i.s_idx
+                WHERE s.s_idx = #{s_idx}
+                order by bos.bo_idx desc
+                limit 6 offset #{startIdx}
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getOrderTotalCount" parameterType="searchVO" resultType="int">
+        <choose>
+            <when test="orderNum != '' or orderNickname != '' or orderState != 0 or startDate != null or endDate != null">
+                SELECT count(*)
+                FROM tb_buyer_order_state bos
+                INNER JOIN tb_buyer_order bo ON bos.bo_idx = bo.bo_idx
+                INNER JOIN tb_buyer_info bi ON bi.b_idx = bo.b_idx
+                INNER JOIN tb_item i ON bos.i_idx = i.i_idx
+                INNER JOIN tb_seller s ON s.s_idx = i.s_idx
+                WHERE s.s_idx = #{s_idx}
+                <if test="orderNum != ''">
+                    and bo.bo_idx = #{orderNum}
+                </if>
+                <if test="orderNickname != ''">
+                    and b_nickname like CONCAT('%', #{orderNickname}, '%')
+                </if>
+                <if test="orderState != 0">
+                    <choose>
+                        <when test="orderState == 1">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 2">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 3">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 4">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 5">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 6">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 7">
+                            and bos_state = #{orderState}
+                        </when>
+                        <when test="orderState == 8">
+                            and bos_state = #{orderState}
+                        </when>
+                    </choose>
+                </if>
+                <if test="startDate != null">
+                    <![CDATA[
+                        and bo_orderdate >= #{startDate}
+                     ]]>
+                </if>
+                <if test="startDate != null">
+                    <![CDATA[
+                        and bo_orderdate <= #{endDate}
+                     ]]>
+                </if>
+            </when>
+
+            <otherwise>
+                SELECT count(*)
+                FROM tb_buyer_order_state bos
+                INNER JOIN tb_buyer_order bo ON bos.bo_idx = bo.bo_idx
+                INNER JOIN tb_buyer_info bi ON bi.b_idx = bo.b_idx
+                INNER JOIN tb_item i ON bos.i_idx = i.i_idx
+                INNER JOIN tb_seller s ON s.s_idx = i.s_idx
+                WHERE s.s_idx = #{s_idx}
+            </otherwise>
+        </choose>
+    </select>
+
+    <update id="updateOrderState" parameterType="orderStateVO">
+        UPDATE tb_buyer_order_state
+        SET bos_state = #{bos_state}
+        WHERE bo_idx = #{bo_idx}
+        <if test="bos_option != null and bos_option != ''">
+            AND bos_option = #{bos_option}
+        </if>
+        <if test="bos_option == null or bos_option == ''">
+            AND (bos_option IS NULL OR bos_option = '')
+        </if>
+    </update>
+
+    <update id="updateItemState" parameterType="itemVO">
+        update tb_item set i_state = #{i_state} where i_idx = #{i_idx}
+    </update>
+
+    <select id="getReviews" parameterType="searchVO" resultType="reviewVO">
+        <choose>
+            <when test="itemNum != '' or buyerNickname != '' or startDate != null or endDate != null">
+                SELECT *
+                FROM tb_item
+                JOIN tb_seller ON tb_item.s_idx = tb_seller.s_idx
+                JOIN tb_buyer_order_state ON tb_item.i_idx = tb_buyer_order_state.i_idx
+                JOIN tb_buyer_order ON tb_buyer_order_state.bo_idx = tb_buyer_order.bo_idx
+                JOIN tb_buyer_info ON tb_buyer_order.b_idx = tb_buyer_info.b_idx
+                JOIN tb_buyer_review ON tb_buyer_order_state.bos_idx = tb_buyer_review.bos_idx
+                WHERE tb_seller.s_idx = #{s_idx}
+                <if test="itemNum != ''">
+                    AND tb_item.i_idx = #{itemNum}
+                </if>
+                <if test="buyerNickname != ''">
+                    AND tb_buyer_info.b_nickname LIKE CONCAT('%', #{buyerNickname}, '%')
+                </if>
+                <if test="startDate != null">
+                    <![CDATA[
+                    AND br_postdate >= #{startDate}
+                 ]]>
+                </if>
+                <if test="endDate != null">
+                    <![CDATA[
+                    AND br_postdate <= CONCAT(#{endDate}, ' 23:59:59')
+                 ]]>
+                </if>
+                ORDER BY br_idx DESC
+            </when>
+
+            <otherwise>
+                SELECT *
+                FROM tb_item
+                JOIN tb_seller ON tb_item.s_idx = tb_seller.s_idx
+                JOIN tb_buyer_order_state ON tb_item.i_idx = tb_buyer_order_state.i_idx
+                JOIN tb_buyer_order ON tb_buyer_order_state.bo_idx = tb_buyer_order.bo_idx
+                JOIN tb_buyer_info ON tb_buyer_order.b_idx = tb_buyer_info.b_idx
+                JOIN tb_buyer_review ON tb_buyer_order_state.bos_idx = tb_buyer_review.bos_idx
+                WHERE tb_seller.s_idx = #{s_idx}
+                ORDER BY br_idx DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getReviewTotalCount" parameterType="searchVO" resultType="int">
+        <choose>
+            <when test="itemNum != '' or buyerNickname != '' or startDate != null or endDate != null">
+                SELECT count(*)
+                FROM tb_item
+                JOIN tb_buyer_info ON tb_item.s_idx = tb_buyer_info.b_idx
+                JOIN tb_buyer_order_state ON tb_item.i_idx = tb_buyer_order_state.i_idx
+                JOIN tb_buyer_order ON tb_buyer_order_state.bo_idx = tb_buyer_order.bo_idx
+                JOIN tb_seller ON tb_item.s_idx = tb_seller.s_idx
+                JOIN tb_buyer_review ON tb_buyer_order_state.bos_idx = tb_buyer_review.bos_idx
+                WHERE tb_seller.s_idx = #{s_idx}
+                <if test="itemNum != ''">
+                    and tb_item.i_idx = #{itemNum}
+                </if>
+                <if test="buyerNickname != ''">
+                    and b_nickname like CONCAT('%', #{buyerNickname}, '%')
+                </if>
+                <if test="startDate != null">
+                    <![CDATA[
+                        and br_postdate >= #{startDate}
+                     ]]>
+                </if>
+                <if test="startDate != null">
+                    <![CDATA[
+                        and br_postdate <= CONCAT(#{endDate}, ' 23:59:59')
+                     ]]>
+                </if>
+            </when>
+
+            <otherwise>
+                SELECT count(*)
+                FROM tb_item
+                JOIN tb_buyer_info ON tb_item.s_idx = tb_buyer_info.b_idx
+                JOIN tb_buyer_order_state ON tb_item.i_idx = tb_buyer_order_state.i_idx
+                JOIN tb_buyer_order ON tb_buyer_order_state.bo_idx = tb_buyer_order.bo_idx
+                JOIN tb_seller ON tb_item.s_idx = tb_seller.s_idx
+                JOIN tb_buyer_review ON tb_buyer_order_state.bos_idx = tb_buyer_review.bos_idx
+                WHERE tb_seller.s_idx = #{s_idx}
+            </otherwise>
+        </choose>
+    </select>
+    <select id="getSellerBySIdx" resultType="SellerVO" parameterType="int">
+        SELECT * FROM tb_seller WHERE s_idx = #{s_idx}
+    </select>
+    <select id="getSellerWithStoreInfo" resultType="SellerVO" parameterType="int">
+        SELECT s.*, si.s_storename, si.s_storeintro, si.s_profile
+        FROM tb_seller s
+        JOIN tb_seller_info si ON s.s_idx = si.s_idx
+        WHERE s.s_idx = #{s_idx}
+    </select>
+
+    <!--///////////////////////////////////////// -->
+    <select id="getReviewsBySellerId" parameterType="int" resultType="com.lunastore.vo.ReviewVO">
+        SELECT br.*, i.i_name, ii.i_saveimg0 AS imageSrc
+        FROM tb_buyer_review br
+        JOIN tb_buyer_order_state bos ON br.bos_idx = bos.bos_idx
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        LEFT JOIN tb_item_img ii ON i.i_idx = ii.i_idx
+        WHERE i.s_idx = #{s_idx}
+        ORDER BY br.br_postdate DESC
+        LIMIT 5
+    </select>
+    <select id="getInquiriesBySellerId" parameterType="int" resultType="com.lunastore.vo.QnaVO">
+        SELECT q.*, i.i_name, ii.i_saveimg0 AS imageSrc
+        FROM tb_qna q
+        JOIN tb_item i ON q.i_idx = i.i_idx
+        LEFT JOIN tb_item_img ii ON i.i_idx = ii.i_idx
+        WHERE q.s_idx = #{s_idx}
+        ORDER BY q.qna_regdate DESC
+        LIMIT 5
+    </select>
+    <select id="getItemsWithCounts" parameterType="int" resultType="com.lunastore.vo.ItemVO">
+        SELECT i.*,
+        IFNULL(o.orderCount, 0) AS orderCount,
+        IFNULL(q.inquiryCount, 0) AS inquiryCount,
+        IFNULL(r.reviewCount, 0) AS reviewCount,
+        IFNULL(o.salesAmount, 0) AS salesAmount
+        FROM tb_item i
+        LEFT JOIN (
+        SELECT i_idx, COUNT(*) AS orderCount, SUM(bos_price * bos_count) AS salesAmount
+        FROM tb_buyer_order_state
+        GROUP BY i_idx
+        ) o ON i.i_idx = o.i_idx
+        LEFT JOIN (
+        SELECT i_idx, COUNT(*) AS inquiryCount
+        FROM tb_qna
+        GROUP BY i_idx
+        ) q ON i.i_idx = q.i_idx
+        LEFT JOIN (
+        SELECT bos.i_idx, COUNT(*) AS reviewCount
+        FROM tb_buyer_review br
+        INNER JOIN tb_buyer_order_state bos ON br.bos_idx = bos.bos_idx
+        GROUP BY bos.i_idx
+        ) r ON i.i_idx = r.i_idx
+        WHERE i.s_idx = #{s_idx}
+    </select>
+
+
+    <!-- 신규 주문 건수 조회 -->
+    <select id="getNewOrderCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE bos.bos_state = 1 AND i.s_idx = #{s_idx}
+    </select>
+
+    <!-- 배송 준비 건수 조회 -->
+    <select id="getPreparingShipmentCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE bos.bos_state = 2 AND i.s_idx = #{s_idx}
+    </select>
+
+    <!-- 배송 중 건수 조회 -->
+    <select id="getShippingCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE bos.bos_state = 3 AND i.s_idx = #{s_idx}
+    </select>
+
+    <!-- 배송 완료 건수 조회 -->
+    <select id="getDeliveredCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE bos.bos_state = 4 AND i.s_idx = #{s_idx}
+    </select>
+
+    <!-- 환불 요청 건수 조회 -->
+    <select id="getRefundRequestCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE bos.bos_state = 6 AND i.s_idx = #{s_idx}
+    </select>
+
+    <!-- 반품 요청 건수 조회 -->
+    <select id="getReturnRequestCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE bos.bos_state = 7 AND i.s_idx = #{s_idx}
+    </select>
+
+    <!-- 교환 요청 건수 조회 -->
+    <select id="getExchangeRequestCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE bos.bos_state = 8 AND i.s_idx = #{s_idx}
+    </select>
+
+    <!-- 오늘 정산 금액 조회 -->
+    <select id="getTodaySettlement" parameterType="int" resultType="int">
+        SELECT IFNULL(SUM(bos.bos_price * bos.bos_count), 0)
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE bos.bos_state = 10 AND i.s_idx = #{s_idx} AND DATE(bos.bos_postdate) = CURDATE()
+    </select>
+
+    <!-- 정산 예정 금액 조회 -->
+    <select id="getUpcomingSettlement" parameterType="int" resultType="int">
+        SELECT IFNULL(SUM(bos.bos_price * bos.bos_count), 0)
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE bos.bos_state NOT IN (5, 6, 7, 10) AND i.s_idx = #{s_idx}
+    </select>
+
+    <!-- 구매 확정 건수 조회 -->
+    <select id="getConfirmedPurchaseCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE bos.bos_state = 10 AND i.s_idx = #{s_idx}
+    </select>
+
+    <!-- 구매 확정 대기 건수 조회 -->
+    <select id="getPendingConfirmationCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE bos.bos_state = 4 AND i.s_idx = #{s_idx}
+    </select>
+
+    <!-- 스토어 찜 건수 조회 -->
+    <select id="getStoreWishlistCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_store_wishlist sw
+        WHERE sw.s_idx = #{s_idx}
+    </select>
+
+    <!-- 상품 찜 건수 조회 -->
+    <select id="getItemWishlistCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_item_wishlist iw
+        JOIN tb_item i ON iw.i_idx = i.i_idx
+        WHERE i.s_idx = #{s_idx}
+    </select>
+
+    <!-- 수정 요청 건수 조회 -->
+    <select id="getModificationRequestCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_item_modification_request imr
+        WHERE imr.s_idx = #{s_idx} AND imr.imr_status = 'PENDING'
+    </select>
+    <!-- 지난 21일간의 일별 매출액 조회 -->
+    <select id="getDailySalesData" parameterType="int" resultType="com.lunastore.dto.DailySalesDTO">
+        SELECT DATE(bos.bos_postdate) AS date,
+        IFNULL(SUM(bos.bos_price * bos.bos_count), 0) AS salesAmount
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE bos.bos_state = 10
+        AND i.s_idx = #{s_idx}
+        AND bos.bos_postdate >= DATE_SUB(CURDATE(), INTERVAL 20 DAY)
+        GROUP BY DATE(bos.bos_postdate)
+        ORDER BY DATE(bos.bos_postdate)
+    </select>
+
+
+
+
+    <!-- 리뷰 페이징 조회 -->
+    <select id="getReviewsByPage" parameterType="map" resultType="com.lunastore.vo.ReviewVO">
+        SELECT r.*, i.i_name, i.i_saveimg0 AS imageSrc
+        FROM tb_review r
+        JOIN tb_item i ON r.i_idx = i.i_idx
+        WHERE i.s_idx = #{s_idx}
+        ORDER BY r.r_postdate DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 전체 리뷰 수 조회 -->
+    <select id="getTotalReviewCount" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_review r
+        JOIN tb_item i ON r.i_idx = i.i_idx
+        WHERE i.s_idx = #{s_idx}
+    </select>
+
+    <!-- 스토어 현황 리스트 조회 -->
+    <select id="getStoreStatusList" parameterType="map" resultType="com.lunastore.dto.StoreStatusDTO">
+        SELECT
+        DATE(bos.bos_postdate) AS date,
+        COUNT(DISTINCT bos.bo_idx) AS orderCount,
+        COUNT(DISTINCT q.qna_idx) AS inquiryCount,
+        COUNT(DISTINCT br.br_idx) AS reviewCount,
+        IFNULL(SUM(bos.bos_price * bos.bos_count), 0) AS salesAmount
+        FROM tb_buyer_order_state bos
+        LEFT JOIN tb_item i ON bos.i_idx = i.i_idx
+        LEFT JOIN tb_qna q ON i.i_idx = q.i_idx
+        LEFT JOIN tb_buyer_review br ON bos.bos_idx = br.bos_idx
+        WHERE i.s_idx = #{s_idx}
+        <if test="startDate != null and endDate != null">
+            AND DATE(bos.bos_postdate) BETWEEN #{startDate} AND #{endDate}
+        </if>
+        GROUP BY DATE(bos.bos_postdate)
+        ORDER BY DATE(bos.bos_postdate) DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 스토어 현황 총 개수 조회 -->
+    <select id="getTotalStoreStatusCount" parameterType="map" resultType="int">
+        SELECT COUNT(DISTINCT DATE(bos.bos_postdate))
+        FROM tb_buyer_order_state bos
+        LEFT JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE i.s_idx = #{s_idx}
+        <if test="startDate != null and endDate != null">
+            AND DATE(bos.bos_postdate) BETWEEN #{startDate} AND #{endDate}
+        </if>
+    </select>
+</mapper>

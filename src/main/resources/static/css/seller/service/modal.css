@@ -1,0 +1,188 @@
+/* modal.css */
+
+.modal {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed; /* 고정 위치 */
+    z-index: 1000; /* 다른 요소보다 위에 표시 */
+    left: 0;
+    top: 0;
+    width: 100%; /* 전체 너비 */
+    height: 100%; /* 전체 높이 */
+    overflow: auto; /* 스크롤 가능 */
+    background-color: rgba(0, 0, 0, 0.4); /* 반투명 배경 */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.modal.active {
+    display: block;
+}
+
+.modal-content {
+    background-color: #fff; /* 흰색 배경 */
+    border-radius: 12px; /* 부드러운 모서리 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 */
+    width: 100%;
+    max-width: 600px; /* 최대 너비 */
+    padding: 20px;
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+    box-sizing: border-box;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-20px); }
+}
+
+.modal.show {
+    display: flex;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal.hide {
+    animation: fadeOut 0.3s ease-out;
+}
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+}
+
+.modal-body h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#reviewDetails {
+    font-size: 16px;
+    color: #555;
+}
+
+/* 리뷰 작성자 정보 */
+.review-author {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.review-author img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.review-author .nickname {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.review-author .date {
+    font-size: 14px;
+    color: #888;
+}
+
+.review-star {
+    position: relative; /* .full과 .empty를 절대 위치로 설정할 수 있도록 relative로 설정 */
+    display: inline-block;
+    height: 17px; /* 별 이미지의 높이 */
+    width: 89px;
+}
+
+/* 빈 별 */
+.m_l_view_star.empty {
+    width: 100%;
+    background-image: url('/css/img/star2.png');
+    background-position: 0 -270px;
+    opacity: 0.5;
+    position: relative;
+    display: block;
+    height: 17px;
+    background-repeat: no-repeat;
+}
+
+/* 실제 별 */
+.m_l_view_star.full {
+    bottom: 17px;
+    width: 50%;
+    background-image: url('/css/img/star.png');
+    background-position: 0 -245px;
+    position: relative;
+    display: block;
+    height: 17px;
+    background-repeat: no-repeat;
+}
+
+/* 리뷰 내용 */
+.review-content {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #555;
+}
+
+/* 작성자에 대한 다른 리뷰 */
+.user-reviews,
+.product-reviews {
+    margin-top: 20px;
+}
+
+.user-reviews h3,
+.product-reviews h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.user-reviews ul,
+.product-reviews ul {
+    list-style: none;
+    padding: 0;
+}
+
+.user-reviews ul li,
+.product-reviews ul li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.user-reviews ul li:last-child,
+.product-reviews ul li:last-child {
+    border-bottom: none;
+}
+
+.modal-body ul li p {
+    margin: 5px 0;
+}
+
+/* 로딩 스피너 스타일 */
+#loadingSpinner {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#loadingSpinner img {
+    width: 50px;
+    height: 50px;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>전체 리뷰 목록</title>
+    <!-- 필요한 CSS 및 JS 링크 -->
+</head>
+<body>
+<h1>전체 리뷰 목록</h1>
+<table>
+    <tr>
+        <th>상품명</th>
+        <th>리뷰 내용</th>
+        <th>작성일</th>
+    </tr>
+    <tr th:each="review : ${reviews}">
+        <td th:text="${review.i_name}"></td>
+        <td th:text="${review.r_content}"></td>
+        <td th:text="${#dates.format(review.r_postdate, 'yyyy-MM-dd')}"></td>
+    </tr>
+</table>
+<div class="seller_contents_table_pasing" id="td_paging">
+    <span th:replace="~{common/salesPaging :: salesFragment}"></span>
+</div>
+<!-- 페이징 -->
+<div class="pagination">
+    <ul>
+        <li th:if="${currentPage > 1}">
+            <a th:href="@{'/seller/reviews'(page=${currentPage - 1})}">이전</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(1, totalPages)}">
+            <a th:href="@{'/seller/reviews'(page=${i})}"
+               th:text="${i}"
+               th:classappend="${i == currentPage} ? 'active' : ''"></a>
+        </li>
+        <li th:if="${currentPage < totalPages}">
+            <a th:href="@{'/seller/reviews'(page=${currentPage + 1})}">다음</a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

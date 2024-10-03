@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{title.list}">List</title>
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/service/list.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var cart = {
+            cart: /*[[#{global.header.cart}]]*/ '장바구니',
+            cartEmpty: /*[[#{global.header.cartEmpty}]]*/ '장바구니가 비어 있습니다.',
+            productImageAlt: /*[[#{global.header.productImageAlt}]]*/ '상품이미지',
+            cartCheck: /*[[#{global.header.cartCheck}]]*/ '장바구니 확인',
+            cartViewMore: /*[[#{global.header.cartViewMore}]]*/ '개의 상품이 더 있습니다.',
+            loginPrompt: /*[[#{global.header.loginPrompt}]]*/ '저장해둔 항목이 있는지 확인하려면 ',
+            loginPrompt2: /*[[#{global.header.loginPrompt2}]]*/ '하세요. ',
+            login: /*[[#{global.header.login}]]*/ '로그인'
+
+        };
+        var urls = {
+            buyerLogin: /*[[@{/buyer/login}]]*/ '/buyer/login',
+            insertCart: /*[[@{/cart/insertCart}]]*/ '/cart/insertCart',
+            cart: /*[[@{/cart/cart}]]*/ '/cart/cart',
+            findOrder: /*[[@{/order/findOrder}]]*/ '/order/findOrder',
+            insertReview: /*[[@{/item/insertReview}]]*/ '/item/insertReview',
+            submitAnswer: /*[[@{/buyer/service/qna/{qnaIdx}/answer}]]*/ '/buyer/service/qna/{qnaIdx}/answer'
+        };
+        /*]]>*/
+    </script>
+    <script th:src="@{/js/buyer/service/list.js}"></script>
+    <script th:src="@{/js/buyer/user/buyerUpdatePage.js}"></script>
+    <script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+    <script th:src="@{/js/buyer/buyerCartNavigation.js}"></script>
+    <style th:if="${#locale.language == 'ja'}">
+        * {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+<div class="wrap">
+    <header>
+        <div th:replace="~{/buyer/common/global_header :: global_header}"></div>
+    </header>
+    <section>
+        <div class="m_list_boundary">
+            <h1 th:text="#{header.search}">LunaStore.com 검색하기</h1>
+            <span th:text="#{header.searchDescription}">LunaStore에서 원하는 상품을 검색하여 최신 트렌드를 만나보세요.</span>
+        </div>
+        <form id="formBox" th:action="@{/item/list}" method="get">
+            <input type="hidden" name="c_idx" id="c_idx" value="0">
+            <input type="hidden" name="p_idx" value="0">
+            <div class="m_list_search">
+                <div class="m_list_search_box">
+                    <div>
+                        <label class="search">
+                            <input type="submit" value="검색">
+                        </label>
+                        <input type="text" name="searchWord" th:placeholder="#{placeholder.search}" th:value="${sVO.searchWord}">
+                    </div>
+                    <div>
+                        <select name="searchField">
+                            <option value="i_name" th:selected="${sVO.searchField == 'i_name'}" th:text="#{category.productName}">상품명</option>
+                            <option value="s_storename" th:selected="${sVO.searchField == 's_storename'}" th:text="#{category.storeName}">스토어명</option>
+                        </select>
+                        <select name="orderByType" id="orderByType">
+                            <option value="pop" th:selected="${sVO.orderByType == 'pop'}" th:text="#{category.popular}">인기상품순</option>
+                            <option value="new" th:selected="${sVO.orderByType == 'new'}" th:text="#{category.newest}">최신상품순</option>
+                        </select>
+                        <select name="viewNum" id="viewNum">
+                            <option value="9" th:selected="${sVO.viewNum == 9}" th:text="#{category.view9}">9개</option>
+                            <option value="18" th:selected="${sVO.viewNum == 18}" th:text="#{category.view18}">18개</option>
+                            <option value="30" th:selected="${sVO.viewNum == 30}" th:text="#{category.view30}">30개</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="m_list_search_list">
+            <div class="m_list_categoris">
+                <h2 class="0" th:text="#{category.all}">전체</h2>
+                <!-- 메인 카테고리와 서브카테고리 표시 -->
+                <div th:each="mainCat : ${categories}">
+                    <div>
+                    <h2 th:text="${mainCat.name}" th:class="${mainCat.id}">메인 카테고리 이름</h2>
+                    <ul>
+                        <li class="m_list_categori" th:each="subCat : ${mainCat.subCategories}">
+                            <h4 class="arrow_big_bottom" th:class="${subCat.id}" th:text="${subCat.name}">
+                                <span class="arrow_big_bottom"></span>
+                            </h4>
+                        </li>
+                    </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m_list_items">
+                <div th:if="${#lists.isEmpty(itemList)}" class="m_list_notFoundItem">
+                    <span th:text="#{message.noItems}">등록된 게시물이 없습니다.</span>
+                </div>
+                <th:block th:unless="${#lists.isEmpty(itemList)}">
+                    <a th:each="item, iterStat : ${itemList}"
+                       th:if="${(iterStat.index + 1) ge pageNav.startNum and (iterStat.index + 1) le pageNav.endNum}"
+                       th:href="@{/item/view(i_idx=${item.i_idx})}" class="m_list_item">
+                        <div class="m_list_item_info">
+                            <img th:src="@{'/uploads/' + ${item.i_saveimg0}}" alt="Item Image">
+                            <div class="m_list_star_box">
+                                <span class="m_list_star empty"></span>
+                                <span class="m_list_star full" th:style="'width: ' + (${item.avg_star / 5} * 100) + '%'"></span>
+                            </div>
+                            <span class="m_list_review_cnt" th:text="'(' + ${item.comment_count} + ')'"></span>
+                            <h4 th:text="${item.i_name}"></h4>
+                            <h5 th:text="${formattedPriceMap[item.i_idx]}"></h5>
+                        </div>
+                    </a>
+                </th:block>
+                <div id="td_paging" th:if="${not #lists.isEmpty(itemList)}">
+                    <span th:replace="~{common/paging :: commonFragment}"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</html>

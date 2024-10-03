@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Luna account</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/global.css}">
+	<link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/user/buyerUpdatePage.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/user/buyerUpdateSideMenu.css}">
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var cart = {
+			cart: /*[[#{global.header.cart}]]*/ '장바구니',
+			cartEmpty: /*[[#{global.header.cartEmpty}]]*/ '장바구니가 비어 있습니다.',
+			productImageAlt: /*[[#{global.header.productImageAlt}]]*/ '상품이미지',
+			cartCheck: /*[[#{global.header.cartCheck}]]*/ '장바구니 확인',
+			cartViewMore: /*[[#{global.header.cartViewMore}]]*/ '개의 상품이 더 있습니다.',
+			loginPrompt: /*[[#{global.header.loginPrompt}]]*/ '저장해둔 항목이 있는지 확인하려면 ',
+			loginPrompt2: /*[[#{global.header.loginPrompt2}]]*/ '하세요. ',
+			login: /*[[#{global.header.login}]]*/ '로그인'
+
+		};
+		/*]]>*/
+	</script>
+	<script th:src="@{/js/buyer/user/buyerUpdatePage.js}"></script>
+	<script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+	<script th:src="@{/js/buyer/buyerCartNavigation.js}"></script>
+	<script th:src="@{/js/buyer/user/buyerUpdateSideMenu.js}"></script>
+	<script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+	<script>
+		const messages = {
+			emptyNickname: "[[#{error.emptyNickname}]]",
+			duplicateNickname: "[[#{error.duplicateNickname}]]",
+			ajaxFailure: "[[#{error.ajaxFailure}]]"
+		};
+
+		$(function () {
+			$("#nickNameInput").keyup(function () {
+				var nickNameInput = $('#nickNameInput').val();
+
+				$.ajax({
+					type: 'post',
+					url: "[[@{/buyer/nicknameCheckProcess}]]",
+					data: {
+						b_nickname: nickNameInput
+					},
+					success: function (data) {
+						if ($('#nickNameInput').val() === "") {
+							$("#nickNamesubmitBtn").attr("disabled", true);
+							$('#nickNameInput').css("border", "1px solid #F74848")
+							$('#nickNameMsg').text(messages.emptyNickname)
+						} else if (data == 1) {
+							$("#nickNameMsg").text(messages.duplicateNickname);
+							$("#nickNamesubmitBtn").attr("disabled", true);
+							$('#nickNameInput').css("border", "1px solid #F74848")
+						} else {
+							$('#nickNameInput').css("border", "1px solid #848484")
+							$("#nickNameMsg").text("");
+							$("#nickNamesubmitBtn").attr("disabled", false);
+						}
+					},
+					error: function () {
+						console.log(messages.ajaxFailure);
+					}
+				});
+			});
+		});
+	</script>
+</head>
+
+<body>
+<div class="warp">
+	<header th:replace="~{buyer/common/global_header :: global_header}"></header>
+	<section>
+		<div class="m_buyerUpdateSideMenu_header1">
+			<div class="m_buyerUpdateSideMenu_header">
+				<div class="m_buyerUpdateSideMenu_header_acc">
+					<a th:href="@{/buyer/buyerServiceInfo(b_idx=${buyer.b_idx})}" th:text="#{account.title}">계정</a>
+					| <span th:text="#{luna.id.management}">Luna ID 관리</span>
+				</div>
+				<div class="m_buyerUpdateSideMenu_loar">
+					<a th:href="@{/buyer/buyerLogout}" class="m_buyerUpdateSideMenu_logout" th:text="#{logout}">로그아웃
+						<div class="arrow_small a12"></div>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="m_buyerUpdateSideMenu_mainregion">
+			<div class="m_buyerUpdateSideMenu_sideregion">
+				<img th:src="@{/uploads/{buyerProfile}(buyerProfile=${buyer.b_profile})}"
+					 class="m_buyerUpdateSideMenu_proflie" alt="이미지를 찾을 수 없음">
+				<div class="m_buyerUpdateSideMenu_username" th:text="${buyer.b_nickname}"></div>
+				<div class="m_buyerUpdateSideMenu_useremail" th:text="${buyer.b_email}"></div>
+				<div class="m_buyerUpdateSideMenu_side_region"></div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<a th:href="@{/buyer/buyerUpdatePage}" class="m_buyerUpdateSideMenu_sidemanu" id="page" th:text="#{profile.public}">공개 프로필</a>
+				</div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<a th:href="@{/buyer/buyerUpdatePage1(b_idx=${buyer.b_idx})}" class="m_buyerUpdateSideMenu_sidemanu" id="page1" th:text="#{personal.info}">개인 정보</a>
+				</div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<a th:href="@{/buyer/buyerUpdatePage2}" class="m_buyerUpdateSideMenu_sidemanu" id="page2" th:text="#{login.security}">로그인 및 보안</a>
+				</div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<a th:href="@{/buyer/buyerUpdatePage3}" class="m_buyerUpdateSideMenu_sidemanu" id="page3" th:text="#{payment.management}">결제 관리</a>
+				</div>
+				<div class="m_buyerUpdateSideMenu_side">
+					<div class="m_buyerUpdateSideMenu_sidemanu_cancel" id="cancelOpenBtn" th:text="#{membership.withdrawal}">회원 탈퇴</div>
+				</div>
+			</div>
+			<div class="m_buyerUpdatePage4_backBlur" id="backBlur"></div>
+			<div class="m_buyerUpdatePage4_mainPage">
+				<div class="m_buyerUpdatePage4_main_title" th:text="#{profile.public}">공개 프로필</div>
+				<div class="m_buyerUpdatePage4_main_content" th:text="#{profile.public.description}">모든 사람들이 볼 수 있는 프로필에 대한 내용을 수정합니다.</div>
+				<div class="m_buyerUpdatePage4_main_content_region">
+					<div class="m_buyerUpdatePage4_Regionprofile" id="Regionprofile">
+						<div class="m_buyerUpdatePage4_content_profiletitle" th:text="#{profile.image}" style="font-size: 18px">프로필 이미지</div>
+						<div class="m_buyerUpdatePage4_profile">
+							<img th:src="@{/uploads/{b_profile}(b_profile=${buyer.b_profile})}" class="m_buyerUpdatePage4_profileRegion" alt="이미지를 찾을 수 없음">
+						</div>
+					</div>
+					<div class="m_buyerUpdatePage4_content" id="nickNamebox">
+						<div class="m_buyerUpdatePage4_content_nametitle" th:text="#{nickname}">닉네임</div>
+						<div class="m_buyerUpdatePage4_content_namesub" th:text="${buyer.b_nickname}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="m_buyerUpdateSideMenu_cancelBlur" id="cancelBlur"></div>
+			<div class="m_buyerUpdateSideMenu_cancelRegion" id="cancelRegion">
+				<form name="buyerCancel" method="get" th:action="@{/buyer/buyerCancelProcess}">
+					<div class="m_buyerUpdateSideMenu_cancelTitle" th:text="#{membership.withdrawal}">회원탈퇴</div>
+					<div id="cancelPage1">
+						<div class="m_buyerUpdateSideMenu_cancelSubTitle" th:text="#{membership.delete.prompt}">계정을 삭제하시려면 암호를 입력해 주세요.</div>
+						<div class="m_buyerUpdateSideMenu_exPwRegion" id="exPwRegion">
+							<label>
+								<input type="password" class="m_buyerUpdateSideMenu_exPwInput" id="exPwInput">
+								<div class="m_buyerUpdateSideMenu_exPwTitle" id="exPwTitle" th:text="#{current.password}">현재암호</div>
+							</label>
+							<div class="m_buyerUpdateSideMenu_exPwMsg" id="exPwMsg"></div>
+						</div>
+						<div class="m_buyerUpdateSideMenu_cancelNextBtn">
+							<label>
+								<div class="m_buyerUpdateSideMenu_cancelNextBtnName" th:text="#{account.delete}">계정삭제</div>
+								<input type="button" class="m_buyerUpdateSideMenu_none" id="nextCancelBtn" disabled="disabled">
+							</label>
+						</div>
+					</div>
+					<div id="cancelPage2" class="m_buyerUpdateSideMenu_none">
+						<div class="m_buyerUpdateSideMenu_checkTitle" th:text="#{membership.delete.confirm}">정말 계정을 삭제하시겠습니까?</div>
+						<div class="m_buyerUpdateSideMenu_cancelNextBtn">
+							<label>
+								<div class="m_buyerUpdateSideMenu_cancelSubmitBtn" th:text="#{delete}">삭제</div>
+								<input type="submit" class="m_buyerUpdateSideMenu_none" disabled="disabled" id="cancelOkBtn">
+							</label>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+
+
+		<form name="buyerUpdate" th:action="@{/buyer/buyerInfoUpdateProcess}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="b_idx" th:value="${buyer.b_idx}">
+			<div class="m_buyerUpdatePage4_profileUpRegion" id="profileUpRegion">
+				<div class="m_buyerUpdatePage4_profileUpTitle" th:text="#{profile.image}">프로필 이미지</div>
+				<div class="m_buyerUpdatePage4_imgRegion">
+					<label>
+						<input type="file" name="b_tempprofile" class="m_buyerUpdatePage4_profileInput" accept=".JPEG,.JPG,.GIF,.PNG" id="profileInput" />
+						<div class="m_buyerUpdatePage4_imageContainer1"></div>
+						<div id="image_container" class="m_buyerUpdatePage4_imageContainer">
+							<img th:src="@{/uploads/{b_profile}(b_profile=${buyer.b_profile})}" id="profile1" class="m_buyerUpdatePage4_profile1" alt="이미지를 찾을 수 없음">
+						</div>
+					</label>
+				</div>
+				<div class="m_buyerUpdatePage4_flax">
+					<div class="m_buyerUpdatePage4_sub" th:text="#{format.supported}">대응 포맷</div>
+					<div th:text="#{format.list}">JPEG / PNG / GIF</div>
+				</div>
+				<div class="m_buyerUpdatePage4_flax">
+					<div class="m_buyerUpdatePage4_sub" th:text="#{format.maxSize}">최대 파일 크기</div>
+					<div th:text="#{format.maxSizeValue}">5 MB</div>
+				</div>
+				<div class="m_buyerUpdatePage4_flax" th:text="#{format.cropInfo}">업로드된 이미지는 프로필에서 원형으로 크롭되어 표시됩니다.</div>
+				<div class="m_buyerUpdatePage4_flax1">
+					<div class="m_buyerUpdatePage4_submitBtnRegion">
+						<label>
+							<div class="m_buyerUpdatePage4_submitBtn" th:text="#{edit}">수정</div>
+							<input type="submit" class="m_buyerUpdatePage4_profileInput" th:value="#{edit}">
+						</label>
+					</div>
+					<div class="m_buyerUpdatePage4_cancelBtnRegion">
+						<div class="m_buyerUpdatePage4_cancelBtn" id="cancelBtn" th:text="#{cancel}">취소</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<form name="buyerUpdate" th:action="@{/buyer/buyerInfoUpdateProcess}" method="post">
+			<input type="hidden" name="b_idx" th:value="${buyer.b_idx}">
+			<div class="m_buyerUpdatePage4_nickNameRegion" id="nickNameRegion">
+				<div class="m_buyerUpdatePage4_nickNameUpTitle" th:text="#{nickname}">닉네임</div>
+				<div class="_inputRegion" id="nickNameInputRegion">
+					<input placeholder=" " type="text" name="b_nickname" class="" id="nickNameInput">
+					<span class="" id="nickNameTitle" th:text="#{nickname}">닉네임</span>
+					<div class="m_buyerUpdatePage4_nickNameMsg" id="nickNameMsg"></div>
+				</div>
+				<div class="m_buyerUpdatePage4_flax1">
+					<div class="m_buyerUpdatePage4_submitBtnRegion">
+						<label>
+							<div class="m_buyerUpdatePage4_submitBtn" th:text="#{edit}">수정</div>
+							<input type="submit" id="nickNamesubmitBtn" class="m_buyerUpdatePage4_profileInput" disabled="disabled">
+						</label>
+					</div>
+					<div class="m_buyerUpdatePage4_cancelBtnRegion">
+						<div class="m_buyerUpdatePage4_cancelBtn" id="nickNamecancelBtn" th:text="#{cancel}">취소</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+</div>
+</body>
+
+</html>

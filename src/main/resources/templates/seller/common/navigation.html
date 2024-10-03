@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<script th:src="@{/js/seller/common/globalNavigation.js}"></script>
+</head>
+<body>
+<div th:fragment="sellerNavigation">
+	<div class="seller_global_category">
+		<div class="seller_global_category_profile">
+			<div><img th:src="@{'/uploads/' + ${seller.s_profile}}" alt=""></div>
+			<div><span th:text="${seller.s_storename}"></span></div>
+		</div>
+		<div class="seller_global_dropdown_wrap">
+			<div>
+				<button class="seller_global_category_btn">
+					<span th:text="#{nav.productManagement}">상품관리</span>
+					<span class="arrow_small"></span>
+				</button>
+				<ul class="seller_global_category_drop_list">
+					<li class="seller_global_category_list">
+						<a th:href="@{/seller/viewEdit(s_idx=${seller.s_idx})}" th:text="#{nav.viewEditProduct}">상품 조회/수정</a>
+					</li>
+					<li class="seller_global_category_list">
+						<a th:href="@{/item/write}" th:text="#{nav.registerProduct}">상품 등록</a>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<a class="seller_global_category_btn" th:href="@{/seller/sales(s_idx=${seller.s_idx})}">
+					<span th:text="#{nav.orderManagement}">주문관리</span>
+				</a>
+			</div>
+			<div>
+				<button class="seller_global_category_btn">
+					<span th:text="#{nav.storeManagement}">매장관리</span>
+					<span class="arrow_small"></span>
+				</button>
+				<ul class="seller_global_category_drop_list">
+					<li class="seller_global_category_list">
+						<a th:href="@{/seller/store}" th:text="#{nav.storeStatus}">스토어 현황</a>
+					</li>
+					<li class="seller_global_category_list">
+						<a th:href="@{/settlement/status}" th:text="#{nav.settlementStatus}">정산 현황</a>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<button class="seller_global_category_btn">
+					<span th:text="#{nav.inquiryReviewManagement}">문의/리뷰관리</span>
+					<span class="arrow_small"></span>
+				</button>
+				<ul class="seller_global_category_drop_list">
+					<li class="seller_global_category_list">
+						<a th:href="@{/seller/review(s_idx=${seller.s_idx})}"><span th:text="#{nav.productReview}">상품 리뷰</span></a>
+					</li>
+					<li class="seller_global_category_list">
+						<a th:href="@{/seller/inquiry}" th:text="#{nav.productInquiry}">상품 문의</a>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<button class="seller_global_category_btn">
+					<span th:text="#{nav.customerService}">고객센터</span>
+				</button>
+			</div>
+			<div>
+				<a class="seller_global_category_btn" th:href="@{/seller/sellerUpdate/{s_idx}(s_idx=${seller.s_idx})}">
+					<span th:text="#{nav.memberInfoManagement}">회원정보관리</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

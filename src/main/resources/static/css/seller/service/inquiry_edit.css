@@ -1,0 +1,83 @@
+/* 문의 답변 수정 섹션 스타일 */
+.seller_inquiry_edit_contents {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.seller_inquiry_edit_contents h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: #333333;
+}
+
+.seller_inquiry_edit_contents .form-group {
+    margin-bottom: 20px;
+}
+
+.seller_inquiry_edit_contents label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555555;
+}
+
+.seller_inquiry_edit_contents input[type="text"],
+.seller_inquiry_edit_contents textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.seller_inquiry_edit_contents textarea {
+    min-height: 100px;
+}
+
+.seller_inquiry_edit_contents .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.seller_inquiry_edit_contents .form-actions button,
+.seller_inquiry_edit_contents .form-actions a {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.seller_inquiry_edit_contents .form-actions button {
+    background-color: #007aff;
+    color: #ffffff;
+}
+
+.seller_inquiry_edit_contents .form-actions button:hover {
+    background-color: #005bb5;
+}
+
+.seller_inquiry_edit_contents .form-actions a {
+    background-color: #e0e0e0;
+    color: #333333;
+}
+
+.seller_inquiry_edit_contents .form-actions a:hover {
+    background-color: #c0c0c0;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}

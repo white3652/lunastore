@@ -1,0 +1,311 @@
+body {
+    background-color: #f9f9f9;
+}
+
+
+/* #region 메인 컨텐츠 메뉴 */
+.m_buyerUpdatePage4_mainPage {
+    width: 940px;
+    height: 500px;
+}
+
+.m_buyerUpdatePage4_main_title {
+    font-size: 24px;
+    font-family: 'NEXONLv1GothicBold';
+    margin-top: 40px;
+}
+
+.m_buyerUpdatePage4_main_content {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.m_buyerUpdatePage4_main_content_region {
+    display: flex;
+}
+
+.m_buyerUpdatePage4_content {
+    width: 440px;
+    height: 180px;
+    margin-top: 40px;
+    margin-right: 40px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    color: #111111;
+    transition: 0.8s;
+    cursor: pointer;
+}
+
+.m_buyerUpdatePage4_Regionprofile {
+    width: 440px;
+    height: 180px;
+    margin-top: 40px;
+    margin-right: 40px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    color: #111111;
+    transition: 0.8s;
+    cursor: pointer;
+    display: flex;
+}
+
+.m_buyerUpdatePage4_content:hover, .m_buyerUpdatePage4_Regionprofile:hover{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.m_buyerUpdatePage4_content_nametitle {
+    font-size: 20px;
+    padding-top: 30px;
+    margin-left: 20px;
+    font-family: 'NEXONLv1GothicBold';
+}
+
+.m_buyerUpdatePage4_content_profiletitle {
+    font-size: 20px;
+    padding-top: 30px;
+    margin-left: 20px;
+    font-family: 'NEXONLv1GothicBold';
+}
+
+.m_buyerUpdatePage4_content_namesub {
+    font-size: 14px;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.m_buyerUpdatePage4_profile {
+    width: 140px;
+    height: 140px;
+}
+
+.m_buyerUpdatePage4_profileRegion{
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 1px solid #0071e3;
+    margin-top:20px;
+    margin-left: 90%;
+}
+
+.m_buyerUpdatePage4_content_namesub1 {
+    font-size: 14px;
+    margin: 0 auto;
+    margin-top: 10px;
+    width: 200px;
+}
+/* #endregion */
+
+.m_buyerUpdatePage4_profileUpRegion{
+    width: 440px;
+    min-height: 400px;
+    background-color: #f9f9f9;
+    border-radius: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+.m_buyerUpdatePage4_profileUpTitle{
+    font-size: 18px;
+    margin: 10px;
+    text-align: center;
+    font-family: 'NEXONLv1GothicBold';
+}
+
+.m_buyerUpdatePage4_imgRegion{
+    height: 200px;
+    background-color: #ffffff;
+    transition: 0.4s;
+}
+
+.m_buyerUpdatePage4_imageContainer1{
+    height: 20px;
+}
+
+.m_buyerUpdatePage4_imgRegion:hover{
+    background-color: #c0c0c0;
+}
+
+.m_buyerUpdatePage4_imageContainer{
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0 auto;
+}
+
+.m_buyerUpdatePage4_profile1{
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+}
+
+.m_buyerUpdatePage4_profileInput{
+    display: none;
+}
+
+.m_buyerUpdatePage4_flax{
+    display: flex;
+    font-size: 14px;
+    margin: 20px;
+}
+
+.m_buyerUpdatePage4_submitBtn{
+    margin-right: 20px;
+}
+
+.m_buyerUpdatePage4_cancelBtn{
+    margin-left: 20px;
+}
+
+.m_buyerUpdatePage4_flax1{
+    display: flex;
+    margin: 20px;
+    justify-content:center;
+}
+
+
+.m_buyerUpdatePage4_sub{
+    width: 180px;
+}
+
+.m_buyerUpdatePage4_submitBtn{
+    width: 100px;
+    background-color: #308dea;
+    height: 40px;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 20px;
+    align-items: center;
+    display: grid;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.m_buyerUpdatePage4_submitBtn:hover{
+    background-color: #0071e3;
+}
+
+.m_buyerUpdatePage4_cancelBtn{
+    width: 100px;
+    background-color: #cfcfcf;
+    height: 40px;
+    text-align: center;
+    border-radius: 20px;
+    align-items: center;
+    display: grid;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.m_buyerUpdatePage4_cancelBtn:hover{
+    background-color: #f9f9f9;
+}
+
+.m_buyerUpdatePage4_backBlur{
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff80;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+.m_buyerUpdatePage4_nickNameRegion{
+    width: 440px;
+    min-height: 100px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+.m_buyerUpdatePage4_nickNameUpTitle{
+    text-align: center;
+    font-family: 'NEXONLv1GothicBold';
+    font-size: 20px;
+    margin: 20px;
+}
+
+.m_buyerUpdatePage4_nickNameInputRegion{
+    width: 400px;
+    height: 60px;
+    border: 1px solid #848484;
+    margin-left: 20px;
+    border-radius: 10px;
+}
+
+.m_buyerUpdatePage4_nickNameInput{
+    border: none;
+    outline: none;
+    width: 360px;
+    height: 40px;
+    margin-left: 20px;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.m_buyerUpdatePage4_nickNameTitle{
+    position: absolute;
+    margin-left: 20px;
+    margin-top: -36px;
+    font-size: 18px;
+    transition: 0.4s;
+}
+.m_buyerUpdatePage4_nickNameMsg{
+    font-size: 10px;
+    margin-left: 20px;
+    color: #F74848;
+    position: relative;
+    margin-top: 4px;
+}
+
+.m_userinfo_sidemanu:hover {
+    color: #0071e3;
+}
+
+.m_userinfo_sidemanu_select {
+    font-size: 16px;
+    color: #0071e3;
+}
+
+._inputRegion{
+    width: 360px;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+._inputRegion input{
+    width: 320px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #858585;
+    padding: 20px;
+    padding-bottom: 0px;
+    background-color:#ffffff00;
+}
+
+._inputRegion input+span{
+    position: absolute;
+    pointer-events: none;
+    color: #858585;
+    transition: all 0.3s ease;
+    left: 20px;
+    top: 24px;
+}
+
+._inputRegion input:focus + span,
+._inputRegion input:not(:placeholder-shown) + span{
+    top: 10px;
+    font-size: 14px;
+}

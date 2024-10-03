@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{payment.title}">결제 | Luna</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/service/buyerShopping.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:src="@{/js/buyer/user/daumMapAPI2.js}"></script>
+    <script th:src="@{/js/buyer/service/buyerPage.js}"></script>
+    <script th:src="@{/js/buyer/buyerCartNavigation.js}"></script>
+    <!--    <script th:src="@{/js/buyer/service/buyerPayment.js}"></script>-->
+    <style th:if="${#locale.language == 'ja'}">
+        * {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+    </style>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var invalidMessage = {
+            invalidEmail: /*[[#{error.invalid.email}]]*/ '이메일 형식이 올바르지 않습니다.',
+            emailInUse: /*[[#{error.email.in.use}]]*/ '사용중인 이메일입니다.',
+            emailCheckFailed: /*[[#{error.email.check.failed}]]*/ '이메일 중복 확인 실패',
+            telEmpty: /*[[#{error.tel.empty}]]*/ '입력 되어 있지 않습니다.',
+            telInvalid: /*[[#{error.tel.invalid}]]*/ '번호가 유효하지 않습니다.',
+            nameTooLong: /*[[#{error.name.too.long}]]*/ '길이가 너무 깁니다.',
+            nameInvalid: /*[[#{error.name.invalid}]]*/ '한글 또는 일본어만 입력이 가능합니다.',
+            nameEmpty: /*[[#{error.name.empty}]]*/ '입력 되어 있지 않습니다.',
+            birthInvalid: /*[[#{error.birth.invalid}]]*/ '생년월일이 유효하지 않습니다.',
+            passwordTooShort: /*[[#{error.password.too.short}]]*/ '암호 길이는 최소 8자 이상입니다.',
+            passwordInvalid: /*[[#{error.password.invalid}]]*/ '암호는 대소문자, 숫자, 특수문자를 포함해야 합니다.',
+            passwordMismatch: /*[[#{error.password.mismatch}]]*/ '암호가 일치하지 않습니다.',
+            selectAddress: /*[[#{select.address}]]*/ '주소를 선택해주세요.',
+            selectPayment: /*[[#{select.payment}]]*/ '결제 방법을 선택해주세요.',
+            contactInvalid: /*[[#{contact.invalid}]]*/ '연락처를 올바르게 입력해주세요.',
+            addressUpdateFailed: /*[[#{address.update.failed}]]*/ '주소 수정에 실패했습니다: ',
+            orderEditFailed: /*[[#{order.edit.failed}]]*/ '주문 처리에 실패했습니다: ',
+            errorOccurred: /*[[#{error.occurred}]]*/ '오류가 발생했습니다: ',
+            paymentSuccess: /*[[#{payment.success}]]*/ '결제가 성공적으로 완료되었습니다.',
+            paymentFailed: /*[[#{payment.failed}]]*/ '결제 정보 전송에 실패했습니다.',
+            addressUpdateSuccess: /*[[#{address.update.success}]]*/ '주소가 수정되었습니다.',
+            orderCanceledSuccess: /*[[#{order.canceled.success}]]*/ '주문이 취소되었습니다.',
+            orderCanceledError: /*[[#{order.canceled.error}]]*/ '주문 취소 중 오류가 발생했습니다.',
+            firstNameInvalidFormat: /*[[#{firstName.invalidFormat}]]*/ "성 정보를 올바르게 입력해주세요.",
+            lastNameInvalidFormat: /*[[#{lastName.invalidFormat}]]*/ "이름 정보를 올바르게 입력해주세요.",
+            zipcodeEmpty: /*[[#{zipcode.empty}]]*/ "우편번호를 입력해주세요.",
+            addressEmpty: /*[[#{address.empty}]]*/ "주소를 입력해주세요.",
+            newAddressInvalidFormat: /*[[#{newAddress.invalidFormat}]]*/ "새 주소 정보를 올바르게 입력해주세요.",
+            zipcodeInvalid: /*[[#{zipcode.invalid}]]*/ "우편번호는 5자리 숫자로 입력되어야 합니다.",
+            zipcodeSearchPrompt: /*[[#{zipcode.search.prompt}]]*/ "우편번호 검색을 통해 입력해주세요.",
+            date: {
+                yearSuffix: /*[[#{date.year}]]*/ '년',
+                monthSuffix: /*[[#{date.month}]]*/ '월',
+                daySuffix: /*[[#{date.day}]]*/ '일'
+            }
+        };
+        /*]]>*/
+    </script>
+</head>
+
+<body>
+<div class="header">
+    <div class="header-content">
+        <div class="header-title" th:text="#{payment.header}">결제</div>
+    </div>
+</div>
+<div class="hr-tag"></div>
+<div class="pay-region">
+    <form action="#" method="post">
+        <input type="hidden" id="b_idx" name="b_idx" th:value="${buyer.b_idx}">
+        <input type="hidden" id="itemsName" name="itemsName" th:value="${itemsName}">
+        <input type="hidden" id="buyerName" name="buyerName" th:value="${buyerName}">
+        <input type="hidden" id="telInput" name="telInput" th:value="${buyer.b_tel}">
+        <div id="baAddress" th:text="${address.ba_address + ' ' + address.ba_restaddress}"></div>
+        <input type="hidden" id="zonecodeInput" name="zonecodeInput" th:value="${address.ba_zipcode}">
+        <input type="hidden" id="cartItemsCount" name="cartItemsCount" th:value="${cartItemsCountJson}">
+        <input type="hidden" id="ba_firstname_hidden" th:value="${address.ba_firstname}">
+        <input type="hidden" id="ba_lastname_hidden" th:value="${address.ba_lastname}">
+        <input type="hidden" id="ba_zipcode_hidden" th:value="${address.ba_zipcode}">
+        <input type="hidden" id="ba_address_hidden" th:value="${address.ba_address}">
+        <input type="hidden" id="ba_restaddress_hidden" th:value="${address.ba_restaddress}">
+
+        <!-- 주소 선택 섹션 -->
+        <div class="title" th:text="#{payment.delivery.destination}">주문하신 제품이 어디로 배송되길 원하십니까?</div>
+        <div class="sub-title" th:text="#{payment.delivery.selectAddress}">주소 선택:</div>
+
+        <!-- 기본 주소 선택 -->
+        <div class="address-option default-address" id="defaultAddress">
+            <div>
+                <div class="address-text" th:text="${address.ba_zipcode}"></div>
+                <div class="address-text" th:text="${address.ba_address + ' ' + address.ba_restaddress}"></div>
+            </div>
+            <div class="action-text" th:text="#{payment.delivery.editDefaultAddress}">기본주소 수정</div>
+        </div>
+
+        <!-- 수정된 주소 입력 섹션 -->
+        <div id="updatedAddressSection" class="input-section" style="display: none; margin-bottom: 20px">
+            <div class="input-group" id="firstNameRegionUpdate">
+                <label for="ba_firstname" th:text="#{payment.form.firstName}">성</label>
+                <input type="text" name="ba_firstname" id="ba_firstname" placeholder=" " style="width: 948px">
+            </div>
+            <div class="error-msg" id="firstNameMsgUpdate"></div>
+
+            <div class="input-group" id="lastNameRegionUpdate">
+                <label for="ba_lastname" th:text="#{payment.form.lastName}">이름</label>
+                <input type="text" name="ba_lastname" id="ba_lastname" placeholder=" " disabled style="width: 948px">
+            </div>
+            <div class="error-msg" id="lastNameMsgUpdate"></div>
+
+            <div class="input-group" id="zonecodeRegionUpdate">
+                <label for="ba_zipcode" th:text="#{payment.form.zipcode}">우편번호</label>
+                <input type="text" name="ba_zipcode" id="ba_zipcode" placeholder=" " disabled style="width: 948px">
+            </div>
+            <div class="error-msg" id="zonecodeMsgUpdate"></div>
+
+            <div class="input-group" id="addressRegionUpdate">
+                <label for="ba_address" th:text="#{payment.form.address}">건물 번지, 이름 또는 거리 이름</label>
+                <input type="text" name="ba_address" id="ba_address" placeholder=" " disabled style="width: 948px">
+            </div>
+            <div class="error-msg" id="addressMsgUpdate"></div>
+
+            <div class="input-group" id="plusAddressRegionUpdate">
+                <label for="ba_restaddress" th:text="#{payment.form.detailAddress}">상세주소 및 아파트 등 건물 출입 코드(선택사항)</label>
+                <input type="text" name="ba_restaddress" id="ba_restaddress" placeholder=" " style="width: 948px">
+            </div>
+            <div class="error-msg" id="restAddressMsgUpdate"></div>
+
+            <!-- 수정 및 취소 버튼 -->
+            <div class="edit-buttons">
+                <button type="button" id="confirmEditBtn" style="display: none;" th:text="#{payment.buttons.confirmEdit}">수정하기</button>
+                <button type="button" id="cancelEditBtn" style="display: none;" th:text="#{payment.buttons.cancelEdit}">취소하기</button>
+            </div>
+        </div>
+
+        <!-- 새 주소 선택 -->
+        <div class="address-option new-address" id="newAddress">
+            <div class="address-text" th:text="#{payment.delivery.useNewAddress}">새 주소 사용</div>
+        </div>
+
+        <!-- 새 주소 입력 섹션 -->
+        <div id="InputNewAddress" class="input-section" style="display: none;">
+            <div class="input-group" id="firstNameRegion">
+                <label for="ba_firstname_new" th:text="#{payment.form.firstName}">성</label>
+                <input type="text" name="ba_firstname_new" id="ba_firstname_new" placeholder=" " disabled style="width: 948px">
+            </div>
+            <div class="error-msg" id="firstNameMsg"></div>
+
+            <div class="input-group" id="lastNameRegion">
+                <label for="ba_lastname_new" th:text="#{payment.form.lastName}">이름</label>
+                <input type="text" name="ba_lastname_new" id="ba_lastname_new" placeholder=" " disabled style="width: 948px">
+            </div>
+            <div class="error-msg" id="lastNameMsg"></div>
+
+            <div class="input-group" id="zonecodeRegion">
+                <label for="ba_zipcode_new" th:text="#{payment.form.zipcode}">우편번호</label>
+                <input type="text" name="ba_zipcode_new" id="ba_zipcode_new" placeholder=" " disabled style="width: 948px">
+            </div>
+            <div class="error-msg" id="zonecodeMsg"></div>
+
+            <div class="input-group" id="addressRegion">
+                <label for="ba_address_new" th:text="#{payment.form.address}">건물 번지, 이름 또는 거리 이름</label>
+                <input type="text" name="ba_address_new" id="ba_address_new" placeholder=" " disabled style="width: 948px">
+            </div>
+            <div class="error-msg" id="addressMsg"></div>
+
+            <div class="input-group" id="plusAddressRegion">
+                <label for="ba_restaddress_new" th:text="#{payment.form.detailAddress}">상세주소 및 아파트 등 건물 출입 코드(선택사항)</label>
+                <input type="text" name="ba_restaddress_new" id="ba_restaddress_new" placeholder=" " disabled style="width: 948px">
+            </div>
+            <div class="error-msg" id="plusAddressMsg"></div>
+        </div>
+
+        <div class="hr-tag"></div>
+
+        <!-- 연락처 정보 섹션 -->
+        <div class="sub-title" th:text="#{payment.contactInfo}">연락처 정보를 알려주십시오.</div>
+        <div class="contact-section" id="tel">
+            <div class="contact-display">
+                <div class="contact-text" th:text="${address.ba_contact}"></div>
+            </div>
+            <div class="action-text tel-update" th:text="#{payment.contact.register}">연락처 등록</div>
+        </div>
+        <div id="telUpdate" class="input-section" style="display: none;">
+            <div class="input-group">
+                <label for="b_tel" th:text="#{payment.form.contact}">연락처</label>
+                <input type="tel" name="b_tel" id="b_tel" class="nAInput" maxlength="13" th:value="${buyer.b_tel}" placeholder=" " disabled style="width: 948px">
+            </div>
+            <div class="error-msg" id="telMsg"></div>
+            <!-- 수정 및 취소 버튼 -->
+            <div class="edit-buttons">
+                <button type="button" id="confirmTelEditBtn" style="display: none;" th:text="#{payment.buttons.confirmEdit}">수정하기</button>
+                <button type="button" id="cancelTelEditBtn" style="display: none;" th:text="#{payment.buttons.cancelEdit}">취소하기</button>
+            </div>
+        </div>
+
+        <div class="hr-tag"></div>
+
+        <!-- 결제 방법 섹션 -->
+        <div class="sub-title" th:text="#{payment.method.select}">어떻게 결제하시겠습니까?</div>
+        <div class="payment-option" id="cardRegion">
+            <div class="payment-text" th:text="#{payment.method.creditCard}">신용카드 또는 할부</div>
+        </div>
+
+        <!-- 주문 항목 테이블 -->
+        <div class="title" th:text="#{payment.orderItems}">주문 항목</div>
+        <table class="order-items-table">
+            <thead>
+            <tr>
+                <th th:text="#{payment.orderItems.header.name}">상품명</th>
+                <th th:text="#{payment.orderItems.header.option}">옵션</th>
+                <th th:text="#{payment.orderItems.header.quantity}">수량</th>
+                <th th:text="#{payment.orderItems.header.unitPrice}">단가</th>
+                <th th:text="#{payment.orderItems.header.subtotal}">소계</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="cart : ${cartList}">
+                <tr>
+                    <td th:text="${cart.i_name}" class="cartItemName">상품명</td>
+                    <td th:text="${cart.i_option}" class="cartOption">옵션</td>
+                    <td th:text="${cart.i_count}" class="cartCount">1</td>
+                    <td th:text="'₩' + ${cart.i_price}" class="cartPrice">₩0</td>
+                    <td th:text="'₩' + (${cart.i_price} * ${cart.i_count})" class="cartSubtotal">₩0</td>
+                    <input type="hidden" class="cartItemId" th:value="${cart.i_idx}" />
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+
+        <!-- 주문 요약 섹션 -->
+        <div class="order-summary">
+            <h2 th:text="#{payment.orderSummary.title}">주문 요약</h2>
+            <p>
+                <span th:text="#{payment.orderSummary.totalLabel}">상품 총액:</span>
+                <span id="formattedTotalPrice" th:text="${formattedTotalPrice}">₩0</span>
+            </p>
+            <p>
+                <strong>
+                    <span th:text="#{payment.orderSummary.grandTotalLabel}">총 결제 금액:</span>
+                    <span id="formattedTotalWithShipping" th:text="${formattedTotalWithShipping}">₩0</span>
+                </strong>
+            </p>
+        </div>
+
+        <!-- 결제 버튼 -->
+        <div class="submit-region">
+            <button type="button" class="submit-button" id="submitButton" disabled th:text="#{payment.buttons.submit}">결제</button>
+        </div>
+    </form>
+</div>
+
+<!-- 메시지 국제화를 위한 JavaScript -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var messages = {
+        paymentFail: /*[[#{alert.paymentFail}]]*/ "결제에 실패했습니다.",
+        paymentSuccess: /*[[#{alert.paymentSuccess}]]*/ "결제가 성공적으로 완료되었습니다.",
+        paymentInfoFail: /*[[#{alert.paymentInfoFail}]]*/ "결제 정보 전송에 실패했습니다.",
+        orderCancelSuccess: /*[[#{alert.orderCancelSuccess}]]*/ "주문이 취소되었습니다.",
+        orderCancelFail: /*[[#{alert.orderCancelFail}]]*/ "주문 취소 중 오류가 발생했습니다."
+    };
+    /*]]>*/
+</script>
+
+</body>
+
+</html>

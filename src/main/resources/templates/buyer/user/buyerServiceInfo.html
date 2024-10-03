@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Luna account</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/global.css}">
+	<link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/user/buyerServiceInfo.css}">
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var cart = {
+			cart: /*[[#{global.header.cart}]]*/ '장바구니',
+			cartEmpty: /*[[#{global.header.cartEmpty}]]*/ '장바구니가 비어 있습니다.',
+			productImageAlt: /*[[#{global.header.productImageAlt}]]*/ '상품이미지',
+			cartCheck: /*[[#{global.header.cartCheck}]]*/ '장바구니 확인',
+			cartViewMore: /*[[#{global.header.cartViewMore}]]*/ '개의 상품이 더 있습니다.',
+			loginPrompt: /*[[#{global.header.loginPrompt}]]*/ '저장해둔 항목이 있는지 확인하려면 ',
+			loginPrompt2: /*[[#{global.header.loginPrompt2}]]*/ '하세요. ',
+			login: /*[[#{global.header.login}]]*/ '로그인'
+
+		};
+		var invalidMessage = {
+			invalidEmail: /*[[#{error.invalid.email}]]*/ '이메일 형식이 올바르지 않습니다.',
+			emailInUse: /*[[#{error.email.in.use}]]*/ '사용중인 이메일입니다.',
+			emailCheckFailed: /*[[#{error.email.check.failed}]]*/ '이메일 중복 확인 실패',
+			telEmpty: /*[[#{error.tel.empty}]]*/ '입력 되어 있지 않습니다.',
+			telInvalid: /*[[#{error.tel.invalid}]]*/ '번호가 유효하지 않습니다.',
+			nameTooLong: /*[[#{error.name.too.long}]]*/ '길이가 너무 깁니다.',
+			nameInvalid: /*[[#{error.name.invalid}]]*/ '한글 또는 일본어만 입력이 가능합니다.',
+			nameEmpty: /*[[#{error.name.empty}]]*/ '입력 되어 있지 않습니다.',
+			birthInvalid: /*[[#{error.birth.invalid}]]*/ '생년월일이 유효하지 않습니다.',
+			passwordTooShort: /*[[#{error.password.too.short}]]*/ '암호 길이는 최소 8자 이상입니다.',
+			passwordInvalid: /*[[#{error.password.invalid}]]*/ '암호는 대소문자, 숫자, 특수문자를 포함해야 합니다.',
+			passwordMismatch: /*[[#{error.password.mismatch}]]*/ '암호가 일치하지 않습니다.',
+			date: {
+				yearSuffix: /*[[#{date.year}]]*/ '년',
+				monthSuffix: /*[[#{date.month}]]*/ '월',
+				daySuffix: /*[[#{date.day}]]*/ '일'
+			}
+		};
+		/*]]>*/
+	</script>
+	<script th:src="@{/js/buyer/user/buyerServiceInfo.js}"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script th:src="@{/js/buyer/user/daumMapAPI.js}"></script>
+	<script th:src="@{/js/buyer/user/telAutoHyphen.js}"></script>
+	<script th:src="@{/js/publicRegex/nameRegex.js}"></script>
+	<script th:src="@{/js/publicRegex/telRegex.js}"></script>
+	<script th:src="@{/js/publicRegex/addressRegex.js}"></script>
+	<script th:src="@{/js/buyer/user/checkebuyerServiceInfo.js}"></script>
+	<script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+	<script th:src="@{/js/buyer/buyerCartNavigation.js}"></script>
+	<script th:src="@{/js/buyer/user/buyerUpdateSideMenu.js}"></script>
+	<script>
+		let telCheckValid = true;
+	</script>
+</head>
+<body>
+<div class="wrap">
+	<header th:replace="~{buyer/common/global_header :: global_header}"></header>
+
+	<section>
+		<!-- #region 상단 타이틀 -->
+		<div class="m_info_header1">
+			<div class="m_info_header">
+				<div class="m_info_header_acc" th:text="#{account.title}">계정</div>
+				<div class="m_info_loar">
+					<a th:href="@{/buyer/buyerLogout}" class="m_info_logout" th:text="#{logout}">로그아웃
+						<div class="arrow_small a12"></div>
+					</a>
+				</div>
+			</div>
+		</div>
+		<!-- #endregion -->
+
+		<!-- #region 프로필 영역 -->
+		<div class="m_info_profile">
+			<div class="m_info_sprofile">
+				<div class="m_info_proname" th:text="${buyer.b_nickname} + #{profile.greeting}"></div>
+				<div class="m_info_pro">
+					<img th:src="@{/uploads/{file}(file=${buyer.b_profile})}" class="m_info_proimg" alt="이미지를 찾을 수 없음">
+					<div class="m_info_werll">
+						<div class="m_info_mr">
+							<span th:text="#{grade.label}">등급</span>
+							<div class="m_info_mrp" th:text="${buyer.b_grade}"></div>
+						</div>
+						<div class="m_info_point">
+							<span th:text="#{point.label}">포인트</span>
+							<div class="m_info_pointp" th:text="${#numbers.formatInteger(buyer.b_point, 0, 'COMMA')}"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- #endregion -->
+
+		<!-- #region 구분선 -->
+		<div class="m_info_hr"></div>
+		<!-- #endregion -->
+
+		<!-- #region 서브영역 -->
+		<div class="m_info_subcen">
+			<div class="m_info_subcenall">
+				<div class="m_info_trvle">
+					<div class="m_info_trvle_list" th:text="#{order.title}">주문 사항</div>
+					<div class="m_info_trvle_list_info" th:text="#{order.description}">배송을 조회하고, 주문을 변경 또는 취소하거나 반품을 신청하세요.</div>
+					<div class="m_info_trvle_list_info_list">
+						<a th:href="@{/order/orderList(b_idx=${buyer.b_idx})}" class="m_info_trvle_list_info_a" th:text="#{order.history}">주문 기록 확인
+							<div class="arrow_small a20"></div>
+						</a>
+					</div>
+				</div>
+				<div class="m_info_like">
+					<div class="m_info_trvle_list" th:text="#{wishlist.title}">관심 목록</div>
+					<div class="m_info_trvle_list_info" th:text="#{wishlist.description}">온라인에서든 Luna Store에서든 관심 있는 제품을 쉽게 저장해두고, 나중에 여기에서 다시 살펴볼 수 있습니다.</div>
+					<div class="m_info_trvle_list_info_list">
+						<a href="#" class="m_info_trvle_list_info_a" th:text="#{wishlist.view}">관심 목록 보기
+							<div class="arrow_small a20"></div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- #endregion -->        <!-- #region 계정 설정 -->
+		<div class="m_info_accmain">
+			<div class="m_info_accsmain">
+				<div class="m_info_accsmain_title" th:text="#{account.settings}">계정 설정</div>
+				<div class="m_info_accsmain_mtitle">
+					<div class="m_info_accsmain_title1" th:text="#{shipping.title}">배송</div>
+					<div class="m_info_accsmain_title1 sub">
+						<span th:text="#{shipping.address}">배송주소</span>
+						<div class="m_info_accsmain_subtitle" th:text="${address.ba_firstname}"></div>
+						<div class="m_info_accsmain_subtitle" th:text="${address.ba_lastname}"></div>
+						<div class="m_info_accsmain_subtitle" th:text="${address.ba_address}"></div>
+						<div class="m_info_accsmain_subtitle" th:text="${address.ba_zipcode}"></div>
+						<div class="m_info_accsmain_subtitle" th:text="${address.ba_restaddress}"></div>
+						<div class="m_info_accsmain_subtitle atag" id="deledit" th:text="#{edit}">편집</div>
+					</div>
+					<div class="m_info_accsmain_title1 sub">
+						<span th:text="#{contact.info}">연락처 정보</span>
+						<div class="m_info_accsmain_subtitle" th:text="${address.ba_contact}"></div>
+						<div class="m_info_accsmain_subtitle atag" id="teledit" th:text="#{edit}">편집</div>
+					</div>
+				</div>
+				<div class="m_info_accsmain_mtitle">
+					<div class="m_info_solosi" th:text="#{privacy.title}">개인 정보 보호</div>
+					<div class="m_info_accsmain_title1 sub">
+						<span th:text="#{privacy.info}">개인 정보</span>
+						<div class="m_info_accsmain_subtitlev" th:text="#{privacy.description}">고객님의 개인 정보는 고객님만의 것으로 언제든 직접 데이터를 관리하고 계정을 삭제할 수도 있습니다. LunaStore는 개인 정보 보호를 최우선으로 여깁니다.</div>
+						<div class="m_info_accsmain_subtitle">
+							<a href="#" class="a" th:text="#{privacy.policy}">개인정보처리방침
+								<div class="arrow_small a20i"></div>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="m_info_accsmain_mtitle">
+					<div class="m_info_solosi" th:text="#{luna.id}">Luna ID</div>
+					<div class="m_info_accsmain_title1 sub">
+						<span th:text="#{personal.info}">개인 정보</span>
+						<div class="m_info_accsmain_subtitle">
+							<a th:href="@{/buyer/buyerUpdatePage1(b_idx=${buyer.b_idx})}" class="a" th:text="#{manage.luna.id}">Luna ID 관리
+								<div class="arrow_small a20i"></div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- #endregion -->
+
+		<div class="m_info_last"></div>
+	</section>
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+
+<!-- 배송 주소 편집 폼 -->
+<div class="m_buyerServiceInfo_mainRegion" id="mainRegion"></div>
+<form method="post" th:action="@{/buyer/buyerInsertAddressProcess}">
+	<input type="hidden" name="b_idx" th:value="${buyer.b_idx}">
+	<input type="hidden" name="ba_contact" th:value="${buyer.b_tel}">
+	<input type="hidden" name="ba_check" value="Y">
+	<div class="m_buyerServiceInfo_delRegion" id="delRegion">
+		<div class="m_buyerServiceInfo_delTitle" th:text="#{edit.shipping.address}">배송 주소를 편집하세요.</div>
+
+		<!-- 성 필드 -->
+		<div class="_inputRegion" id="firstNameRegion">
+			<input placeholder=" " type="text" name="ba_firstname" id="firstNameInput" th:value="${address.ba_firstname}">
+			<span class="" id="firstNametitle" th:text="#{first.name}">성</span>
+			<div class="m_buyerServiceInfo_firstnameMsg" id="firstNameMsg"></div>
+		</div>
+
+		<!-- 이름 필드 -->
+		<div class="_inputRegion" id="LastNameRegion">
+			<input placeholder=" " type="text" name="ba_lastname" id="lastNameInput" th:value="${address.ba_lastname}">
+			<span class="" id="lastNametitle" th:text="#{last.name}">이름</span>
+			<div class="m_buyerServiceInfo_lastnameMsg" id="lastNameMsg"></div>
+		</div>
+
+		<!-- 우편번호 필드 -->
+		<div class="_inputRegion" id="zonecodeRegion">
+			<input placeholder=" " type="text" name="ba_zipcode" id="zonecodeInput" th:value="${address.ba_zipcode}">
+			<span class="" id="zonecodetitle" th:text="#{zipcode}">우편번호</span>
+			<div class="m_buyerServiceInfo_zonecodeMsg testMsg" id="zonecodeMsg"></div>
+		</div>
+
+		<!-- 주소 필드 -->
+		<div class="_inputRegion" id="addressRegion">
+			<input placeholder=" " type="text" name="ba_address" id="addressInput" th:value="${address.ba_address}">
+			<span class="" id="addresstitle" th:text="#{address}">건물 번지, 이름 또는 거리 이름</span>
+			<div class="m_buyerServiceInfo_addressMsg testMsg" id="addressMsg"></div>
+		</div>
+
+		<!-- 상세주소 필드 -->
+		<div class="_inputRegion" id="viewAddressRegion">
+			<input placeholder=" " type="text" name="ba_restaddress" id="viewAddressInput" th:value="${address.ba_restaddress}">
+			<span class="" id="viewAddresstitle" th:text="#{detailed.address}">상세주소(선택)</span>
+			<div class="m_buyerServiceInfo_viewAddressMsg testMsg" id="viewAddressMsg"></div>
+		</div>
+
+		<!-- 수정 버튼 -->
+		<div class="m_buyerServiceInfo_addressSubmitRegion" id="addressSubmitRegion">
+			<label>
+				<div class="m_buyerServiceInfo_addressSubmitTitle" id="addressSubmitTitle" th:text="#{edit}">수정</div>
+				<input type="submit" id="addressSubmit" class="m_buyerServiceInfo_addressSubmit" disabled="disabled">
+			</label>
+		</div>
+	</div>
+</form>
+<form method="post" th:action="@{/buyer/buyerInsertContactProcess}">
+	<input type="hidden" name="b_idx" th:value="${buyer.b_idx}">
+	<input type="hidden" name="ba_idx" th:value="${address.ba_idx}">
+	<div class="m_buyerServiceInfo_telMainRegion" id="telMainRegion">
+		<div class="m_buyerServiceInfo_telTitleRegion" th:text="#{edit.contact.info}">연락처 정보를 수정하세요.</div>
+		<div class="m_buyerServiceInfo_telSubTitle" th:text="#{contact.info.description}">청구 연락처는 문자 메시지로도 배송 관련 정보를 받아보려면 아래에 휴대폰 번호를 추가하세요.</div>
+
+		<!-- 전화번호 필드 -->
+		<div class="_inputRegion" id="telRegion">
+			<input placeholder=" " type="tel" name="ba_contact" id="telInput" maxlength="13" th:value="${address.ba_contact}">
+			<span class="" id="telTitle" th:text="#{phone.number}">전화번호</span>
+			<div class="m_buyerServiceInfo_telMsg" id="telSmg"></div>
+		</div>
+
+		<!-- 수정 버튼 -->
+		<div class="m_buyerServiceInfo_telSubmitRegion" id="telSubmitRegion">
+			<label>
+				<div class="m_buyerServiceInfo_telSubmitTitle" id="telSubmitTitle"th:text="#{edit}">수정</div>
+				<input type="submit" id="telSubmit" class="m_buyerServiceInfo_telSubmit" disabled="disabled">
+			</label>
+		</div>
+	</div>
+</form>

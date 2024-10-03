@@ -1,0 +1,294 @@
+*{
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none
+}
+body{
+    background-color: #f9f9f9;
+}
+
+.m_sellerLogin_title{
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #E5E5E5;
+}
+.m_sellerLogin_tiregion{
+    width: 1200px;
+    height: 40px;
+    background-color: #ffffff;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+.m_sellerLogin_tiregionti{
+    display: flex;
+    margin-left: 20px;
+    font-size: 24px;
+    align-items: center;
+    color: #111111;
+}
+
+.m_sellerLogin_tiregionre{
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 6px;
+}
+
+.m_sellerLogin_tiregionss{
+    margin-right: 20px;
+    font-size: 10px;
+    color: #111111;
+}
+
+.m_sellerLogin_main{
+    width: 1200px;
+    margin: 0 auto;
+    display: block;
+}
+.m_sellerLogin_main_log{
+    padding-top: 80px;
+    margin: 0 auto;
+    width: 1200px;
+    text-align: center;
+}
+.m_sellerLogin_main_subtitle{
+    margin-top: 80px;
+    text-align: center;
+    font-size: 40px;
+    font-family: 'NEXONLv1GothicBold';
+}
+.m_sellerLogin_main_loginbtnregion{
+    margin-top: 120px;
+    margin-bottom: 300px;
+}
+.m_sellerLogin_main_loginbtn{
+    display: flex;
+    width: 136px;
+    height: 40px;
+    background-color: #0071E3;
+    border-radius: 20px;
+    margin: 0 auto;
+    color: #ffffff;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: 0.4s;
+}
+.m_sellerLogin_main_loginbtn:hover{
+    background-color: #268bf0;
+    cursor: pointer;
+}
+
+.m_sellerLogin_2page {
+    display: none;
+    text-align: center;
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.m_sellerLogin_2title {
+    font-size: 40px;
+    font-family: 'NEXONLv1GothicBold';
+    height: 46px;
+    margin-top: 60px;
+}
+
+.m_sellerLogin_2subtitle {
+    font-size: 20px;
+    margin-top: 20px;
+
+}
+
+.m_sellerLogin_2loginre {
+    margin-top: 80px;
+    position: relative;
+}
+
+.m_sellerLogin_2seletatag{
+    margin-top: 80px;
+   	margin-bottom: 300px;
+}
+.m_sellerLogin_2entuser{
+    margin-right: 40px;
+    color: #111111;
+    font-size: 12px;
+}
+.m_sellerLogin_2pwblive{
+    font-size: 12px;
+    color: #0071E3;
+}
+
+.m_sellerLogin_buyerEmailRegion{
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.m_sellerLogin_emailRegion{
+    width: 460px;
+    height: 60px;
+    border: 1px solid #858585;
+    border-radius: 10px;
+    position: relative;
+    margin: 0 auto;
+    transition: 0.4s;
+    margin-top: 40px;
+}
+
+.m_sellerLogin_emailInput{
+    width: 400px;
+    height: 40px;
+    margin-top: 20px;
+    margin-left: -20px;
+    outline: none;
+    font-size: 16px;
+    border: none;
+    background-color: #f9f9f9;
+}
+
+.m_sellerLogin_emailTitle{
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    font-size: 16px;
+    transition: 0.4s;
+}
+
+.m_sellerLogin_pwRegion{
+    width: 460px;
+    height: 60px;
+    border: 1px solid #858585;
+    border-radius: 0px 0px 10px 10px;
+    position: relative;
+    margin: 0 auto;
+    margin-top: 4px;
+    visibility: visible;
+    display:none;
+    transition: 0.15s;
+}
+
+.m_sellerLogin_pwInput{
+    width: 400px;
+    height: 40px;
+    margin-top: 20px;
+    margin-left: -20px;
+    outline: none;
+    font-size: 16px;
+    border: none;
+    background-color: #f9f9f9;
+}
+
+.m_sellerLogin_pwTitle{
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    font-size: 16px;
+    transition: 0.4s;
+}
+
+.m_sellerLogin_buyerIDSmg {
+    font-size: 10px;
+    margin-left: 20px;
+    color: #F74848;
+    position: relative;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.arrow_small{
+   width: 24px;
+    height: 24px;
+    right: -20px;
+    top:20px;
+    transition: 0.2s;
+    display: -webkit-inline-box;
+    rotate: -90deg;
+    position: absolute;
+    cursor: pointer;
+    filter: invert(61%) sepia(0%) saturate(1%) hue-rotate(158deg) brightness(85%) contrast(87%);
+}
+
+.m_sellerLogin_submit{
+    opacity: 0;
+    position: absolute;
+    top:0;
+}
+
+._inputRegion{
+    width: 460px;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 2px;
+}
+._inputRegion input{
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #858585;
+    padding: 20px;
+    padding-bottom: 0px;
+    transition: all 0.15s ease;
+    background-color:#ffffff00;
+}
+
+._inputRegion input:focus{
+    border :1px solid #0071E3;
+    box-shadow: 0px 0px 6px 0px #0071e3;
+}
+
+._inputRegion input+span{
+    position: absolute;
+    pointer-events: none;
+    color: #858585;
+    transition: all 0.15s ease;
+    left: 20px;
+    bottom: 20px;
+}
+
+._inputRegion input:focus + span,
+._inputRegion input:not(:placeholder-shown) + span{
+    bottom: 36px;
+    font-size: 14px;
+}
+
+._inputRegion1{
+    width: 460px;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    visibility: hidden;
+    transition: all 0.15s ease;
+    
+}
+._inputRegion1 input{
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 0px 0px 10px 10px;
+    border: 1px solid #858585;
+    padding: 20px;
+    padding-bottom: 0px;
+    transition: all 0.15s ease;
+    background-color:#ffffff00;
+}
+
+._inputRegion1 input:focus{
+    border :1px solid #0071E3;
+    box-shadow: 0px 0px 6px 0px #0071e3;
+}
+
+._inputRegion1 input+span{
+    position: absolute;
+    pointer-events: none;
+    color: #858585;
+    transition: all 0.15s ease;
+    left:20px;
+    bottom: 20px;
+}
+
+._inputRegion1 input:focus + span,
+._inputRegion1 input:not(:placeholder-shown) + span{
+    bottom: 36px;
+    font-size: 14px;
+}

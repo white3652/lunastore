@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{productInquiryPageTitle}">상품문의 페이지</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- CSS 링크 -->
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/service/inquiry_section.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_section.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/service/qna.css}"> <!-- Q&A 관련 CSS -->
+
+    <!-- JavaScript 링크 -->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:src="@{/js/seller/service/service.js}"></script>
+    <script th:src="@{/js/seller/service/serviceSection.js}"></script>
+    <script th:src="@{/js/seller/common/globalNavigation.js}"></script>
+    <script th:src="@{/js/seller/service/qna.js}"></script> <!-- Q&A 관련 JavaScript -->
+</head>
+
+<body>
+<div class="wrap">
+
+    <!-- Header Fragment -->
+    <header th:replace="~{seller/common/header :: sellerHeader}"></header>
+
+    <section>
+        <div class="seller_global_section">
+
+            <!-- Navigation Fragment -->
+            <nav th:replace="~{seller/common/navigation :: sellerNavigation}"></nav>
+
+            <div class="seller_inquiry_contents">
+                <div class="seller_inquiry_contents_title">
+                    <span th:text="#{breadcrumbProductInquiry}">메인 > 문의/리뷰관리 > 상품 문의</span>
+                </div>
+
+                <div class="seller_inquiry_contents_search">
+                    <form id="svec_search_form" th:action="@{/seller/inquiry}" method="get">
+                        <div class="seller_inquiry_contents_search_box">
+                            <div class="seller_inquiry_contents_search_items">
+                                <span class="seller_inquiry_contents_search_title" th:text="#{searchKeyword}">검색어</span>
+                                <div class="seller_inquiry_contents_search_item1">
+                                        <span th:text="#{productNumber}">상품번호
+                                            <input type="text" name="productNum" autocomplete="off"
+                                                   th:placeholder="#{enterProductNumber}" th:value="${productNum}">
+                                        </span>
+                                    <span th:text="#{memberNumber}">회원번호
+                                            <input type="text" name="memberNum" autocomplete="off"
+                                                   th:placeholder="#{enterMemberNumber}" th:value="${memberNum}">
+                                        </span>
+                                </div>
+                            </div>
+                            <div class="seller_inquiry_contents_search_items">
+                                <span class="seller_inquiry_contents_search_title" th:text="#{saleStatus}">판매상태</span>
+                                <div class="seller_inquiry_contents_search_item2">
+                                    <input type="radio" id="all" name="answeredStatus" value="all"
+                                           th:checked="${answeredStatus == 'all'}">
+                                    <label for="all"><span th:text="#{all}">전체</span></label>
+
+                                    <input type="radio" id="unanswered" name="answeredStatus" value="unanswered"
+                                           th:checked="${answeredStatus == 'unanswered'}">
+                                    <label for="unanswered"><span th:text="#{unansweredInquiries}">미처리 문의</span></label>
+
+                                    <input type="radio" id="answered" name="answeredStatus" value="answered"
+                                           th:checked="${answeredStatus == 'answered'}">
+                                    <label for="answered"><span th:text="#{answeredInquiries}">처리 문의</span></label>
+                                </div>
+                            </div>
+                            <div class="seller_inquiry_contents_search_items">
+                                <span class="seller_inquiry_contents_search_title" th:text="#{registrationPeriod}">등록기간</span>
+                                <div class="seller_inquiry_contents_search_item4">
+                                    <input type="date" id="startDate" name="startDate"
+                                           th:value="${startDate != null ? #dates.format(startDate, 'yyyy-MM-dd') : ''}">
+                                    <span th:text="#{to}"> ~ </span>
+                                    <input type="date" id="endDate" name="endDate"
+                                           th:value="${endDate != null ? #dates.format(endDate, 'yyyy-MM-dd') : ''}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="seller_inquiry_contents_search_btns">
+                            <div>
+                                <input type="submit" th:value="#{search}" value="검색">
+                                <input type="reset" th:value="#{reset}" value="초기화">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="seller_inquiry_contents_list">
+                    <div>
+                        <span th:text="#{inquiryListTotal(${totalCount})}">문의목록 (총 00개)</span>
+                    </div>
+                    <table class="seller_inquiry_contents_table">
+                        <thead>
+                        <tr class="seller_inquiry_contents_table_title">
+                            <th th:text="#{category}">구분</th>
+                            <th th:text="#{registerEditAnswer}">답변 등록/수정</th>
+                            <th th:text="#{registrationDate}">작성일</th>
+                            <th th:text="#{inquiryName}">문의명</th>
+                            <th th:text="#{productNumber}">상품번호</th>
+                            <th th:text="#{memberNumber}">회원번호</th>
+                            <th th:text="#{answerStatus}">답변 여부</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="inquiry, iterStat : ${qnaList}">
+                            <td>
+                                <span th:text="${iterStat.index + 1 + (pageNav.pageNum - 1) * pageNav.rows_page}">1</span>
+                            </td>
+                            <td class="seller_inquiry_contents_table_edit_btn">
+                                <button type="button" class="edit-button"
+                                        th:data-qna-idx="${inquiry.qna_idx}"
+                                        th:data-qna-title="${inquiry.qna_title}"
+                                        th:data-qna-question="${inquiry.qna_question}"
+                                        th:data-qna-answer="${inquiry.qna_answer}">
+                                    <span th:text="#{register}">등록</span>
+                                </button>
+                            </td>
+                            <td>
+                                <span th:text="${#dates.format(inquiry.qna_regdate, 'yyyy.MM.dd')}">0000.00.00</span>
+                            </td>
+                            <td class="seller_inquiry_contents_table_product_name">
+                                <a th:href="@{/seller/inquiry/detail(qnaIdx=${inquiry.qna_idx})}">
+                                    <span th:text="${inquiry.qna_title}">문의 제목</span>
+                                </a>
+                            </td>
+                            <td>
+                                <span th:text="${inquiry.productNumFormatted}">P00000001</span>
+                            </td>
+                            <td>
+                                <span th:text="${inquiry.memberNumFormatted}">M00000001</span>
+                            </td>
+                            <td>
+                                <span th:text="${inquiry.answered} ? #{yes} : #{no}">❌</span> <!-- 답변 여부 표시 -->
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(qnaList)}">
+                            <td colspan="7"><span th:text="#{noInquiries}">등록된 문의가 없습니다.</span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="seller_contents_table_pasing" id="td_paging">
+                    <span th:replace="~{common/qnaPaging :: qnaFragment}"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 답변 수정 모달 창 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 th:text="#{editAnswer}">답변 수정</h2>
+            <form id="editForm" th:action="@{/seller/inquiry/edit}" method="post">
+                <input type="hidden" name="qna_idx" id="modal_qna_idx" value="" />
+
+                <div class="form-group">
+                    <label for="modal_qna_title" th:text="#{inquiryTitle}">문의 제목:</label>
+                    <input type="text" id="modal_qna_title" name="qna_title" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label for="modal_qna_question" th:text="#{inquiryContent}">문의 내용:</label>
+                    <textarea id="modal_qna_question" name="qna_question" rows="5" readonly></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="modal_qna_answer" th:text="#{answer}">답변:</label>
+                    <textarea id="modal_qna_answer" name="qna_answer" rows="5" required
+                              th:placeholder="#{enterAnswer}"></textarea>
+                    <div id="modal_error_message" class="error-message" style="display: none;"></div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" th:text="#{submit}">수정 완료</button>
+                    <button type="button" class="cancel-button" th:text="#{cancel}">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!-- fragments/footer.html -->
+<div th:fragment="global_footer">
+    <div class="notice">
+        <div id="notice">
+            <a href="" th:text="#{notice.announcement}">[공지] 11월 특별 할인 행사 안내</a>
+        </div>
+        <div class="social">
+            <a href="">
+                <span class="footerIcon" id="Youtube"></span>
+            </a>
+            <a href="">
+                <span class="footerIcon" id="Twitter"></span>
+            </a>
+            <a href="">
+                <span class="footerIcon" id="Facebook"></span>
+            </a>
+        </div>
+    </div>
+    <hr width="100%" color="dimgray" size="1px">
+    <div class="address">
+        <ul class="nav">
+            <li><a href=""><span th:text="#{terms}">이용약관</span></a></li>
+            <li><a href=""><span th:text="#{privacy}">개인정보처리방침</span></a></li>
+            <li><a href=""><span th:text="#{shippingPolicy}">배송 및 반품 정책</span></a></li>
+            <li><a href=""><span th:text="#{userGuide}">사용가이드</span></a></li>
+            <li><a href=""><span th:text="#{faq}">자주 묻는 질문</span></a></li>
+            <li><a href=""><span th:text="#{membershipInfo}">멤버십안내</span></a></li>
+            <li><a href=""><span th:text="#{partnership}">제휴 문의</span></a></li>
+        </ul>
+        <ul class="nav">
+            <li><a href=""><span th:text="#{companyIntro}">회사소개</span></a></li>
+            <li><a href=""><span th:text="#{recruitment}">채용안내</span></a></li>
+            <li><a href=""><span th:text="#{ethicalManagement}">윤리경영</span></a></li>
+            <li><a href=""><span th:text="#{levelUp}">LEVEL UP(폰트)</span></a></li>
+            <li><a href=""><span th:text="#{advertising}">광고문의</span></a></li>
+            <li><a href=""><span th:text="#{blog}">블로그</span></a></li>
+        </ul>
+        <address>
+            <span th:text="#{address.company}">㈜루나스토어 대표이사 주재송</span>
+            <span th:text="#{address.location}">충청남도 천안시 서북구 성정로 95</span>
+            <span th:text="#{address.phone}">전화 : 010-5375-7576</span>
+            <span th:text="#{address.fax}">팩스 : 041-578-7576</span><br>
+            <span th:text="#{address.email}">E-mail : white3652@naver.com</span>
+            <span th:text="#{address.businessNumber}">사업자등록번호 : 123-45-67890호</span>
+            <span th:text="#{address.commmerceNumber}">통신판매업 신고번호 : 제2024-충남천안-1234호</span>
+            <a href=""><span th:text="#{address.businessInfo}">사업자정보확인</span></a><br>
+            <span th:text="#{copyright}">© LunaStore All Rights Reserved.</span>
+            <p><span></span></p>
+        </address>
+        <!-- 언어 전환 링크 추가 -->
+        <div class="language-switch">
+            <a href="?lang=ko">한국어</a> | <a href="?lang=ja">日本語</a>
+        </div>
+    </div>
+</div>

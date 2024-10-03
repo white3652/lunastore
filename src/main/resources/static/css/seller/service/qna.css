@@ -1,0 +1,406 @@
+/* 기존 Q&A Container 스타일 */
+
+.seller_inquiry_contents_table_edit_btn button.edit-button {
+    background-color: #0071e3; /* Apple의 파란색 계열 색상 */
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 호버 시 스타일 */
+.seller_inquiry_contents_table_edit_btn button.edit-button:hover {
+    background-color: #005bb5;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 활성화 상태 (선택 시) */
+.seller_inquiry_contents_table_edit_btn button.edit-button:active {
+    background-color: #004494;
+    transform: translateY(0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.qna-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.qna-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    font-weight: 600;
+    color: #333333;
+}
+
+/* Flash 메시지 스타일 */
+.flash-message {
+    background-color: #e6f7ff;
+    border-left: 6px solid #1890ff;
+    padding: 15px 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    color: #0050b3;
+    font-size: 1em;
+}
+
+/* Q&A 리스트 아이템 스타일 */
+.qna-item {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 20px 0;
+}
+
+.qna-item:last-child {
+    border-bottom: none;
+}
+
+/* 질문 제목 스타일 */
+.qna-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.4em;
+    font-weight: 500;
+    color: #333333; /* 파란색에서 어두운 회색으로 변경 */
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.qna-title:hover {
+    color: #555555; /* 호버 시 더 어두운 회색으로 변경 */
+}
+
+.toggle-icon {
+    font-size: 1em;
+    transition: transform 0.3s ease;
+}
+
+.qna-title.active .toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* Q&A 내용 스타일 */
+.qna-content {
+    display: none;
+    padding: 15px 0 0 0;
+    animation: fadeIn 0.3s ease-in-out;
+    white-space: normal; /* 텍스트 여러 줄로 표시 */
+    word-wrap: break-word; /* 긴 단어 줄 바꿈 */
+    word-break: break-word; /* 긴 단어 줄 바꿈 */
+}
+
+.question, .answer-section p {
+    white-space: normal; /* 텍스트 여러 줄로 표시 */
+    word-wrap: break-word; /* 긴 단어 줄 바꿈 */
+    word-break: break-word; /* 긴 단어 줄 바꿈 */
+}
+
+.question {
+    font-size: 1.1em;
+    color: #555555;
+}
+
+.answer-section {
+    margin-top: 10px;
+}
+
+.answer-section p {
+    font-size: 1.1em;
+    color: #333333;
+}
+
+.answer-section .answer-form {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.answer-section .answer-form textarea {
+    resize: vertical;
+    padding: 12px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+    min-height: 80px;
+}
+
+.answer-section .answer-form button {
+    align-self: flex-end;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #0071e3;
+    border: none;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.answer-section .answer-form button:hover {
+    background-color: #005bb5;
+}
+
+/* Q&A 제출 폼 스타일 */
+.qna-submit {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #f0f0f0;
+}
+
+.qna-submit h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    font-weight: 600;
+    color: #333333;
+}
+
+.qna-submit form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.qna-submit input[type="text"],
+.qna-submit textarea {
+    padding: 15px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+}
+
+.qna-submit input[type="text"]::placeholder,
+.qna-submit textarea::placeholder {
+    color: #a0a0a0;
+}
+
+.qna-submit button {
+    width: 150px;
+    align-self: center;
+    padding: 12px;
+    background-color: #0071e3;
+    border: none;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.qna-submit button:hover {
+    background-color: #005bb5;
+}
+
+/* 애니메이션 효과 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .qna-container {
+        padding: 30px 15px;
+    }
+
+    .qna-container h2 {
+        font-size: 2em;
+    }
+
+    .qna-title {
+        font-size: 1.2em;
+    }
+
+    .qna-submit h3 {
+        font-size: 1.5em;
+    }
+}
+
+/* 모달 스타일 */
+/* 모달 배경 */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* 더욱 부드러운 반투명 검정색 */
+    transition: opacity 0.3s ease;
+}
+
+/* 모달 콘텐츠 */
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* 10% from the top and centered */
+    padding: 30px;
+    border: none; /* Border 제거 */
+    width: 90%; /* Responsive width */
+    max-width: 600px;
+    border-radius: 20px; /* 더 큰 곡선 */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* 깊은 그림자 */
+    position: relative;
+    animation: slideDown 0.3s ease;
+}
+
+/* 모달 닫기 버튼 */
+.close {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    color: #aaa;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 모달 제목 */
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    color: #333333;
+    font-weight: 600;
+}
+
+/* 폼 그룹 */
+.modal-content .form-group {
+    margin-bottom: 20px;
+}
+
+/* 라벨 스타일 */
+.modal-content label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555555;
+}
+
+/* 텍스트 입력 및 텍스트 영역 */
+.modal-content input[type="text"],
+.modal-content textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    font-size: 1em;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-content input[type="text"]:focus,
+.modal-content textarea:focus {
+    border-color: #0071e3;
+    box-shadow: 0 0 5px rgba(0, 113, 227, 0.5);
+    outline: none;
+}
+
+/* 폼 액션 버튼 */
+.modal-content .form-actions {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.modal-content .form-actions button {
+    padding: 10px 25px;
+    background-color: #0071e3;
+    border: none;
+    color: #ffffff;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content .form-actions button:hover {
+    background-color: #005bb5;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content .form-actions button:active {
+    background-color: #004494;
+    transform: translateY(0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 취소 버튼 스타일 */
+.modal-content .form-actions .cancel-button {
+    background-color: #cccccc;
+    margin-right: 10px;
+}
+
+.modal-content .form-actions .cancel-button:hover {
+    background-color: #999999;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content .form-actions .cancel-button:active {
+    background-color: #777777;
+    transform: translateY(0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 애니메이션 효과 */
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+}
+
+.modal-content {
+    /* 기존 스타일 유지 */
+    animation: slideDown 0.3s ease forwards;
+}
+
+.modal.fadeOut .modal-content {
+    animation: slideUp 0.3s ease forwards;
+}

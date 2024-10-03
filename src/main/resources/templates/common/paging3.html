@@ -1,0 +1,42 @@
+<th:block th:fragment="commonFragment3(buyerId, pageNav, url, lastSlashIndex, jspPage)">
+    <!-- 공통 변수 설정 -->
+    <span th:with="url=${url},
+                  lastSlashIndex=${lastSlashIndex},
+                  jspPage=${jspPage}"></span>
+
+    <!-- URL 빌더 -->
+    <th:block th:switch="${jspPage}">
+        <th:block th:case="'orderList'">
+            <!-- 경로 및 파라미터 이름 수정 -->
+            <span th:with="listUrl=@{/order/orderList(b_idx=${buyerId})}"></span>
+        </th:block>
+        <!-- 다른 페이지에 대한 설정 -->
+        <th:block th:case="*">
+            <span th:with="listUrl=@{/defaultList(buyerId=${buyerId})}"></span>
+        </th:block>
+    </th:block>
+
+    <!-- 페이징 -->
+    <div class="pagination">
+        <!-- 첫 페이지와 이전 블록으로 이동 -->
+        <th:block th:if="${pageNav.pageNum > pageNav.pages_pageBlock}">
+            <a th:href="@{${listUrl}(pageNum=1, pageBlock=1)}">&lt;&lt;</a>&nbsp;
+            <a th:href="@{${listUrl}(pageNum=${(pageNav.pageBlock - 1) * pageNav.pages_pageBlock}, pageBlock=${pageNav.pageBlock - 1})}">이전</a>
+        </th:block>
+
+        <!-- 페이지 번호 -->
+        <th:block th:each="p : ${#numbers.sequence((pageNav.pageBlock - 1) * pageNav.pages_pageBlock + 1, pageNav.pageBlock * pageNav.pages_pageBlock)}">
+            <th:block th:if="${p <= pageNav.total_pageNum}">
+                <a th:href="@{${listUrl}(pageNum=${p}, pageBlock=${pageNav.pageBlock})}">
+                    <span th:class="${p == pageNav.pageNum} ? 'active' : ''" th:text="${p} + ' '"></span>
+                </a>
+            </th:block>
+        </th:block>
+
+        <!-- 다음 블록과 마지막 페이지로 이동 -->
+        <th:block th:if="${pageNav.total_pageNum > (pageNav.pageBlock * pageNav.pages_pageBlock)}">
+            <a th:href="@{${listUrl}(pageNum=${pageNav.pageBlock * pageNav.pages_pageBlock + 1}, pageBlock=${pageNav.pageBlock + 1})}">다음</a>&nbsp;
+            <a th:href="@{${listUrl}(pageNum=${pageNav.total_pageNum}, pageBlock=${pageNav.last_pageBlock})}">&gt;&gt;</a>
+        </th:block>
+    </div>
+</th:block>

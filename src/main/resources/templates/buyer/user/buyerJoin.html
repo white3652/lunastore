@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title th:text="#{title.buyer.join}">Luna ID 생성 - Luna</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/global.css}">
+	<link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/user/buyerJoin.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var cart = {
+			cart: /*[[#{global.header.cart}]]*/ '장바구니',
+			cartEmpty: /*[[#{global.header.cartEmpty}]]*/ '장바구니가 비어 있습니다.',
+			productImageAlt: /*[[#{global.header.productImageAlt}]]*/ '상품이미지',
+			cartCheck: /*[[#{global.header.cartCheck}]]*/ '장바구니 확인',
+			cartViewMore: /*[[#{global.header.cartViewMore}]]*/ '개의 상품이 더 있습니다.',
+			loginPrompt: /*[[#{global.header.loginPrompt}]]*/ '저장해둔 항목이 있는지 확인하려면 ',
+			loginPrompt2: /*[[#{global.header.loginPrompt2}]]*/ '하세요. ',
+			login: /*[[#{global.header.login}]]*/ '로그인'
+
+		};
+		var invalidMessage = {
+			invalidEmail: /*[[#{error.invalid.email}]]*/ '이메일 형식이 올바르지 않습니다.',
+			emailInUse: /*[[#{error.email.in.use}]]*/ '사용중인 이메일입니다.',
+			emailCheckFailed: /*[[#{error.email.check.failed}]]*/ '이메일 중복 확인 실패',
+			telEmpty: /*[[#{error.tel.empty}]]*/ '입력 되어 있지 않습니다.',
+			telInvalid: /*[[#{error.tel.invalid}]]*/ '번호가 유효하지 않습니다.',
+			nameTooLong: /*[[#{error.name.too.long}]]*/ '길이가 너무 깁니다.',
+			nameInvalid: /*[[#{error.name.invalid}]]*/ '한글 또는 일본어만 입력이 가능합니다.',
+			nameEmpty: /*[[#{error.name.empty}]]*/ '입력 되어 있지 않습니다.',
+			birthInvalid: /*[[#{error.birth.invalid}]]*/ '생년월일이 유효하지 않습니다.',
+			passwordTooShort: /*[[#{error.password.too.short}]]*/ '암호 길이는 최소 8자 이상입니다.',
+			passwordInvalid: /*[[#{error.password.invalid}]]*/ '암호는 대소문자, 숫자, 특수문자를 포함해야 합니다.',
+			passwordMismatch: /*[[#{error.password.mismatch}]]*/ '암호가 일치하지 않습니다.',
+			date: {
+				yearSuffix: /*[[#{date.year}]]*/ '년',
+				monthSuffix: /*[[#{date.month}]]*/ '월',
+				daySuffix: /*[[#{date.day}]]*/ '일'
+			}
+		};
+		/*]]>*/
+	</script>
+	<script th:src="@{/js/buyer/user/buyerJoin.js}"></script>
+	<script th:src="@{/js/publicRegex/telRegex.js}"></script>
+	<script th:src="@{/js/buyer/user/telAutoHyphen.js}"></script>
+	<script th:src="@{/js/buyer/user/joinNextPage.js}"></script>
+	<script th:src="@{/js/buyer/user/birthdayIO.js}"></script>
+	<script th:src="@{/js/publicRegex/nameRegex.js}"></script>
+	<script th:src="@{/js/publicRegex/birthdayRegex.js}"></script>
+	<script th:src="@{/js/publicRegex/emailRegex.js}"></script>
+	<script th:src="@{/js/publicRegex/passwordRegex.js}"></script>
+	<script th:src="@{/js/buyer/user/checkjoin.js}"></script>
+	<script th:src="@{/js/buyer/user/terms.js}"></script>
+	<script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+	<script th:src="@{/js/buyer/buyerCartNavigation.js}"></script>
+	<style th:if="${#locale.language == 'ja'}">
+		* {
+			font-family: 'Noto Sans JP', sans-serif;
+		}
+	</style>
+</head>
+
+<body>
+<div class="wrap">
+	<header th:replace="~{buyer/common/global_header :: global_header}"></header>
+
+	<section>
+		<!-- 상단 타이틀 -->
+		<div class="m_userLogin_title">
+			<div class="m_userLogin_tiregion">
+				<div class="m_userLogin_tiregionti" th:text="#{buyer.join.lunaid}">Luna ID</div>
+				<div class="m_userLogin_tiregionre">
+					<a th:href="@{/buyer/buyerLogin}" class="m_userLogin_tiregionss" th:text="#{buyer.login}">로그인</a>
+					<a th:href="@{/buyer/buyerJoin}" class="m_userLogin_tiregionss" th:text="#{buyer.join.createLunaID}">Luna ID 생성</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- 메인 영역 -->
+		<div class="m_userLogin_mainRegion">
+			<form name="buyerJoin" method="post" th:action="@{/buyer/buyerJoinProcess}">
+				<!-- 페이지1 -->
+				<div class="m_userLogin_maintitle" th:text="#{buyer.join.title}">Luna ID 생성</div>
+				<div class="m_userLogin_subtitle" th:text="#{buyer.join.subtitle}">하나의 Luna ID로 모든 Luna 서비스를 이용할 수 있습니다.</div>
+				<div id="joinPage1" class="m_userLogin_page1">
+					<div class="_inputRegion" id="telRegion">
+						<input placeholder=" " type="tel" name="b_tel" class="" id="telInput" maxlength="13">
+						<span class="" id="telTitle" th:text="#{buyer.tel}">전화번호</span>
+						<div class="m_userLogin_telMsg" id="telSmg"></div>
+					</div>
+
+					<div class="m_userLogin_content" th:text="#{buyer.join.telDescription}">항상 사용할 수 있는 전화번호를 입력하십시오. 새 기기나 웹 브라우저에 로그인할 때 해당 전화번호를 사용하여 신원을 확인합니다. 메시지 또는 데이터 요금이 적용될 수 있습니다.</div>
+					<div class="m_userLogin_checkregion">
+						<label>
+							<input type="checkbox" name="b_terms" id="terms" value="y">
+							<span class="m_userLogin_rula">
+                                <a href="#" class="m_userLogin_atag" th:text="#{buyer.terms.policy}">Luna의 개인정보 처리방침</a>
+                                <span th:text="#{buyer.terms.agree}">에 따라 개인 정보를 수집, 사용, 타사에 대한 제공 및 처리하는 데 동의합니다.</span>
+                            </span>
+						</label>
+					</div>
+
+					<div class="m_userLogin_pagebtn1">
+						<div class="m_userLogin_btn1Region" id="nextPageBtn">
+							<label>
+								<div class="m_userLogin_next1" id="nextPageContainer">
+									<span th:text="#{buyer.next}"></span>
+									<input type="button" class="m_userLogin_btn" id="nextPage" disabled="disabled">
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<!-- 페이지2 -->
+				<div id="joinPage2" class="m_userLogin_page2">
+					<div class="m_userLogin_nameRegion">
+						<div class="_inputRegionName" id="firstNameRegion">
+							<input placeholder=" " type="text" name="b_firstname" class="" id="firstNameInput">
+							<span class="" id="firstNametitle" th:text="#{buyer.firstname}">성</span>
+							<div class="m_userLogin_nameMsg" id="firstNameMsg"></div>
+						</div>
+
+						<div class="m_userinfo_updatename_region_hr" id="active"></div>
+
+						<div class="_inputRegionName" id="lastNameRegion">
+							<input placeholder=" " type="text" name="b_lastname" class="" id="lastNameInput">
+							<span class="" id="lastNametitle" th:text="#{buyer.lastname}">이름</span>
+							<div class="m_userLogin_nameMsg" id="lastNameMsg"></div>
+						</div>
+					</div>
+					<div class="m_userinfo_updatename_region_inbday">
+						<div class="_inputRegionBir" id="yyyyregion">
+							<label>
+								<input placeholder=" " type="text" name="b_birth" class="" id="yyyyinput" maxlength="8" autocomplete='off'>
+								<span class="" id="yyyytext" th:text="#{buyer.birthday}">생년월일</span>
+								<div id="result" class="m_userLogin_birthdayResult" th:text="#{buyer.birthday.format}">yyyy년 mm월 dd일</div>
+							</label>
+							<div class="m_userLogin_birthdayMsg" id="resultmsg"></div>
+						</div>
+					</div>
+
+					<div class="m_userLogin_pagebtn1">
+						<div class="m_userLogin_btn1Region" id="lastPageBtn">
+							<label>
+								<div class="m_userLogin_next1">
+									<span th:text="#{buyer.next}"></span>
+									<input type="button" class="m_userLogin_btn" id="lastPage" disabled="disabled">
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<!-- 페이지3 -->
+				<div id="joinPage3" class="m_userLogin_page3">
+					<div class="_inputRegion" id="emailRegion">
+						<input placeholder=" " type="email" name="b_email" class="" id="emailInput">
+						<span class="" id="emailTitle" th:text="#{buyer.email.placeholder}">name@example.com</span>
+						<div class="m_userLogin_emailMsg" id="emailMsg"></div>
+						<div id="active"></div>
+						<div class="m_userLogin_emailSubTitle" th:text="#{buyer.email.subtitle}">새 Luna ID로 사용될 이메일입니다.</div>
+					</div>
+
+					<div class="_inputRegion" id="newPwRegion">
+						<input placeholder=" " type="password" name="b_pw" class="" id="newPwInput">
+						<span class="" id="passwordTitle" th:text="#{buyer.password}">암호</span>
+						<div class="m_userLogin_passwordMsg" id="newPwMsg"></div>
+					</div>
+
+					<div class="_inputRegion" id="ckeckPwRegion">
+						<input placeholder=" " type="password" class="" id="ckeckPwInput">
+						<span class="" id="checkPasswordTitle" th:text="#{buyer.password.confirm}">암호 확인</span>
+						<div class="m_userLogin_checkPasswordMsg" id="ckeckPwMsg"></div>
+					</div>
+
+					<div class="m_userLogin_pagebtn1">
+						<div class="m_userLogin_btn1Region" id="joinSubmitBtn">
+							<label>
+								<div class="m_userLogin_next1">
+									<span th:text="#{buyer.submit}">가입하기</span>
+									<input type="submit" class="m_userLogin_btn" id="joinSubmit" disabled="disabled">
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	// 폼 제출 시 세션 스토리지 데이터를 히든 필드로 추가
+	$(document).ready(function() {
+		$('form').submit(function() {
+			$('<input>').attr({
+				type: 'hidden',
+				name: 'b_tel',
+				value: sessionStorage.getItem('b_tel')
+			}).appendTo(this);
+
+			$('<input>').attr({
+				type: 'hidden',
+				name: 'b_firstname',
+				value: sessionStorage.getItem('b_firstname')
+			}).appendTo(this);
+
+			$('<input>').attr({
+				type: 'hidden',
+				name: 'b_lastname',
+				value: sessionStorage.getItem('b_lastname')
+			}).appendTo(this);
+
+			$('<input>').attr({
+				type: 'hidden',
+				name: 'b_birth',
+				value: sessionStorage.getItem('b_birth')
+			}).appendTo(this);
+		});
+	});
+</script>
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</body>
+</html>

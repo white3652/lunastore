@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>main</title>
+<!--    <link rel="stylesheet" th:href="@{/css/font/font.css}">-->
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/main_section.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/main_header.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var cart = {
+            cart: /*[[#{global.header.cart}]]*/ '장바구니',
+            cartEmpty: /*[[#{global.header.cartEmpty}]]*/ '장바구니가 비어 있습니다.',
+            productImageAlt: /*[[#{global.header.productImageAlt}]]*/ '상품이미지',
+            cartCheck: /*[[#{global.header.cartCheck}]]*/ '장바구니 확인',
+            cartViewMore: /*[[#{global.header.cartViewMore}]]*/ '개의 상품이 더 있습니다.',
+            loginPrompt: /*[[#{global.header.loginPrompt}]]*/ '저장해둔 항목이 있는지 확인하려면 ',
+            loginPrompt2: /*[[#{global.header.loginPrompt2}]]*/ '하세요. ',
+            login: /*[[#{global.header.login}]]*/ '로그인'
+
+        };
+        /*]]>*/
+    </script>
+    <script th:src="@{/js/buyer/headerCart.js}"></script>
+    <script th:src="@{/js/buyer/mainNavigation.js}"></script>
+    <script th:src="@{/js/cart.js}"></script>
+    <script th:src="@{/js/buyer/main.js}"></script>
+    <script th:src="@{/js/buyer/mainSection.js}"></script>
+
+
+</head>
+<body>
+<div class="wrap">
+    <header th:replace="~{buyer/common/main_header :: main_header}"></header>
+    <section>
+        <div class="main_banner">
+            <div class="main_banner_img_counting">
+                <span class="main_banner_img_count"></span>
+            </div>
+            <ul class="main_banner_imgs">
+                <li class="main_banner_img view">
+                    <div>
+                        <p th:utext="#{banner1.message1}">신백 선물하기<br>설 선물의 발견<br>프리미엄 그대로 명절 선물하고<br>스타벅스 아메리카노 응모하기</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_01.avif}" alt="">
+                </li>
+                <li class="main_banner_img next">
+                    <div>
+                        <p th:utext="#{banner1.message2}">24년 설 명절<br>기프트 특선 기획<br>산지직송의 건강한 상품으로<br>따뜻한 마음을 선물하세요.</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_02.avif}" alt="">
+                </li>
+                <li class="main_banner_img next_next">
+                    <div>
+                        <p th:utext="#{banner1.message3}">KIDS<br>명절&신학기선물<br>인기 키즈 코디,<br>신학기 책가방 까지!</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_03.avif}" alt="">
+                </li>
+                <li class="main_banner_img next_next_next">
+                    <div>
+                        <p th:utext="#{banner1.message4}">슈슈앤크라<br>2024<br>spring collection</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_04.avif}" alt="">
+                </li>
+                <li class="main_banner_img">
+                    <div>
+                        <p th:utext="#{banner1.message5}">JJ지코트<br>24년 온라인전용 봄 신상<br>& 겨울 클리어런스 ~80%</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_05.avif}" alt="">
+                </li>
+                <li class="main_banner_img">
+                    <div>
+                        <p th:utext="#{banner1.message6}">캐주얼<br>클리어런스<br>FW 최종 클리어런스 할인전</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_06.avif}" alt="">
+                </li>
+                <li class="main_banner_img">
+                    <div>
+                        <p th:utext="#{banner1.message7}">럭셔리 뷰티<br>설 기프트 제안<br>갈색병 정품증정 세트 외<br>S머니 추가 및 신세계상품권 증정</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_07.avif}" alt="">
+                </li>
+                <li class="main_banner_img">
+                    <div>
+                        <p th:utext="#{banner1.message8}">로레알 뷰티<br>럭셔리 기프트<br>~15% + S머니 추가 할인<br>사은품 최대 증정 혜택</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_08.avif}" alt="">
+                </li>
+                <li class="main_banner_img">
+                    <div>
+                        <p th:utext="#{banner1.message9}">루이까또즈<br>브랜드위크<br>신년 신학기 특가~50%<br>BEST 핸드백/지갑/벨트</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_09.avif}" alt="">
+                </li>
+                <li class="main_banner_img">
+                    <div>
+                        <p th:utext="#{banner1.message10}">금강제화<br>리갈, 클락스 外<br>~30% OFF+추가 쿠폰 혜택</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_10.avif}" alt="">
+                </li>
+                <li class="main_banner_img prev_prev_perv">
+                    <div>
+                        <p th:utext="#{banner1.message11}">Luna<br>HUGO런칭<br>HUGO피규어<br>& 카드 트레이 증정</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_11.avif}" alt="">
+                </li>
+                <li class="main_banner_img prev_prev">
+                    <div>
+                        <p th:utext="#{banner1.message12}">나이키<br>UP TO 50%</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_12.avif}" alt="">
+                </li>
+                <li class="main_banner_img prev">
+                    <div>
+                        <p th:utext="#{banner1.message13}">디올 NEW<br>아이코닉 립 글로우<br>#061 포피코랄</p>
+                    </div>
+                    <img th:src="@{/css/img/banner1/banner_13.avif}" alt="">
+                </li>
+            </ul>
+
+            <div class="main_banner_btns">
+                <button class="main_banner_prev"><span></span></button>
+                <button class="main_banner_next"><span></span></button>
+                <button class="main_banner_next_next"><span></span></button>
+            </div>
+        </div>
+        <h1 class="gallerys" th:utext="#{main.gallerys}">Luna Store. <span>원하는 제품을 <br>구입하는 가장 좋은 방법.</span></h1>
+        <h1 class="gallery_name" th:utext="#{main.gallery_name}">Luna의 소식. <span>따끈따끈한 새 이벤트들.</span></h1>
+
+        <!-- Random items section -->
+        <div class="gallery_box">
+            <ul class="gallery active">
+                <li class="gallery_li" th:each="item : ${allItems}">
+                    <a th:href="@{/item/view(i_idx=${item.i_idx})}">
+                        <h2 th:text="${item.i_name}"></h2>
+                        <img th:src="@{|/uploads/${item.i_saveimg0}|}" alt="">
+                        <span th:text="${item.i_price}"></span>
+                    </a>
+                </li>
+                <li th:if="${allItems.size()} == 0">
+                    <p th:text="#{gallery.noItems}">등록된 상품이 없습니다.</p>
+                </li>
+            </ul>
+            <div class="gallery_btns">
+                <button class="prev arrow_big active"></button>
+                <button class="next arrow_big active"></button>
+            </div>
+        </div>
+
+        <!-- Original sections for each category -->
+        <h1 class="gallery_name" th:text="#{category.digital_appliances}">디지털/가전</h1>
+        <div class="gallery_box">
+            <ul class="gallery active">
+                <li class="gallery_li" th:each="item : ${listA}">
+                    <a th:href="@{/item/view(i_idx=${item.i_idx})}">
+                        <h2 th:text="${item.i_name}"></h2>
+                        <img th:src="@{|/uploads/${item.i_saveimg0}|}" alt="">
+                        <span th:text="${item.i_price}"></span>
+                    </a>
+                </li>
+                <li th:if="${listA.size()} == 0">
+                    <p th:text="#{gallery.noItems}">등록된 상품이 없습니다.</p>
+                </li>
+            </ul>
+            <div class="gallery_btns">
+                <button class="prev arrow_big active"></button>
+                <button class="next arrow_big active"></button>
+            </div>
+        </div>
+
+        <h1 class="gallery_name" th:text="#{category.interior}">인테리어</h1>
+        <div class="gallery_box">
+            <ul class="gallery active">
+                <li class="gallery_li" th:each="item : ${listB}">
+                    <a th:href="@{/item/view(i_idx=${item.i_idx})}">
+                        <h2 th:text="${item.i_name}"></h2>
+                        <img th:src="@{|/uploads/${item.i_saveimg0}|}" alt="">
+                        <span th:text="${item.i_price}"></span>
+                    </a>
+                </li>
+                <li th:if="${listB.size()} == 0">
+                    <p th:text="#{gallery.noItems}">등록된 상품이 없습니다.</p>
+                </li>
+            </ul>
+            <div class="gallery_btns">
+                <button class="prev arrow_big active"></button>
+                <button class="next arrow_big active"></button>
+            </div>
+        </div>
+
+        <h1 class="gallery_name" th:text="#{category.food}">식품</h1>
+        <div class="gallery_box">
+            <ul class="gallery active">
+                <li class="gallery_li" th:each="item : ${listC}">
+                    <a th:href="@{/item/view(i_idx=${item.i_idx})}">
+                        <h2 th:text="${item.i_name}"></h2>
+                        <img th:src="@{|/uploads/${item.i_saveimg0}|}" alt="">
+                        <span th:text="${item.i_price}"></span>
+                    </a>
+                </li>
+                <li th:if="${listC.size()} == 0">
+                    <p th:text="#{gallery.noItems}">등록된 상품이 없습니다.</p>
+                </li>
+            </ul>
+            <div class="gallery_btns">
+                <button class="prev arrow_big active"></button>
+                <button class="next arrow_big active"></button>
+            </div>
+        </div>
+
+        <h1 class="gallery_name" th:text="#{category.clothing}">의류</h1>
+        <div class="gallery_box">
+            <ul class="gallery active">
+                <li class="gallery_li" th:each="item : ${listD}">
+                    <a th:href="@{/item/view(i_idx=${item.i_idx})}">
+                        <h2 th:text="${item.i_name}"></h2>
+                        <img th:src="@{|/uploads/${item.i_saveimg0}|}" alt="">
+                        <span th:text="${item.i_price}"></span>
+                    </a>
+                </li>
+                <li th:if="${listD.size()} == 0">
+                    <p th:text="#{gallery.noItems}">등록된 상품이 없습니다.</p>
+                </li>
+            </ul>
+            <div class="gallery_btns">
+                <button class="prev arrow_big active"></button>
+                <button class="next arrow_big active"></button>
+            </div>
+        </div>
+
+        <h1 class="gallery_name" th:text="#{category.living}">생활</h1>
+        <div class="gallery_box">
+            <ul class="gallery active">
+                <li class="gallery_li" th:each="item : ${listE}">
+                    <a th:href="@{/item/view(i_idx=${item.i_idx})}">
+                        <h2 th:text="${item.i_name}"></h2>
+                        <img th:src="@{|/uploads/${item.i_saveimg0}|}" alt="">
+                        <span th:text="${item.i_price}"></span>
+                    </a>
+                </li>
+                <li th:if="${listE.size()} == 0">
+                    <p th:text="#{gallery.noItems}">등록된 상품이 없습니다.</p>
+                </li>
+            </ul>
+            <div class="gallery_btns">
+                <button class="prev arrow_big active"></button>
+                <button class="next arrow_big active"></button>
+            </div>
+        </div>
+    </section>
+</div>
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</body>
+</html>

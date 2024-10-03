@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="${#locale.language}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{title.productReviewPage}">상품리뷰 페이지</title>
+
+    <!-- 정적 리소스 링크 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/service/review_section.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_section.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <!-- 새로운 모달 CSS 추가 -->
+    <link rel="stylesheet" th:href="@{/css/seller/service/modal.css}">
+    <!-- 스크립트 링크 -->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:src="@{/js/seller/service/serviceSection.js}"></script>
+    <script th:src="@{/js/seller/common/globalNavigation.js}"></script>
+    <script th:src="@{/js/seller/service/serviceSection.js}"></script>
+    <script th:src="@{/js/seller/service/service.js}"></script>
+    <!-- 새로운 모달 JavaScript 추가 -->
+    <script th:src="@{/js/seller/service/reviewModal.js}" defer></script>
+</head>
+
+<body>
+<div class="wrap">
+
+    <!-- 헤더 포함 -->
+    <header th:replace="~{seller/common/header :: sellerHeader}"></header>
+
+    <section>
+        <div class="seller_global_section" style="height: 1000px">
+
+            <!-- 네비게이션 포함 -->
+            <nav th:replace="~{seller/common/navigation :: sellerNavigation}"></nav>
+
+            <div class="seller_review_contents">
+                <div class="seller_review_contents_title">
+                    <span th:text="#{breadcrumb.main} + ' > ' + #{breadcrumb.inquiryReviewManagement} + ' > ' + #{breadcrumb.productReview}">메인 > 문의/리뷰관리 > 상품 리뷰</span>
+                </div>
+
+                <!-- 검색 폼 -->
+                <div class="seller_review_contents_search">
+                    <form th:action="@{/seller/review}" method="get">
+                        <div class="seller_review_contents_search_box">
+                            <input type="hidden" name="s_idx" th:value="${seller.s_idx}">
+                            <div class="seller_review_contents_search_items">
+                                <span class="seller_review_contents_search_title" th:text="#{search.keyword}">검색어</span>
+                                <div class="seller_review_contents_search_item1">
+                    <span>
+                        <span th:text="#{search.productNumber}">상품번호</span>
+                        <input type="text" name="itemNum" autocomplete="off" th:placeholder="#{placeholder.enterProductNumber}" th:value="${sVO.itemNum}">
+                    </span>
+                                    <span>
+                        <span th:text="#{search.nickname}">닉네임</span>
+                        <input type="text" name="buyerNickname" autocomplete="off" th:placeholder="#{placeholder.enterNickname}" th:value="${sVO.buyerNickname}">
+                    </span>
+                                </div>
+                            </div>
+                            <div class="seller_review_contents_search_items">
+                                <span class="seller_review_contents_search_title" th:text="#{search.registrationPeriod}">등록기간</span>
+                                <div class="seller_review_contents_search_item3">
+                                    <input type="date" id="startDate" name="sDate" th:value="${sDate}">
+                                    <span th:text="#{search.to}"> ~ </span>
+                                    <input type="date" id="endDate" name="eDate" th:value="${eDate}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="seller_review_contents_search_btns">
+                            <div>
+                                <input type="submit" th:value="#{button.search}" value="검색">
+                                <input type="reset" th:value="#{button.reset}" value="초기화">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 리뷰 목록 -->
+                <div class="seller_review_contents_list">
+                    <div th:if="${#lists.isEmpty(reviewList)}">
+                        <span th:text="${#messages.msg('reviewList.totalCount', 0)}">리뷰목록 (총 0개)</span>
+                    </div>
+                    <div th:unless="${#lists.isEmpty(reviewList)}">
+                        <span th:text="${#messages.msg('reviewList.totalCount', pageNav.totalRows)}">리뷰목록 (총 [[${pageNav.totalRows}]]개)</span>
+                    </div>
+
+                    <table class="seller_review_contents_table">
+                        <tr class="seller_review_contents_table_title">
+                            <th th:text="#{table.header.category}">구분</th>
+                            <th th:text="#{table.header.date}">작성일</th>
+                            <th th:text="#{table.header.nickname}">닉네임</th>
+                            <th th:text="#{table.header.review}">리뷰</th>
+                            <th th:text="#{table.header.rating}">별점</th>
+                            <th th:text="#{table.header.productNumber}">상품번호</th>
+                        </tr>
+
+                        <tr th:each="review, iterStat : ${reviewList}"
+                            th:if="${iterStat.index >= pageNav.startNum - 1 and iterStat.index < pageNav.endNum}">
+                            <td><span th:text="${iterStat.index + 1}"></span></td>
+                            <td><span th:text="${review.br_postdate}"></span></td>
+                            <td><span th:text="${review.b_nickname}"></span></td>
+                            <td class="seller_review_contents_table_product_name">
+                                <!-- 모달을 열기 위한 링크로 수정 -->
+                                <a href="#" class="review-detail-link" th:data-review-id="${review.br_idx}">
+                                    <span th:text="${review.br_content}"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="review-star">
+                                    <div class="stars" th:style="|--star-width: ${review.br_star * 20}%|"></div>
+                                    <span th:text="${review.br_star} + ' ' + #{unit.point}"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <span th:text="'P' + ${#numbers.formatInteger(review.i_idx, '00000000')}"></span>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(reviewList)}">
+                            <td colspan="6" th:text="#{reviewList.noReviews}">등록된 리뷰가 없습니다.</td>
+                        </tr>
+                    </table>
+                    <!-- 페이징 -->
+                    <div th:if="${not #lists.isEmpty(reviewList)}" class="seller_contents_table_pasing" id="td_paging">
+                        <span th:replace="~{common/salesPaging :: salesFragment(requestUrl=${requestUrl})}"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- 모달 창 구조 -->
+<div id="reviewModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+        <span class="close-button" aria-label="#{aria.close}" th:aria-label="#{aria.close}">&times;</span>
+        <div class="modal-body">
+            <h2 id="modalTitle" th:text="#{modal.reviewDetails}">리뷰 상세 정보</h2>
+            <div id="reviewDetails">
+                <!-- AJAX로 로드된 리뷰 상세 내용 -->
+                <div id="loadingSpinner" style="display: none;">
+                    <img src="/css/img/loading.gif" alt="#{alt.loading} 로딩 중...">
+                </div>
+                <!-- 리뷰 내용이 여기에 표시됩니다 -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <!-- 푸터 포함 -->
+    <footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</footer>
+
+</body>
+
+</html>

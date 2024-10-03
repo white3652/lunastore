@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luna account | verifyEmail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link th:href="@{/css/global.css}" rel="stylesheet">
+    <link th:href="@{/css/icon/icon.css}" rel="stylesheet">
+    <link th:href="@{/css/buyer/user/verifyEmail.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <!-- Previous head content remains the same -->
+    <script th:inline="javascript">
+        var s_email = /*[[${s_email}]]*/ '';
+        var joinEmailProcessUrl = /*[[@{/seller/joinEmailProcess}]]*/ '';
+        var sellerVerifyEmailProcessUrl = /*[[@{/seller/sellerVerifyEmailProcess}]]*/ '';
+        var sellerLoginUrl = /*[[@{/seller/sellerLogin}]]*/ '';
+        var checkStoredCodeUrl = /*[[@{/seller/checkStoredCode}]]*/ '';
+    </script>
+    <script>
+        var emailSentCode = '';
+        var lastSentTime = 0;
+
+        function sendEmailVerification() {
+            var currentTime = new Date().getTime();
+            if (currentTime - lastSentTime < 60000) {
+                alert("인증번호 재전송은 1분에 한 번만 가능합니다. 잠시 후 다시 시도해주세요.");
+                return;
+            }
+
+            $.ajax({
+                type: 'post',
+                url: joinEmailProcessUrl,
+                data: {
+                    s_email: s_email
+                },
+                dataType: "text",
+                success: function (data) {
+                    $('#auth_num_input').attr("disabled", false);
+                    emailSentCode = data.trim();
+                    console.log("이메일로 전송된 인증번호:", emailSentCode);
+                    lastSentTime = currentTime;
+                    alert("인증번호가 전송되었습니다. 이메일을 확인해주세요.");
+
+                    // 서버에 저장된 코드 확인
+                    checkStoredCode();
+                },
+                error: function (xhr, status, error) {
+                    console.log("이메일 전송 실패:", status, error);
+                    alert("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+                }
+            });
+        }
+
+        function checkStoredCode() {
+            $.ajax({
+                type: 'get',
+                url: checkStoredCodeUrl,
+                data: {
+                    s_email: s_email
+                },
+                success: function (data) {
+                    console.log("서버에 저장된 인증번호:", data);
+                    if (data !== emailSentCode) {
+                        console.log("경고: 이메일로 전송된 인증번호와 서버에 저장된 인증번호가 일치하지 않습니다.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("서버 코드 확인 실패:", status, error);
+                }
+            });
+        }
+
+        $(function () {
+            sendEmailVerification();
+
+            $("#re_email_btn").click(function () {
+                sendEmailVerification();
+            });
+
+            $("#confirm_email_btn").on("click", function () {
+                const inputCode = $('#auth_num_input').val().trim();
+                console.log("사용자 입력 인증번호:", inputCode);
+
+                $.ajax({
+                    type: 'post',
+                    url: sellerVerifyEmailProcessUrl,
+                    data: {
+                        s_email: s_email,
+                        inputCode: inputCode
+                    },
+                    success: function (data) {
+                        if (data == 1) {
+                            alert("인증되었습니다. 다시 로그인해주세요.");
+                            window.location.href = sellerLoginUrl;
+                        } else {
+                            console.log("인증 실패. 서버 응답:", data);
+                            alert("인증번호가 일치하지 않습니다. 최근에 받은 인증번호를 입력했는지 확인해주세요.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("인증 처리 실패:", status, error);
+                        alert("인증 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div class="warp">
+    <header th:replace="~{buyer/common/global_header :: global_header}"></header>
+    <section>
+        <div class="mainRegion">
+            <div class="mainRegionTitle" th:text="#{seller.verifyEmail.mainTitle}">이메일을 확인해 주세요.</div>
+            <div class="mainRegionSubTitle" th:text="${s_email}"></div>
+            <form name="sellerVerifyEmail" method="post" th:action="@{/seller/sellerVerifyEmailProcess}">
+                <input type="hidden" id="s_email" th:value="${s_email}">
+                <div>
+                    <input type="text" id="auth_num_input" th:placeholder="#{seller.verifyEmail.authNumberPlaceholder}" placeholder="인증번호 6자리를 입력해주세요." maxlength="6" class="emailNemberInput">
+                </div>
+                <input type="button" id="confirm_email_btn" th:value="#{seller.verifyEmail.confirmButton}" value="인증확인" class="emailCheckBtn">
+                <input type="button" th:value="#{seller.verifyEmail.resendButton}" id="re_email_btn" value="재전송" class="reEmailBtn">
+            </form>
+        </div>
+    </section>
+</div>
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</body>
+
+</html>

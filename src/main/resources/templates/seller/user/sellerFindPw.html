@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{title.findPassword}">Luna account | 비밀번호 찾기</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/user/sellerFindPw.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <!-- JavaScript Files -->
+    <script th:src="@{/js/seller/user/taxidAutoHyphen.js}"></script>
+    <script th:src="@{/js/seller/user/sellerFindPw.js}"></script>
+
+    <!-- Inline JavaScript with Thymeleaf URL -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function(){
+            $("#findBtn").click(function(e){
+                var formData = $("form[name='sellerFindPW']").serialize();
+
+                $.ajax({
+                    url: /*[[@{/seller/findPwProcess}]]*/,
+                    type: "POST",
+                    data: formData,
+                    success: function(result) {
+                        alert(result);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("An error occurred: " + error);
+                        alert(/*#{alert.passwordFindError}*/ '비밀번호 찾기 과정에서 오류가 발생했습니다.');
+                    }
+                });
+
+                e.preventDefault();
+            });
+        });
+        /*]]>*/
+    </script>
+</head>
+
+<body>
+<div class="warp">
+    <header>
+        <header th:replace="~{buyer/common/global_header :: global_header}"></header>
+    </header>
+
+    <section>
+        <!-- Header Section -->
+        <div class="m_sellerFindPw_header1">
+            <div class="m_sellerFindPw_header">
+                <div class="m_sellerFindPw_header_acc" th:text="#{label.rootID}">Root ID</div>
+                <div class="m_sellerFindPw_loar">
+                    <a th:href="@{/seller/sellerLogin}" class="m_sellerFindPw_logout">
+                        <span th:text="#{button.login}">로그인</span>
+                        <div class="arrow_small a12"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="_hr"></div>
+
+        <!-- Password Reset Form -->
+        <form name="sellerFindPW" method="post" th:action="@{/seller/findPwProcess}">
+            <!-- Page 1: Business Number Input -->
+            <div class="m_sellerFindPw_findPage1" id="findPage1">
+                <div class="m_sellerFindPw_findPwTitle" th:text="#{title.resetPassword}">암호 재설정</div>
+                <div class="m_sellerFindPw_findPwSubTitle" th:text="#{subtitle.enterBusinessNumber}">
+                    계속하려면 계정에서 사용하는 사업자 번호를 입력하십시오.
+                </div>
+                <div class="m_sellerFindPw_updatename_region_taxid">
+                    <div class="m_sellerFindPw_taxidRegion" id="taxidRegion">
+                        <label>
+                            <input type="text" name="s_businessnum" class="m_sellerFindPw_taxidInput" id="taxidInput" maxlength="12" required>
+                            <div class="m_sellerFindPw_taxidTitle" id="taxidTitle" th:text="#{label.businessNumber}">사업자 번호</div>
+                        </label>
+                    </div>
+                </div>
+                <div class="m_sellerFindPw_nextRegion">
+                    <div class="m_sellerFindPw_nextBtn" id="nextBtn" th:text="#{button.next}">다음</div>
+                </div>
+            </div>
+
+            <!-- Page 2: Email Input -->
+            <div class="m_sellerFindPw_findPage2" id="findPage2" style="display: none;">
+                <div class="m_sellerFindPw_findPwTitle" th:text="#{title.enterEmail}">이메일을 입력해 주세요</div>
+                <div class="m_sellerFindPw_emailRegion" id="emailRegion">
+                    <label>
+                        <input type="email" name="s_email" class="m_sellerFindPw_emailInput" id="emailInput" required>
+                        <div class="m_sellerFindPw_emailTitle" id="emailTitle" th:text="#{label.emailAddress}">이메일 주소</div>
+                    </label>
+                </div>
+                <div class="m_sellerFindPw_submitRegion">
+                    <div class="m_sellerFindPw_returnBtn" id="returnBtn" th:text="#{button.cancel}">취소</div>
+                    <label>
+                        <div class="m_sellerFindPw_submitBtn" th:text="#{button.confirm}">확인</div>
+                        <input type="submit" class="m_sellerFindPw_submit" id="findBtn" th:value="#{button.confirm}" value="확인">
+                    </label>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>
+
+<!--<footer>-->
+<!--    <footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>-->
+<!--</footer>-->
+
+<!-- Optional: Initialize Page Sections -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function(){
+        $("#nextBtn").click(function(){
+            $("#findPage1").hide();
+            $("#findPage2").show();
+        });
+
+        $("#returnBtn").click(function(){
+            $("#findPage2").hide();
+            $("#findPage1").show();
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+
+</html>

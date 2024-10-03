@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lunastore.OrderMapper">
+
+    <insert id="insertOrder" parameterType="com.lunastore.vo.OrderVO" useGeneratedKeys="true" keyProperty="bo_idx">
+        INSERT INTO tb_buyer_order (b_idx, bo_itemname, bo_name, bo_zipcode, bo_address, bo_contact)
+        VALUES (#{b_idx}, #{bo_itemname}, #{bo_name}, #{bo_zipcode}, #{bo_address}, #{bo_contact})
+    </insert>
+
+    <insert id="insertOrderState" parameterType="com.lunastore.vo.OrderStateVO">
+        INSERT INTO tb_buyer_order_state (bo_idx, i_idx, bos_option, bos_price, bos_count, bos_state)
+        VALUES (#{bo_idx}, #{i_idx}, #{bos_option}, #{bos_price}, #{bos_count}, #{bos_state})
+    </insert>
+
+    <delete id="deleteOrder" parameterType="int">
+        UPDATE tb_buyer_order_state
+        SET bos_state = 5
+        WHERE bo_idx = #{boIdx}
+    </delete>
+
+    <delete id="successOrder" parameterType="int">
+        DELETE FROM tb_buyer_cart WHERE b_idx = #{b_idx}
+    </delete>
+
+    <update id="removeItemCount" parameterType="orderStateVO">
+        UPDATE tb_item SET i_count = i_count - #{bos_count} WHERE i_idx = #{i_idx}
+    </update>
+
+    <select id="findOrder" parameterType="map" resultType="orderStateVO">
+        SELECT
+        *
+        FROM
+        tb_buyer_order_state bos
+        INNER JOIN tb_buyer_order bo ON bos.bo_idx = bo.bo_idx
+        LEFT JOIN tb_buyer_review br ON br.bos_idx = bos.bos_idx
+        WHERE
+        bo.b_idx = #{b_idx}
+        AND bos.i_idx = #{i_idx}
+        AND br.br_idx IS NULL
+        ORDER BY
+        bos.bos_postdate DESC
+        LIMIT 1
+    </select>
+
+    <select id="findOrderByBoIdx" parameterType="int" resultType="orderVO">
+        SELECT * FROM tb_buyer_order WHERE bo_idx = #{bo_idx}
+    </select>
+
+    <update id="updateOrderStatus" parameterType="map">
+        UPDATE tb_buyer_order_state bos
+        JOIN tb_buyer_order bo ON bos.bo_idx = bo.bo_idx
+        SET bos.bos_state = #{status}, bo.bo_orderdate = NOW()
+        WHERE bo.bo_idx = #{bo_idx};
+    </update>
+
+    <update id="updateOrderState" parameterType="map">
+        UPDATE tb_buyer_order_state
+        SET bos_state = #{bos_state}
+        WHERE bo_idx = #{bo_idx};
+    </update>
+
+    <insert id="insertAddress" parameterType="com.lunastore.vo.AddressVO">
+        INSERT INTO tb_buyer_address (b_idx, ba_firstname, ba_lastname, ba_zipcode, ba_address, ba_restaddress)
+        VALUES (#{b_idx}, #{ba_firstname}, #{ba_lastname}, #{ba_zipcode}, #{ba_address}, #{ba_restaddress})
+    </insert>
+
+    <update id="updateOrderAddress" parameterType="orderVO">
+        UPDATE tb_buyer_order
+        SET bo_address = #{bo_address}, bo_zipcode = #{bo_zipcode}, bo_contact = #{bo_contact}, bo_name = #{bo_name}
+        WHERE bo_idx = #{bo_idx}
+    </update>
+
+    <!-- 추가된 메서드 -->
+    <select id="findOrdersByBuyerId" parameterType="int" resultType="orderDTO">
+        SELECT
+        bo.bo_idx,
+        bo.b_idx,
+        bo.bo_itemname,
+        bo.bo_name,
+        bo.bo_zipcode,
+        bo.bo_address,
+        bo.bo_contact,
+        bo.bo_orderdate,
+        bos.bos_idx,
+        bos.i_idx,
+        bos.bos_option,
+        bos.bos_price,
+        bos.bos_count,
+        bos.bos_settle,
+        bos.bos_state,
+        bos.bos_postdate
+        FROM tb_buyer_order bo
+        JOIN tb_buyer_order_state bos ON bo.bo_idx = bos.bo_idx
+        WHERE bo.b_idx = #{b_idx}
+        ORDER BY bo.bo_orderdate DESC
+    </select>
+
+    <select id="findOrdersByBuyerIdWithItem" parameterType="int" resultType="orderDTO">
+        SELECT
+        bo.bo_idx,
+        bo.b_idx,
+        bo.bo_itemname,
+        bo.bo_name,
+        bo.bo_zipcode,
+        bo.bo_address,
+        bo.bo_contact,
+        bo.bo_orderdate,
+        bos.bos_idx,
+        bos.i_idx,
+        bos.bos_option,
+        bos.bos_price,
+        bos.bos_count,
+        bos.bos_settle,
+        bos.bos_state,
+        bos.bos_postdate,
+        i.i_name,
+        ii.i_saveimg0
+        FROM
+        tb_buyer_order bo
+        JOIN
+        tb_buyer_order_state bos ON bo.bo_idx = bos.bo_idx
+        JOIN
+        tb_item i ON bos.i_idx = i.i_idx
+        LEFT JOIN
+        tb_item_img ii ON i.i_idx = ii.i_idx
+        WHERE
+        bo.b_idx = #{b_idx}
+        ORDER BY
+        bo.bo_orderdate DESC
+    </select>
+
+    <select id="findOrdersByBuyerIdWithItemPaged" parameterType="map" resultType="orderDTO">
+        SELECT
+        bo.bo_idx,
+        bo.b_idx,
+        bo.bo_itemname,
+        bo.bo_name,
+        bo.bo_zipcode,
+        bo.bo_address,
+        bo.bo_contact,
+        bo.bo_orderdate,
+        bos.bos_idx,
+        bos.i_idx,
+        bos.bos_option,
+        bos.bos_price,
+        bos.bos_count,
+        bos.bos_settle,
+        bos.bos_state,
+        bos.bos_postdate,
+        i.i_name,
+        ii.i_saveimg0
+        FROM
+        tb_buyer_order bo
+        JOIN
+        tb_buyer_order_state bos ON bo.bo_idx = bos.bo_idx
+        JOIN
+        tb_item i ON bos.i_idx = i.i_idx
+        LEFT JOIN
+        tb_item_img ii ON i.i_idx = ii.i_idx
+        WHERE
+        bo.b_idx = #{b_idx}
+        ORDER BY
+        bo.bo_orderdate DESC
+        LIMIT #{rowsPage} OFFSET #{startNum}
+    </select>
+
+    <select id="countOrdersByBuyer" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM tb_buyer_order WHERE b_idx = #{b_idx}
+    </select>
+
+    <!-- 주문 상세 조회 -->
+    <select id="getOrderByBoIdx" parameterType="int" resultType="com.lunastore.dto.OrderDTO">
+        SELECT
+        bo.bo_idx,
+        bo.b_idx,
+        bo.bo_itemname,
+        bo.bo_name,
+        bo.bo_zipcode,
+        bo.bo_address,
+        bo.bo_contact,
+        bo.bo_orderdate,
+        -- 결제 정보 (예: 결제수단, 은행명)
+        -- 추가 컬럼 필요 시 여기에 추가
+        ba.ba_firstname,
+        ba.ba_lastname,
+        ba.ba_zipcode,
+        ba.ba_address,
+        ba.ba_contact
+        FROM tb_buyer_order bo
+        LEFT JOIN tb_address ba ON bo.b_idx = ba.b_idx
+        WHERE bo.bo_idx = #{bo_idx}
+    </select>
+
+    <select id="findOrderViewByBoIdx" parameterType="int" resultType="orderViewDTO">
+        SELECT
+        bo.bo_idx,
+        bo.b_idx,
+        bo.bo_itemname,
+        bo.bo_name,
+        bo.bo_zipcode,
+        bo.bo_address,
+        bo.bo_contact,
+        bo.bo_orderdate,
+        ba.ba_firstname,
+        ba.ba_lastname,
+        ba.ba_zipcode,
+        ba.ba_address,
+        ba.ba_contact,
+        bos.bos_state,
+        bos.bos_price,
+        bos.bos_count,
+        i.i_name,
+        ii.i_saveimg0
+        FROM tb_buyer_order bo
+        LEFT JOIN tb_buyer_address ba ON bo.b_idx = ba.b_idx
+        LEFT JOIN tb_buyer_order_state bos ON bo.bo_idx = bos.bo_idx
+        LEFT JOIN tb_item i ON bos.i_idx = i.i_idx
+        LEFT JOIN tb_item_img ii ON i.i_idx = ii.i_idx
+        WHERE bo.bo_idx = #{bo_idx}
+    </select>
+
+    <select id="getSettlementData" resultType="settlementDTO">
+        SELECT
+        DATE(bo.bo_orderdate) AS date,
+        COUNT(CASE WHEN latest.bos_state = 10 THEN 1 END) AS confirmedOrders,
+        COUNT(CASE WHEN latest.bos_state IN (1, 2, 3, 4) THEN 1 END) AS pendingOrders,
+        SUM(CASE WHEN latest.bos_state = 10 THEN latest.bos_price * latest.bos_count ELSE 0 END) AS todaySettlement,
+        SUM(CASE WHEN latest.bos_state NOT IN (5, 6, 7, 10) THEN latest.bos_price * latest.bos_count ELSE 0 END) AS scheduledSettlement
+        FROM
+        tb_buyer_order bo
+        JOIN
+        (
+        SELECT
+        bos1.bo_idx,
+        bos1.bos_state,
+        bos1.bos_price,
+        bos1.bos_count
+        FROM
+        tb_buyer_order_state bos1
+        WHERE
+        bos1.bos_postdate = (
+        SELECT MAX(bos2.bos_postdate)
+        FROM tb_buyer_order_state bos2
+        WHERE bos2.bo_idx = bos1.bo_idx
+        )
+        ) latest
+        ON bo.bo_idx = latest.bo_idx
+        WHERE
+        bo.bo_orderdate BETWEEN #{startDate} AND #{endDate}
+        GROUP BY
+        DATE(bo.bo_orderdate)
+        ORDER BY
+        DATE(bo.bo_orderdate) DESC
+    </select>
+
+    <select id="getSettlementDataPaged" resultType="com.lunastore.dto.SettlementDTO">
+        SELECT
+        DATE(bo.bo_orderdate) AS date,
+        COUNT(CASE WHEN latest.bos_state = 10 THEN 1 END) AS confirmedOrders,
+        COUNT(CASE WHEN latest.bos_state IN (1, 2, 3, 4) THEN 1 END) AS pendingOrders,
+        SUM(CASE WHEN latest.bos_state = 10 THEN latest.bos_price * latest.bos_count ELSE 0 END) AS todaySettlement,
+        SUM(CASE WHEN latest.bos_state NOT IN (5, 6, 7, 10) THEN latest.bos_price * latest.bos_count ELSE 0 END) AS scheduledSettlement
+        FROM
+        tb_buyer_order bo
+        JOIN
+        (
+        SELECT
+        bos1.bo_idx,
+        bos1.bos_state,
+        bos1.bos_price,
+        bos1.bos_count
+        FROM
+        tb_buyer_order_state bos1
+        WHERE
+        bos1.bos_postdate = (
+        SELECT MAX(bos2.bos_postdate)
+        FROM tb_buyer_order_state bos2
+        WHERE bos2.bo_idx = bos1.bo_idx
+        )
+        ) latest
+        ON bo.bo_idx = latest.bo_idx
+        WHERE
+        bo.bo_orderdate BETWEEN #{startDate} AND #{endDate}
+        GROUP BY
+        DATE(bo.bo_orderdate)
+        ORDER BY
+        DATE(bo.bo_orderdate) DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+    <select id="countSettlementData" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        (
+        SELECT
+        DATE(bo.bo_orderdate)
+        FROM
+        tb_buyer_order bo
+        JOIN
+        tb_buyer_order_state bos ON bos.bo_idx = bo.bo_idx
+        WHERE
+        bo.bo_orderdate BETWEEN #{startDate} AND #{endDate}
+        GROUP BY
+        DATE(bo.bo_orderdate)
+        ) AS settlement_counts
+    </select>
+
+    <!-- 새로 추가된 업데이트 쿼리 -->
+    <update id="updateSettlement" parameterType="settlementDTO">
+        UPDATE tb_buyer_order_state
+        SET
+        bos_state = CASE
+        WHEN #{confirmedOrders} > 0 THEN 10
+        ELSE 5
+        END,
+        bos_postdate = NOW()
+        WHERE
+        bo_idx = #{bo_idx} AND
+        bos_option = #{bos_option}
+    </update>
+    <!-- confirmPurchase 쿼리 추가 -->
+    <update id="confirmPurchase" parameterType="int">
+        UPDATE tb_buyer_order_state
+        SET bos_state = 10,
+        bos_postdate = NOW()
+        WHERE bo_idx = #{bo_idx} AND bos_state = 4;
+    </update>
+
+    <!-- findOrderStateByBoIdx 쿼리 추가 -->
+    <select id="findOrderStateByBoIdx" parameterType="int" resultType="int">
+        SELECT bos_state FROM tb_buyer_order_state WHERE bo_idx = #{bo_idx}
+    </select>
+    <!-- 새로운 매퍼 추가 -->
+    <select id="findOrderViewWithStateByBoIdx" parameterType="int" resultType="com.lunastore.dto.OrderViewDTO">
+        SELECT
+        bo.bo_idx,
+        bo.b_idx,
+        bo.bo_itemname,
+        bo.bo_name,
+        bo.bo_zipcode,
+        bo.bo_address,
+        bo.bo_contact,
+        bo.bo_orderdate,
+
+        ba.ba_firstname,
+        ba.ba_lastname,
+        ba.ba_zipcode,
+        ba.ba_address,
+        ba.ba_contact,
+
+        i.i_name,
+        img.i_saveimg0,
+
+        bos.bos_idx,
+        bos.i_idx,
+        bos.bos_option,
+        bos.bos_price,
+        bos.bos_count,
+        bos.bos_settle, <!-- 'bos_settle'이 맞는지 확인하세요 -->
+        bos.bos_state,
+        bos.bos_postdate
+        FROM
+        tb_buyer_order bo
+        JOIN
+        tb_buyer_order_state bos ON bo.bo_idx = bos.bo_idx
+        JOIN
+        tb_buyer_address ba ON bo.b_idx = ba.b_idx
+        JOIN
+        tb_item i ON bos.i_idx = i.i_idx
+        JOIN
+        tb_item_img img ON i.i_idx = img.i_idx
+        WHERE
+        bo.bo_idx = #{bo_idx} AND bos.bos_state IS NOT NULL
+    </select>
+
+    <select id="countPurchaseConfirmedBySeller" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_buyer_order bo
+        JOIN tb_buyer_order_state bos ON bo.bo_idx = bos.bo_idx
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE i.s_idx = #{s_idx}
+        AND bos.bos_state = 10
+    </select>
+
+    <select id="countConfirmationWaitingBySeller" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_buyer_order bo
+        JOIN tb_buyer_order_state bos ON bo.bo_idx = bos.bo_idx
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        WHERE i.s_idx = #{s_idx}
+        AND bos.bos_state = 2
+    </select>
+</mapper>

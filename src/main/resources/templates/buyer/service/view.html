@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{view.title}">View</title>
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/service/view.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link th:href="@{/css/pagination.css}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var cart = {
+            cart: /*[[#{global.header.cart}]]*/ '장바구니',
+            cartEmpty: /*[[#{global.header.cartEmpty}]]*/ '장바구니가 비어 있습니다.',
+            productImageAlt: /*[[#{global.header.productImageAlt}]]*/ '상품이미지',
+            cartCheck: /*[[#{global.header.cartCheck}]]*/ '장바구니 확인',
+            cartViewMore: /*[[#{global.header.cartViewMore}]]*/ '개의 상품이 더 있습니다.',
+            loginPrompt: /*[[#{global.header.loginPrompt}]]*/ '저장해둔 항목이 있는지 확인하려면 ',
+            loginPrompt2: /*[[#{global.header.loginPrompt2}]]*/ '하세요. ',
+            login: /*[[#{global.header.login}]]*/ '로그인'
+
+        };
+        /*]]>*/
+    </script>
+    <!-- 외부 JavaScript 파일 추가 -->
+    <script th:src="@{/js/buyer/service/view.js}"></script>
+    <script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+    <script th:src="@{/js/buyer/buyerCartNavigation.js}"></script>
+    <script th:src="@{/js/buyer/service/qna.js}"></script>
+    <!-- JavaScript에서 사용할 URL들을 객체로 정의 -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var urls = {
+            buyerLogin: /*[[@{/buyer/login}]]*/ '/buyer/login',
+            insertCart: /*[[@{/cart/insertCart}]]*/ '/cart/insertCart',
+            cart: /*[[@{/cart/cart}]]*/ '/cart/cart',
+            findOrder: /*[[@{/order/findOrder}]]*/ '/order/findOrder',
+            insertReview: /*[[@{/item/insertReview}]]*/ '/item/insertReview',
+            submitAnswer: /*[[@{/buyer/service/qna/{qnaIdx}/answer}]]*/ '/buyer/service/qna/{qnaIdx}/answer'
+        };
+        var messages = {
+            noOrdersForReview: /*[[#{buyer.noOrdersForReview}]]*/ '리뷰를 작성할 주문내역이 없습니다.',
+            reviewPlaceholder: /*[[#{buyer.reviewPlaceholder}]]*/ '구매한 상품에 대해 리뷰를 남겨보세요.',
+            submitReview: /*[[#{buyer.submitReview}]]*/ '등록',
+            invalidQuantity: /*[[#{buyer.invalidQuantity}]]*/ '수량을 입력해 주세요.',
+            quantityGreaterThanZero: /*[[#{buyer.quantityGreaterThanZero}]]*/ '수량은 1 이상이어야 합니다.',
+            loginRequired: /*[[#{buyer.loginRequired}]]*/ '로그인이 필요한 서비스 입니다. 로그인 페이지로 이동하시겠습니까?',
+            cartAddSuccess: /*[[#{buyer.cartAddSuccess}]]*/ '장바구니에 상품이 추가되었습니다. 장바구니로 이동하시겠습니까?',
+            cartAddError: /*[[#{buyer.cartAddError}]]*/ '장바구니에 상품을 추가하는데 실패했습니다.',
+            reviewSubmissionSuccess: /*[[#{buyer.reviewSubmissionSuccess}]]*/ '리뷰가 성공적으로 등록되었습니다.',
+            reviewSubmissionError: /*[[#{buyer.reviewSubmissionError}]]*/ '리뷰 등록 중 오류가 발생했습니다.',
+            pageMoveError: /*[[#{buyer.pageMoveError}]]*/ '페이지 이동에 실패했습니다.',
+            duplicateItemInCart: /*[[#{duplicateItemInCart}]]*/ '장바구니에 동일한 상품이 존재합니다.',
+            purchaseOption: /*[[#{purchaseOption}]]*/ '구매한 옵션 :',
+            fiveStar: /*[[#{fiveStar}]]*/ '5점',
+            fourStar: /*[[#{fourStar}]]*/ '4점',
+            threeStar: /*[[#{threeStar}]]*/ '3점',
+            twoStar: /*[[#{twoStar}]]*/ '2점',
+            oneStar: /*[[#{oneStar}]]*/ '1점',
+            enterReviewContent: /*[[#{enterReviewContent}]]*/ '리뷰 내용을 입력해 주세요.',
+            invalidOrderStatus: /*[[#{invalidOrderStatus}]]*/ '유효한 주문 상태가 필요합니다.'
+        };
+        /*]]>*/
+    </script>
+    <style th:if="${#locale.language == 'ja'}">
+        * {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <header th:if="${isSeller}" th:replace="~{seller/common/header2 :: sellerHeader2}"></header>
+    <div th:if="${!isSeller}">
+        <header th:replace="~{buyer/common/global_header :: global_header}"></header>
+    </div>
+
+    <section>
+        <input type="hidden" id="i_idx" th:value="${item.i_idx}">
+        <input type="hidden" id="b_idx" th:value="${buyer != null ? buyer.b_idx : ''}">
+        <input type="hidden" id="s_idx" th:value="${seller != null ? seller.s_idx : ''}">
+        <input type="hidden" id="i_price" th:value="${item.i_price}">
+        <input type="hidden" id="i_img" th:value="${item.i_saveimg0}">
+
+        <a href="#" class="m_l_view_category_link">
+            <span th:if="${item.c_idx <= 5}" th:text="#{category.digital}">디지털/가전</span>
+            <span th:if="${item.c_idx > 5} and ${item.c_idx <= 10}" th:text="#{category.interior}">인테리어</span>
+            <span th:if="${item.c_idx > 10} and ${item.c_idx <= 15}" th:text="#{category.food}">식품</span>
+            <span th:if="${item.c_idx > 15} and ${item.c_idx <= 20}" th:text="#{category.clothing}">의류</span>
+            <span th:if="${item.c_idx > 20}" th:text="#{category.lifestyle}">생활</span>
+        </a>
+        <span class="arrow_small"></span>
+        <a href="#" class="m_l_view_category_link"><span th:text="${item.c_name}">카테고리 이름</span></a>
+        <span class="arrow_small"></span><br>
+
+        <div class="m_l_view_star_box">
+            <span class="m_l_view_star empty"></span>
+            <span class="m_l_view_star full" th:style="${item.avg_star != null ? 'width: ' + (item.avg_star / 5 * 100) + '%' : 'width: 0%'}"></span>
+        </div>
+        <label for="m_l_view_btn_review">
+            <span th:text="'(' + (${item.comment_count} != null ? ${item.comment_count} : 0) + ')'">0</span>
+        </label>
+        <span class="m_l_view_item_title" id="i_name" th:text="${item.i_name}">상품명</span>
+        <span class="m_l_view_storename" th:text="${item.s_storename}">상점명</span>
+
+        <div class="m_l_view_itemsimpleinfo" style="height: 700px">
+            <div class="m_l_view_itemimg">
+                <div th:if="${item.i_saveimg0 == null and item.i_saveimg1 == null and item.i_saveimg2 == null and item.i_saveimg3 == null and item.i_saveimg4 == null}">
+                    <img th:src="@{/css/img/noimg.png}" alt="이미지 없음" style="width: 150px; height: auto;">
+                </div>
+                <div th:if="${item.i_saveimg0 != null or item.i_saveimg1 != null or item.i_saveimg2 != null or item.i_saveimg3 != null or item.i_saveimg4 != null}">
+                    <div class="m_l_view_itemimg_box">
+                        <th:block th:each="index : ${#numbers.sequence(0,4)}">
+                            <img th:if="${imgArr[index] != null}" th:class="'i_saveimg' + ${index}"
+                                 th:src="@{'/uploads/' + ${imgArr[index]}}" alt="" />
+                        </th:block>
+                    </div>
+                    <div class="m_l_view_itemimg_btn">
+                        <th:block th:each="index : ${#numbers.sequence(0,4)}">
+                            <button th:if="${imgArr[index] != null}" th:class="'i_saveimg' + ${index}">
+                                <img th:class="'i_saveimg' + ${index}"
+                                     th:src="@{'/uploads/' + ${imgArr[index]}}" alt="" />
+                            </button>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+            <div class="m_l_view_itemoption">
+                <div class="m_l_view_itemprice_box">
+                    <span class="m_l_view_itemprice">
+                        <span th:text="'₩'+ ${#numbers.formatDecimal(item.i_price, 0, 3)} "></span>
+                    </span>
+                </div>
+                <!-- Quantity Selection -->
+                <div class="m_l_view_option quantity-selector">
+                    <div class="quantity-label-container" style="margin-bottom: 380px">
+                        <label for="i_count" class="quantity-label" th:text="#{view.quantity}">수량:</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="decrement">-</button>
+                            <input type="number" id="i_count" name="i_count" min="1" value="1" class="quantity-input">
+                            <button type="button" class="increment">+</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="m_l_view_firstoption hide">
+                    <span class="m_l_view_checkedoption"></span><br>
+                    <span class="reset" th:text="#{view.reset}">다시선택</span>
+                </button>
+                <div class="m_l_view_itemoption_box">
+                    <th:block th:each="index : ${#numbers.sequence(0,4)}">
+                        <div class="m_l_view_option" th:if="${optionArr[index] != null}">
+                            <span th:utext="${optionArr[index]}">옵션</span>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+
+        <div class="m_l_view_getitem_box">
+            <!-- 추가적인 내용이 필요하면 여기에 작성 -->
+        </div>
+
+        <div class="m_l_view_getitem">
+            <span class="m_l_view_getitem_itemname" th:text="${item.i_name}">상품명</span><br>
+            <span class="m_l_view_checkedoption"></span>
+            <span class="m_l_view_getitem_itemprice">
+                <span th:text="'₩'+ ${#numbers.formatDecimal(item.i_price, 0, 3)}"></span>
+            </span>
+
+            <button class="m_l_view_getitem_cart" id="getCart"><span th:text="#{button.cart}">장바구니</span></button>
+            <span class="m_l_view_getitem_span" th:text="#{view.needMoreTime}">시간이 좀 더 필요하신가요?</span>
+            <span class="m_l_view_getitem_span" th:text="#{view.saveLater}">선택한 상품을 목록에 모두 저장해두고 언제든 살펴보세요.</span>
+            <button class="m_l_view_getitem_save" id="getLikeItem"><span class="m_l_view_getitem_span" th:text="#{button.save}">나중을 위한 저장</span></button>
+            <span class="m_l_view_getitem_span" th:text="#{view.deliveryInfo}">배송에 관한 자세한 정보는 '결제'단계에서 볼 수 있습니다.</span>
+        </div>
+
+        <div class="m_l_view_dummy"></div>
+
+        <div class="m_l_view_itemdetail">
+            <div class="m_l_view_btn">
+                <div class="m_l_view_btn_box">
+                    <button class="m_l_view_btn_itemexplain active"><span th:text="#{view.itemInfo}">상품정보</span></button>
+                    <button class="m_l_view_btn_review" id="m_l_view_btn_review"><span th:text="#{view.review}">리뷰</span></button>
+                    <button class="m_l_view_btn_QandA"><span th:text="#{qna.title}">Q&A</span></button>
+                    <button class="m_l_view_btn_sellerinfo"><span th:text="#{seller.info}">판매자정보</span></button>
+                </div>
+            </div>
+
+            <div class="m_l_view_itemexplain page-section" th:utext="${item.i_explain}">
+                <!-- 상품 설명 내용 -->
+            </div>
+
+            <div class="m_l_view_itemreview page-section">
+                <h2 th:text="#{view.review}">상품리뷰</h2>
+                <div class="m_l_view_simplereview">
+                    <div class="m_l_view_simple_stars">
+                        <h3 th:text="#{review.satisfaction}">구매만족도</h3>
+                        <h1 th:text="${avgStarInt != null ? avgStarInt : 0}">0</h1>
+                        <div class="m_l_view_simple_star_box">
+                            <span class="m_l_view_simple_star empty"></span>
+                            <span class="m_l_view_simple_star full" th:style="${avgStarInt != null ? 'width: ' + (avgStarInt / 5.0 * 100) + '%' : 'width: 0%'}"></span>
+                        </div>
+                        <span th:text="${item.comment_count != null ? item.comment_count + #messages.msg('view.unit') : #messages.msg('view.zeroUnit')}">0건</span>
+                    </div>
+
+                    <div class="m_l_view_simple_statistics">
+                        <ul>
+                            <li class="points1" th:each="star, stat : ${#numbers.sequence(5, 1, -1)}">
+                                <span class="num" th:text="|${star} #{review.points}|">5점</span>
+                                <div>
+                                    <span th:style="${reviewList.size() > 0 ? 'width: ' + (starArr[star - 1] * 100 / reviewList.size()) + '%' : 'width: 0%'}"></span>
+                                </div>
+                                <span class="percent">
+                                    <span th:text="${reviewList.size() > 0 ? #numbers.formatDecimal(starArr[star - 1] * 100 / reviewList.size(), 1, 0) + '%' : '0%'}">0%</span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <h2 th:text="#{view.allReviews}">전체리뷰</h2>
+                <div class="m_l_view_detailreview">
+                    <ul>
+                        <th:block th:if="${buyer == null and seller == null}">
+                            <li class="m_l_view_review">
+                                <div>
+                                    <span class="m_l_view_notFoundBuyer">
+                                        <a th:href="@{/buyer/login}" th:text="#{view.login}">로그인</a> <span th:text="#{view.loginRequired}"> 후에 작성할 수 있습니다.</span>
+                                    </span>
+                                </div>
+                            </li>
+                        </th:block>
+                        <th:block th:if="${buyer != null}">
+                            <li class="m_l_view_review">
+                                <div class="m_l_view_buyerReviewBox">
+                                    <img class="m_l_view_reviewImg" alt="" th:src="${buyer.b_profile != null ? '/uploads/' + buyer.b_profile : '/css/img/defaultProfile.png'}">
+                                    <span class="m_l_view_reviewNickname" th:text="${buyer.b_nickname != null ? buyer.b_nickname : #messages.msg('view.nickname')}">닉네임</span>
+                                </div>
+                            </li>
+                        </th:block>
+                        <th:block th:if="${seller != null}">
+                            <li class="m_l_view_review">
+                                <div class="m_l_view_buyerReviewBox">
+                                    <img class="m_l_view_reviewImg" alt="" th:src="${seller.s_profile != null ? '/uploads/' + seller.s_profile : '/css/img/defaultProfile.png'}">
+                                    <span class="m_l_view_reviewNickname" th:text="${seller.s_storename != null ? seller.s_storename : #messages.msg('view.storeName')}">닉네임</span>
+                                </div>
+                            </li>
+                        </th:block>
+                    </ul>
+                    <ul class="m_l_view_review_search">
+                        <li>
+                            <label for="starall">
+                                <input type="radio" name="starorder" id="starall">
+                                <span th:text="#{review.all}">전체</span>
+                            </label>
+                            <span class="m_l_view_stick">|</span>
+                            <label for="star5">
+                                <input type="radio" name="starorder" id="star5">
+                                <span class="m_l_view_starorder"></span>
+                            </label>
+                            <span class="m_l_view_stick">|</span>
+                            <label for="star4">
+                                <input type="radio" name="starorder" id="star4">
+                                <span class="m_l_view_starorder"></span>
+                            </label>
+                            <span class="m_l_view_stick">|</span>
+                            <label for="star3">
+                                <input type="radio" name="starorder" id="star3">
+                                <span class="m_l_view_starorder"></span>
+                            </label>
+                            <span class="m_l_view_stick">|</span>
+                            <label for="star2">
+                                <input type="radio" name="starorder" id="star2">
+                                <span class="m_l_view_starorder"></span>
+                            </label>
+                            <span class="m_l_view_stick">|</span>
+                            <label for="star1">
+                                <input type="radio" name="starorder" id="star1">
+                                <span class="m_l_view_starorder"></span>
+                            </label>
+                        </li>
+                        <li>
+                            <label for="recommend">
+                                <input type="radio" name="vieworder" id="recommend">
+                                <span th:text="#{review.recommend}">추천순</span>
+                            </label>
+                            <span class="m_l_view_stick">|</span>
+                            <label for="latest">
+                                <input type="radio" name="vieworder" id="latest">
+                                <span th:text="#{review.latest}">최신순</span>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="submit" id="search_submit" style="display:none;">
+                            <label for="search_submit">
+                                <span class="search"></span>
+                            </label>
+                            <input type="text" class="m_l_view_searchReview" th:placeholder="#{review.searchOption}">
+                        </li>
+                    </ul>
+                    <ul class="m_l_view_reviews">
+                        <th:block th:if="${reviewList.isEmpty()}">
+                            <li class="m_l_view_review">
+                                <div>
+                                    <span class="m_l_view_notFoundReview" th:text="#{review.noReviews}">등록된 리뷰가 없습니다.</span>
+                                </div>
+                            </li>
+                        </th:block>
+                        <th:block th:unless="${reviewList.isEmpty()}">
+                            <th:block th:each="review : ${reviewList}">
+                                <th:block th:if="${review != null}">
+                                    <li class="m_l_view_review">
+                                        <div>
+                                            <img class="m_l_view_reviewImg" alt="" th:src="${review.b_profile != null ? '/uploads/' + review.b_profile : '/css/img/defaultProfile.png'}">
+                                            <span class="m_l_view_reviewNickname" th:text="${review.b_nickname != null ? review.b_nickname : #messages.msg('view.nickname')}">닉네임</span>
+                                            <span class="m_l_view_reviewModifydate" th:text="${review.br_modifydate != null ? review.br_modifydate : review.br_postdate}">날짜</span>
+                                        </div>
+                                        <div>
+                                            <span class="m_l_view_reviewOption" th:text="#{review.selectedOption} + (${review.bos_option != null ? review.bos_option : #messages.msg('review.none')})">옵션</span>
+                                        </div>
+                                        <div class="m_l_view_star_box">
+                                            <span class="m_l_view_star empty"></span>
+                                            <span class="m_l_view_star full"
+                                                  th:style="${review.br_star != null and review.br_star > 0 ? 'width: ' + (review.br_star * 20) + '%': 'width: 0%'}">
+
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span class="m_l_view_reviewContent" th:text="${review.br_content != null ? review.br_content : #messages.msg('review.content')}">리뷰 내용</span>
+                                        </div>
+                                    </li>
+                                </th:block>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${totalPages > 1}">
+                            <div class="pagination">
+                                <ul>
+                                    <!-- 이전 페이지 블록 -->
+                                    <li th:if="${startPage > 1}">
+                                        <a th:href="@{'/item/view?i_idx=' + ${item.i_idx} + '&reviewPageNum=' + (${startPage - 1})}">&laquo;</a>
+                                    </li>
+
+                                    <!-- 페이지 번호 -->
+                                    <th:block th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
+                                        <li th:class="${pageNum == currentPage} ? 'active'">
+                                            <a th:href="@{'/item/view?i_idx=' + ${item.i_idx} + '&reviewPageNum=' + ${pageNum}}"
+                                               th:text="${pageNum}"></a>
+                                        </li>
+                                    </th:block>
+
+                                    <!-- 다음 페이지 블록 -->
+                                    <li th:if="${endPage < totalPages}">
+                                        <a th:href="@{'/item/view?i_idx=' + ${item.i_idx} + '&reviewPageNum=' + (${endPage + 1})}">&raquo;</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </th:block>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 플래시 메시지 -->
+            <div th:if="${message}" class="flash-message" id="flashMessage">
+                <p th:text="${message}"></p>
+            </div>
+
+            <!-- Q&A 리스트 -->
+            <!-- Q&A 리스트 -->
+            <div class="m_l_view_itemQandA page-section">
+                <h3 style="border-bottom: 1px solid lightgray;padding-bottom: 20px" th:text="#{qna.title}">Q&A</h3>
+                <th:block th:if="${qnaList == null or qnaList.isEmpty()}">
+                    <div class="qna-item">
+                        <p th:text="#{qna.noQna}">등록된 Q&A가 없습니다.</p>
+                    </div>
+                </th:block>
+                <th:block th:each="qna : ${qnaList}">
+                    <div class="qna-item">
+                        <!-- 질문 제목과 아이콘 -->
+                        <div class="qna-question" tabindex="0" aria-expanded="false">
+                            <h4 class="qna-title"><strong>Q :&nbsp;</strong>
+                                <span th:text="${qna.qna_title}">질문 제목</span>
+                                <i class="fa-solid fa-chevron-down toggle-icon"></i>
+                            </h4>
+                        </div>
+                        <!-- 질문 내용과 답변 -->
+                        <div class="qna-content">
+                            <p class="question"><strong th:text="#{qna.content}">내용 :&nbsp; </strong>
+                                <span th:text="${qna.qna_question}">질문 내용</span>
+                            </p>
+                            <hr style="margin-top: 25px; margin-bottom: 20px">
+                            <div class="answer-section">
+                                <p><strong>A :&nbsp; </strong>
+                                    <span th:if="${qna.qna_answer != null}" th:text="${qna.qna_answer}">답변 내용</span>
+                                    <span th:if="${qna.qna_answer == null}" th:text="#{qna.waitingAnswer}">답변 대기 중입니다.</span>
+                                </p>
+                                <!-- 판매자만 답변 폼을 볼 수 있도록 조건 추가 -->
+                                <div th:if="${isSeller and qna.qna_answer == null}">
+                                    <form th:action="@{/qna/{qnaIdx}/answer(qnaIdx=${qna.qna_idx})}" method="post" class="answer-form">
+                                        <textarea name="answer" th:placeholder="#{qna.answerPlaceholder}" required></textarea>
+                                        <button type="submit" th:text="#{button.submitAnswer}">답변 제출</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+                <!-- Q&A 제출 폼 (구매자에게만 표시) -->
+                <div class="qna-submit" th:if="${isBuyer}">
+                    <h3 th:text="#{qna.askQuestion}">질문하기</h3>
+                    <form th:action="@{/qna/submit}" method="post">
+                        <input type="hidden" name="i_idx" th:value="${i_idx}" />
+                        <input type="text" name="title"  th:placeholder="#{qna.questionTitlePlaceholder}" required />
+                        <textarea name="question"  th:placeholder="#{qna.questionContentPlaceholder}" required style="height: 250px"></textarea>
+                        <button type="submit" th:text="#{button.submit}">제출</button>
+                    </form>
+                </div>
+            </div>
+
+
+
+            <div class="m_l_view_itemsellerinfo page-section">
+                <h3 th:text="#{seller.info}">판매자 정보</h3>
+                <div class="seller-info-container">
+                    <div class="seller-profile">
+                        <img th:src="${sellerInfo.s_profile != null ? '/uploads/' + sellerInfo.s_profile : '/uploads/defaultProfile.jpg'}" alt="판매자 프로필 이미지">
+                    </div>
+                    <div class="seller-details">
+                        <p class="store-name" th:text="${sellerInfo.s_storename != null ? sellerInfo.s_storename : #messages.msg('seller.noInfo')}">상점 이름</p>
+                        <p class="store-intro" th:text="${sellerInfo.s_storeintro != null ? sellerInfo.s_storeintro : #messages.msg('seller.noInfo')}">상점 소개</p>
+                        <div class="seller-additional-info">
+                            <!-- 사업자 번호 -->
+                            <p th:text="#{seller.businessNumber(${sellerInfo.s_businessnum != null ? sellerInfo.s_businessnum : #messages.msg('seller.noInfo')})}"></p>
+
+                            <!-- 이메일 -->
+                            <p th:text="#{seller.email(${sellerInfo.s_email != null ? sellerInfo.s_email : #messages.msg('seller.noInfo')})}"></p>
+
+                            <!-- 주소 -->
+                            <p th:text="#{seller.address(${(sellerInfo.s_zipcode != null ? sellerInfo.s_zipcode + ' ' : '') + (sellerInfo.s_address != null ? sellerInfo.s_address + ' ' : '') + (sellerInfo.s_restaddress != null ? sellerInfo.s_restaddress : #messages.msg('seller.noInfo'))})}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</body>
+</html>

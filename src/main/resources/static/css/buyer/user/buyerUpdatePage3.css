@@ -1,0 +1,62 @@
+body {
+    background-color: #f9f9f9;
+}
+
+/* #region 메인 컨텐츠 메뉴 */
+.m_userinfopayup_mainPage {
+    width: 940px;
+    height: 500px;
+}
+
+.m_userinfopayup_main_title {
+    font-size: 24px;
+    font-family: 'NEXONLv1GothicBold';
+    margin-top: 40px;
+}
+
+.m_userinfopayup_main_content_region {
+    display: flex;
+}
+
+.m_userinfopayup_content {
+    width: 440px;
+    height: 180px;
+    margin-top: 66px;
+    margin-right: 40px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    color: #111111;
+    transition: 0.8s;
+    cursor: pointer;
+}
+
+.m_userinfopayup_content1 {
+    width: 440px;
+    height: 180px;
+    margin-top: 66px;
+    margin-right: 40px;
+    border-radius: 10px;
+    color: #111111;
+}
+
+.m_userinfopayup_content_nametitle {
+    font-size: 20px;
+    padding-top: 30px;
+    margin-left: 20px;
+    font-family: 'NEXONLv1GothicBold';
+}
+
+.m_userinfopayup_content_namesub {
+    font-size: 14px;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.m_userinfopayup_content_namesuba {
+    font-size: 14px;
+    margin-left: 10px;
+    margin-top: 20px;
+    color: #0071e3;
+}
+
+/* #endregion */

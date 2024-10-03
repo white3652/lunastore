@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.lunastore.mapper.QnaMapper">
+
+    <!-- Q&A 삽입 -->
+    <insert id="insertQna" parameterType="com.lunastore.vo.QnaVO">
+        INSERT INTO tb_qna (i_idx, b_idx, s_idx, qna_title, qna_question, qna_regdate, qna_modifydate)
+        VALUES (#{i_idx}, #{b_idx}, #{s_idx}, #{qna_title}, #{qna_question}, NOW(), NOW())
+    </insert>
+
+    <!-- Q&A 조회 by qnaIdx -->
+    <select id="getQnaById" parameterType="int" resultType="com.lunastore.vo.QnaVO">
+        SELECT qna_idx, i_idx, b_idx, s_idx, qna_title, qna_question, qna_answer, qna_regdate, qna_modifydate
+        FROM tb_qna
+        WHERE qna_idx = #{qnaIdx}
+    </select>
+
+    <!-- Q&A 리스트 조회 by itemId -->
+    <select id="getQnasByItemId" parameterType="int" resultType="com.lunastore.vo.QnaVO">
+        SELECT qna_idx, i_idx, b_idx, s_idx, qna_title, qna_question, qna_answer, qna_regdate, qna_modifydate
+        FROM tb_qna
+        WHERE i_idx = #{itemId}
+        ORDER BY qna_regdate DESC
+    </select>
+
+    <!-- Q&A 답변 업데이트 -->
+    <update id="updateAnswer" parameterType="map">
+        UPDATE tb_qna
+        SET qna_answer = #{answer}, qna_modifydate = NOW()
+        WHERE qna_idx = #{qnaIdx}
+    </update>
+
+
+    <select id="countInquiries" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_qna
+        WHERE 1=1
+        <if test="productNum != null and productNum != ''">
+            AND i_idx = #{productNum}
+        </if>
+        <if test="memberNum != null and memberNum != ''">
+            AND b_idx = #{memberNum}
+        </if>
+        <if test="answeredStatus != null and answeredStatus != 'all'">
+            <choose>
+                <when test="answeredStatus == 'unanswered'">
+                    AND qna_answer IS NULL
+                </when>
+                <when test="answeredStatus == 'answered'">
+                    AND qna_answer IS NOT NULL
+                </when>
+            </choose>
+        </if>
+        <if test="startDate != null">
+            AND qna_regdate >= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND qna_regdate &lt;= #{endDate}
+        </if>
+    </select>
+
+
+    <select id="getInquiries" parameterType="map" resultType="com.lunastore.vo.QnaVO">
+        SELECT *
+        FROM tb_qna
+        WHERE 1=1
+        <if test="productNum != null and productNum != ''">
+            AND i_idx = #{productNum}
+        </if>
+        <if test="memberNum != null and memberNum != ''">
+            AND b_idx = #{memberNum}
+        </if>
+        <if test="answeredStatus != null and answeredStatus != 'all'">
+            <choose>
+                <when test="answeredStatus == 'unanswered'">
+                    AND qna_answer IS NULL
+                </when>
+                <when test="answeredStatus == 'answered'">
+                    AND qna_answer IS NOT NULL
+                </when>
+            </choose>
+        </if>
+        <if test="startDate != null">
+            AND qna_regdate >= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND qna_regdate &lt;= #{endDate}
+        </if>
+        ORDER BY qna_regdate DESC
+        LIMIT #{rowsPage} OFFSET #{offset}
+    </select>
+
+</mapper>

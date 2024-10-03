@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Seller Header 2</title>
+</head>
+
+<body>
+<div th:fragment="sellerHeader2">
+    <div class="seller-header" th:if="${seller != null}">
+        <header>
+            <div class="seller_global_header">
+                <div class="seller_global_logo">
+                    <a th:href="@{/seller/dashBoard}"><span class="logo"></span></a>
+                </div>
+                <div class="seller_global_service_btns">
+                    <div>
+                        <span th:text="#{greeting(${seller.s_firstname}, ${seller.s_lastname})}"></span>
+                    </div>
+                    <div>
+                        <a th:href="@{/seller/dashBoard}"><span th:text="#{goToStore}"></span></a>
+                    </div>
+                    <div>
+                        <a th:href="@{/seller/sellerLogout}"><span th:text="#{logout}"></span></a>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+</div>
+</body>
+</html>

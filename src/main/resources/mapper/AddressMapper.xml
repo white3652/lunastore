@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lunastore.mapper.AddressMapper">
+
+    <resultMap id="AddressResultMap" type="com.lunastore.vo.AddressVO">
+        <id property="ba_idx" column="ba_idx" />
+        <result property="b_idx" column="b_idx" />
+        <result property="ba_firstname" column="ba_firstname" />
+        <result property="ba_lastname" column="ba_lastname" />
+        <result property="ba_address" column="ba_address" />
+        <result property="ba_restaddress" column="ba_restaddress" />
+        <result property="ba_zipcode" column="ba_zipcode" />
+        <result property="ba_contact" column="ba_contact" />
+        <result property="ba_check" column="ba_check" />
+    </resultMap>
+
+    <select id="getAddressesByBuyerId" resultMap="AddressResultMap">
+        SELECT *
+        FROM tb_buyer_address
+        WHERE b_idx = #{b_idx}
+    </select>
+</mapper>

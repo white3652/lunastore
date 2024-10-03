@@ -1,0 +1,48 @@
+/* #region ----------------------------------------- header ----------------------------------------- */
+
+header {
+    background-color: #00CD0820;
+}
+
+.seller_global_header {
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: 1200px;
+    height: 48px;
+    margin: 0 auto;
+    padding-right: 20px;
+}
+
+/* -------------------------------- logo -------------------------------- */
+
+.seller_global_logo {
+    vertical-align: top;
+    width: 18px;
+    height: 18px;
+}
+
+.seller_global_logo .logo {
+    width: 18px;
+    height: 18px;
+    background-size: 18px;
+    padding: 15px 20px;
+}
+
+/* ------------------------------ serviceBtns ------------------------------ */
+
+.seller_global_service_btns {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    width: 244px;
+    line-height: 48px;
+}
+
+.seller_global_service_btns span {
+    color: black;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* #endregion */

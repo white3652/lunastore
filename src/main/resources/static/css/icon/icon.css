@@ -1,0 +1,34 @@
+.arrow_big,
+.arrow_small,
+.cart,
+.info,
+.logo,
+.search {
+    background-position: center;
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+
+.arrow_big {
+    background-image: url(../../icon/arrow_big.svg);
+}
+
+.arrow_small {
+    background-image: url(../../icon/arrow_small.svg);
+}
+
+.cart {
+    background-image: url(../../icon/cart.svg);
+}
+
+.info {
+    background-image: url(../../icon/info.svg);
+}
+
+.logo {
+    background-image: url(../../icon/logo.svg);
+}
+
+.search {
+    background-image: url(../../icon/search.svg);
+}

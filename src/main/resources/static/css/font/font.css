@@ -1,0 +1,113 @@
+@font-face {
+    font-family: 'Inter-Black';
+    src: url(../../font/Inter-Black.ttf)
+}
+@font-face {
+    font-family: 'Inter-Bold';
+    src: url(../../font/Inter-Bold.ttf)
+}
+@font-face {
+    font-family: 'Inter-ExtraBold';
+    src: url(../../font/Inter-ExtraBold.ttf)
+}
+@font-face {
+    font-family: 'Inter-ExtraLight';
+    src: url(../../font/Inter-ExtraLight.ttf)
+}
+@font-face {
+    font-family: 'Inter-Light';
+    src: url(../../font/Inter-Light.ttf)
+}
+@font-face {
+    font-family: 'Inter-Medium';
+    src: url(../../font/Inter-Medium.ttf)
+}
+@font-face {
+    font-family: 'Inter-Regular';
+    src: url(../../font/Inter-Regular.ttf)
+}
+@font-face {
+    font-family: 'Inter-SemiBold';
+    src: url(../../font/Inter-SemiBold.ttf)
+}
+@font-face {
+    font-family: 'Inter-Thin';
+    src: url(../../font/Inter-Thin.ttf)
+}
+@font-face {
+    font-family: 'Inter_Bold_700';
+    src: url(../font/Inter\ Bold\ 700.otf)
+}
+@font-face {
+    font-family: 'Inter_Bold_Italic_700';
+    src: url(../font/Inter\ Bold\ Italic\ 700.otf)
+}
+@font-face {
+    font-family: 'Inter_Italic_400';
+    src: url(../font/Inter\ Italic\ 400.otf)
+}
+@font-face {
+    font-family: 'Inter_Regular_400';
+    src: url(../font/Inter\ Regular\ 400.otf)
+}
+@font-face {
+    font-family: 'Jalnan2TTF';
+    src: url(../../font/Jalnan2TTF.ttf)
+}
+@font-face {
+    font-family: 'NEXONLv1GothicBold';
+    src: url(../../font/NEXONLv1GothicBold.ttf)
+}
+@font-face {
+    font-family: 'NEXONLv1GothicLight';
+    src: url(../../font/NEXONLv1GothicLight.ttf)
+}
+@font-face {
+    font-family: 'NEXONLv1GothicRegular';
+    src: url(../../font/NEXONLv1GothicRegular.ttf)
+}
+@font-face {
+    font-family: 'SB-B';
+    src: url(../font/SB\ 어그로OTF\ B.otf)
+}
+@font-face {
+    font-family: 'SB-L';
+    src: url(../font/SB\ 어그로OTF\ L.otf)
+}
+@font-face {
+    font-family: 'SB-M';
+    src: url(../font/SB\ 어그로OTF\ M.otf)
+}
+
+@font-face {
+    font-family: 'Noto Sans KR';
+    src: url('https://fonts.gstatic.com/s/notosanskr/v16/KFOkCnqEu92Fr1Mu4mxP.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Noto Sans JP';
+    src: url('https://fonts.gstatic.com/s/notosansjp/v16/KFOmCnqEu92Fr1Mu72xKOzY.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('https://fonts.gstatic.com/s/roboto/v20/KFOlCnqEu92Fr1MmWUlfBBc9.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+

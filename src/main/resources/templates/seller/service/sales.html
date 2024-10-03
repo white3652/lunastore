@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="#{order.management.pageTitle}">주문관리 페이지</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_section.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/service/sales_section.css}">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:src="@{/js/seller/service/service.js}"></script>
+    <script th:src="@{/js/seller/service/serviceSection.js}"></script>
+    <script th:src="@{/js/seller/common/globalNavigation.js}"></script>
+</head>
+
+<body>
+<div class="wrap">
+
+    <header th:replace="~{seller/common/header :: sellerHeader}"></header>
+
+    <section>
+        <div class="seller_global_section">
+
+            <nav th:replace="~{seller/common/navigation :: sellerNavigation}"></nav>
+
+            <div class="seller_sales_contents">
+                <div class="seller_sales_contents_title">
+                    <span th:text="#{order.management.mainTitle}">메인 > 주문관리</span>
+                </div>
+
+                <div class="seller_sales_contents_search">
+                    <form>
+                        <input type="hidden" name="s_idx" th:value="${seller.s_idx}">
+                        <div class="seller_sales_contents_search_box">
+                            <div class="seller_sales_contents_search_items">
+                                <span class="seller_sales_contents_search_title" th:text="#{search.keyword}">검색어</span>
+                                <div class="seller_sales_contents_search_item1">
+                                    	<span>
+                                        	<span th:text="#{search.orderNumber}">주문번호</span>
+                                        	<input type="text" name="orderNum" autocomplete='off' th:placeholder="#{search.orderNumber.placeholder}" placeholder="주문번호를 입력하세요." th:value="${sVO.orderNum}">
+                                        </span>
+                                    <span>
+                                        	<span th:text="#{search.nickname}">닉네임</span>
+                                        	<input type="text" name="orderNickname" autocomplete='off' th:placeholder="#{search.nickname.placeholder}" placeholder="닉네임을 입력하세요." th:value="${sVO.orderNickname}">
+                                        </span>
+                                </div>
+                            </div>
+                            <div class="seller_sales_contents_search_items">
+                                <span class="seller_sales_contents_search_title" th:text="#{search.orderState}">주문상태</span>
+                                <div class="seller_sales_contents_search_item2">
+                                    <input type="radio" id="0" name="orderState" value="0" th:checked="${sVO.orderState == 0 or sVO.orderState == ''}">
+                                    <label for="0"><span th:text="#{order.state.all}">전체</span></label>
+                                    <input type="radio" id="1" class="restCheckBox" name="orderState" value="1" th:checked="${sVO.orderState == 1}">
+                                    <label for="1"><span th:text="#{order.state.paymentCompleted}">결제완료</span></label>
+                                    <input type="radio" id="2" class="restCheckBox" name="orderState" value="2" th:checked="${sVO.orderState == 2}">
+                                    <label for="2"><span th:text="#{order.state.preparingShipment}">배송준비</span></label>
+                                    <input type="radio" id="3" class="restCheckBox" name="orderState" value="3" th:checked="${sVO.orderState == 3}">
+                                    <label for="3"><span th:text="#{order.state.shipping}">배송중</span></label>
+                                    <input type="radio" id="4" class="restCheckBox" name="orderState" value="4" th:checked="${sVO.orderState == 4}">
+                                    <label for="4"><span th:text="#{order.state.shipped}">배송완료</span></label>
+                                    <input type="radio" id="5" class="restCheckBox" name="orderState" value="5" th:checked="${sVO.orderState == 5}">
+                                    <label for="5"><span th:text="#{order.state.orderCancelled}">주문취소</span></label>
+                                    <input type="radio" id="6" class="restCheckBox" name="orderState" value="6" th:checked="${sVO.orderState == 6}">
+                                    <label for="6"><span th:text="#{order.state.refund}">환불</span></label>
+                                    <input type="radio" id="7" class="restCheckBox" name="orderState" value="7" th:checked="${sVO.orderState == 7}">
+                                    <label for="7"><span th:text="#{order.state.exchange}">교환</span></label>
+                                    <input type="radio" id="8" class="restCheckBox" name="orderState" value="8" th:checked="${sVO.orderState == 8}">
+                                    <label for="8"><span th:text="#{order.state.return}">반품</span></label>
+                                </div>
+                            </div>
+                            <div class="seller_sales_contents_search_items">
+                                <span class="seller_sales_contents_search_title" th:text="#{search.registrationPeriod}">등록기간</span>
+                                <div class="seller_sales_contents_search_item3">
+                                    <input type="date" id="startDate" name="sDate" th:value="${param.sDate}">
+                                    <span> ~ </span>
+                                    <input type="date" id="endDate" name="eDate" th:value="${param.eDate}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="seller_sales_contents_search_btns">
+                            <div>
+                                <input type="submit" th:value="#{search.searchButton}" value="검색">
+                                <input type="reset" th:value="#{search.resetButton}" value="초기화">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="seller_sales_contents_list">
+                    <th:block th:if="${orderList == null or orderList.size() == 0}">
+                        <div><span th:text="#{order.list.noOrders}">상품목록 (총 0개)</span></div>
+                    </th:block>
+                    <th:block th:unless="${orderList == null or orderList.size() == 0}">
+                        <div><span th:text="#{order.list.title(${pageNav.totalRows})}">상품목록 (총 <span th:text="${pageNav.totalRows}"></span>개)</span></div>
+                    </th:block>
+                    <table class="seller_sales_contents_table">
+                        <tr class="seller_sales_contents_table_title">
+                            <th th:text="#{order.table.header.category}">구분</th>
+                            <th th:text="#{order.table.header.edit}">수정</th>
+                            <th th:text="#{order.table.header.nickname}">닉네임</th>
+                            <th th:text="#{order.table.header.productName}">상품명</th>
+                            <th th:text="#{order.table.header.option}">옵션</th>
+                            <th th:text="#{order.table.header.quantity}">수량</th>
+                            <th th:text="#{order.table.header.orderNumber}">주문번호</th>
+                            <th th:text="#{order.table.header.orderState}">주문상태</th>
+                            <th th:text="#{order.table.header.paymentAmount}">결제금액</th>
+                        </tr>
+
+                        <th:block th:if="${orderList == null or orderList.size() == 0}">
+                            <tr><td colspan="9" th:text="#{order.list.noOrders}">등록된 주문이 없습니다.</td></tr>
+                        </th:block>
+
+                        <th:block th:unless="${orderList == null or orderList.size() == 0}">
+                            <th:block th:each="order, iterStat : ${orderList}">
+                                <tr>
+                                    <td><span th:text="${pageNav.startNum + iterStat.index}"></span></td>
+                                    <td class="seller_sales_contents_table_edit_btn">
+                                        <button type="button" class="editButton"><span th:text="#{order.table.header.edit}">수정</span></button>
+                                        <input type="hidden" class="bo_idx" th:value="${order.bo_idx}">
+                                        <input type="hidden" class="bos_option" th:value="${order.bos_option}">
+                                        <div class="stateList" style="display: none;">
+                                            <div class="changeState" data-state="1"><span th:text="#{order.state.paymentCompleted}" style="color: black">결제완료</span></div>
+                                            <div class="changeState" data-state="2"><span th:text="#{order.state.preparingShipment}" style="color: black">배송준비</span></div>
+                                            <div class="changeState" data-state="3"><span th:text="#{order.state.shipping}" style="color: black">배송중</span></div>
+                                            <div class="changeState" data-state="4"><span th:text="#{order.state.shipped}" style="color: black">배송완료</span></div>
+                                            <div class="changeState" data-state="5"><span th:text="#{order.state.orderCancelled}" style="color: black">주문취소</span></div>
+                                            <div class="changeState" data-state="6"><span th:text="#{order.state.refund}" style="color: black">환불</span></div>
+                                            <div class="changeState" data-state="7"><span th:text="#{order.state.exchange}" style="color: black">교환</span></div>
+                                            <div class="changeState" data-state="8"><span th:text="#{order.state.return}" style="color: black">반품</span></div>
+                                        </div>
+                                    </td>
+                                    <td><span th:text="${order.b_nickname}"></span></td>
+                                    <td class="seller_sales_contents_table_product_name">
+                                        <a href=""><span th:text="${order.i_name}"></span></a>
+                                    </td>
+                                    <td><span th:text="${order.bos_option}"></span></td>
+                                    <td><span th:text="${order.bos_count + '개'}"></span></td>
+                                    <td><span th:text="${order.bo_idx}"></span></td>
+                                    <td>
+                                        <span>
+                                            <th:block th:switch="${order.bos_state}">
+                                                <th:block th:case="1" th:text="#{order.state.paymentCompleted}">결제완료</th:block>
+                                                <th:block th:case="2" th:text="#{order.state.preparingShipment}">배송준비</th:block>
+                                                <th:block th:case="3" th:text="#{order.state.shipping}">배송중</th:block>
+                                                <th:block th:case="4" th:text="#{order.state.shipped}">배송완료</th:block>
+                                                <th:block th:case="5" th:text="#{order.state.orderCancelled}">주문취소</th:block>
+                                                <th:block th:case="6" th:text="#{order.state.refund}">환불</th:block>
+                                                <th:block th:case="7" th:text="#{order.state.exchange}">교환</th:block>
+                                                <th:block th:case="8" th:text="#{order.state.return}">반품</th:block>
+                                                <th:block th:case="10" th:text="#{order.state.purchaseConfirmed}">구매확정</th:block>
+                                            </th:block>
+                                        </span>
+                                    </td>
+                                    <td><span th:text="${order.formattedTotalPrice}"></span></td>
+                                </tr>
+                            </th:block>
+                        </th:block>
+
+                    </table>
+
+                    <div th:if="${orderList != null and orderList.size() > 0}" class="seller_contents_table_pasing" id="td_paging">
+                        <span th:replace="~{common/salesPaging :: salesFragment}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    $(document).ready(function() {
+        let openStateList = null;
+
+        $(".editButton").click(function(event) {
+            event.stopPropagation();
+            var $this = $(this);
+            var buttonPosition = $this.offset();
+            var topPosition = buttonPosition.top + $this.outerHeight();
+            var $stateList = $this.siblings(".stateList");
+
+            if (openStateList && openStateList[0] === $stateList[0]) {
+                $stateList.hide();
+                openStateList = null;
+                return;
+            }
+
+            if (openStateList) {
+                openStateList.hide();
+            }
+
+            $stateList.css({
+                "position": "absolute",
+                "top": topPosition + "px",
+                "left": buttonPosition.left + "px"
+            }).toggle();
+
+            if ($stateList.is(":visible")) {
+                openStateList = $stateList;
+            } else {
+                openStateList = null;
+            }
+        });
+
+        $(".changeState").click(function(event) {
+            event.stopPropagation();
+            var $this = $(this);
+            var $stateList = $this.closest(".stateList");
+            var $row = $stateList.closest("tr");
+            var bo_idx = $row.find(".bo_idx").val();
+            var bos_option = $row.find(".bos_option").val();
+            var bos_state = $this.data('state');
+            var orderState = {"bo_idx": bo_idx, "bos_option": bos_option, "bos_state": bos_state};
+            console.log("Order State Data:", orderState);
+            $.ajax({
+                type: 'post',
+                url: "[[@{/seller/updateOrderStateProcess}]]",
+                data: JSON.stringify(orderState),
+                contentType: "application/json;charset=utf-8;",
+                dataType: 'json',
+                success: function (data) {
+                    if(data > 0){  // 변경된 행의 수가 0보다 크면
+                        var newStateText = $this.find("span").text();
+                        // bo_idx가 일치하는 모든 행 업데이트
+                        $('tr').each(function() {
+                            var $currentRow = $(this);
+                            if ($currentRow.find(".bo_idx").val() === bo_idx) {
+                                $currentRow.find("td:nth-child(8) span").text(newStateText);
+                            }
+                        });
+                        $stateList.hide();
+                        openStateList = null;
+                        console.log(bo_idx + " 주문의 상태가 " + newStateText + "로 업데이트되었습니다.");
+                    } else {
+                        console.log("주문 상태 업데이트에 실패했습니다.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("AJAX 오류 발생: " + status + " " + error);
+                }
+            });
+        });
+
+        $(document).click(function() {
+            if (openStateList) {
+                openStateList.hide();
+                openStateList = null;
+            }
+        });
+    });
+</script>
+
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="context-path" th:content="@{/}" />
+    <meta name="image-upload-url" th:content="@{/tui-editor/image-upload}" />
+    <meta name="image-print-url" th:content="@{/tui-editor/image-print}" />
+    <title th:text="#{title.itemWrite}">Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/seller/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:src="@{/js/seller/service/write.js}"></script>
+    <script th:src="@{/js/seller/service/writeAjax.js}"></script>
+    <script th:src="@{/js/seller/common/globalNavigation.js}"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+
+    <style th:inline="css">
+        section {
+            box-sizing: border-box;
+            width: 1000px;
+            margin: 0 auto;
+            padding: 20px 20px 100px;
+            background-color: #F2F2F2;
+        }
+
+        .itemcategory {
+            box-sizing: border-box;
+            width: 150px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        option {
+            font-weight: bold;
+        }
+
+        .input-container{
+            position: relative;
+            display: inline-block;
+        }
+
+        .input-container input[type="text"] {
+            box-sizing: border-box;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.15s ease;
+        }
+
+        .input-container .itemtitle {
+            width: 960px;
+            font-size: 28px;
+            padding: 30px 10px 10px;
+            margin-bottom: 10px;
+        }
+
+        .input-container .itemprice {
+            box-sizing: border-box;
+            width: 295px;
+            font-size: 16px;
+            padding: 20px 10px 10px;
+            margin:0 5px 10px 0;
+        }
+
+        .input-container input + span {
+            box-sizing: border-box;
+            position: absolute;
+            line-height: 50px;
+            font-size: 14px;
+            top: 0px;
+            left: 10px;
+            pointer-events: none;
+            color: #999;
+            font-weight: bold;
+            transition: all 0.15s ease;
+        }
+
+        .input-container input:focus{
+            border: 1px solid #00CD08;
+            box-shadow: 0 0 0 3px #00CD0850;
+        }
+
+        .input-container input:focus + span,
+        .input-container input:not(:placeholder-shown) + span {
+            top: 5px;
+            line-height: 20px;
+            font-size: 10px;
+        }
+
+        .input-container .itemtitle + span {
+            line-height: 74.55px;
+            font-size: 28px;
+        }
+
+        .input-container .itemtitle:focus + span,
+        .input-container .itemtitle:not(:placeholder-shown) + span {
+            top: 5px;
+            line-height: 30px;
+            font-size: 20px;
+        }
+
+        .arrow_small {
+            width: 18px;
+            height: 18px;
+            background-size: 18px;
+            rotate: -90deg;
+            vertical-align: middle;
+            filter: invert(0%) sepia(1%) saturate(2514%) hue-rotate(223deg) brightness(0%) contrast(87%);
+        }
+
+        input[type="file"],
+        input[type="submit"] {
+            display: none;
+        }
+
+        .iteminfo {
+            display: flex;
+        }
+
+        .itemimgbox label {
+            box-sizing: border-box;
+            display: inline-block;
+            vertical-align: top;
+            background-color: white;
+            width: 600px;
+            height: 600px;
+            background-image: url(../resources/static/css/img/add-icon.png);
+            background-position: center;
+            background-size: 150px;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+
+        .itemimgbox .preview {
+            box-sizing: border-box;
+            width: 600px;
+            height: 600px;
+
+        }
+
+        .buttonImg button {
+            box-sizing: content-box;
+            width: 64px;
+            height: 64px;
+            border: 2px solid #F2F2F2;
+            background-color: white;
+            background-image: url(../resources/static/css/img/add-icon.png);
+            background-position: center;
+            background-size: 14px;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+
+        .buttonImg .preview {
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+        }
+
+        .imgbox {
+            box-sizing: border-box;
+            width: 600px;
+            height: 600px;
+            font-size: 0;
+            overflow: hidden;
+            background-color: white;
+            background-image: url(/../resources/static/css/img/noimg.png);
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .itemimgbox {
+            box-sizing: border-box;
+            display: inline-block;
+            vertical-align: top;
+            height: 600px;
+        }
+
+        .itemImgButton {
+            box-sizing: border-box;
+            margin: 20px 0;
+            display: inline-block;
+            width: 600px;
+            height: 64px;
+            font-size: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .itemImgButton input[type="button"] {
+            box-sizing: border-box;
+            margin: 0 5px;
+            width: 64px;
+            height: 64px;
+            border: 0;
+            font-size: 32px;
+            font-weight: bold;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.2s;
+        }
+
+        input[type="button"].add:hover {
+            color: white;
+            background-color: #00CD0899;
+        }
+
+        input[type="button"].remove:hover {
+            color: white;
+            background-color: #FF606099;
+        }
+
+        .itemoptions {
+            box-sizing: border-box;
+            width: 360px;
+            height: 700px;
+            padding-left: 10px;
+            font-size: 0;
+            overflow: hidden;
+        }
+
+        .itemoptionsbox {
+            height: 662px;
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+
+        .itemoptionsbox::-webkit-scrollbar {
+            width: 10px;
+            display:none;
+        }
+
+        .itemoptionsbox::-webkit-scrollbar-thumb {
+            background-color: transparent;
+            border-radius: 10px;
+            background-clip: padding-box;
+            border: 2px solid transparent;
+        }
+
+        .itemoptionsbox::-webkit-scrollbar-track {
+            background-color: transparent;
+            border-radius: 10px;
+        }
+
+        .itemoptions h4 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .itemOptionButton {
+            width: 148px;
+            margin: 0 auto;
+        }
+
+        .itemOptionButton>input[type="button"] {
+            box-sizing: border-box;
+            margin: 0 5px;
+            width: 64px;
+            height: 64px;
+            border: 0;
+            font-size: 32px;
+            font-weight: bold;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.2s;
+        }
+
+        .hiddenoptions {
+            display: none;
+        }
+
+        .itemoption {
+            box-sizing: border-box;
+            width: 350px;
+            padding: 0 0 20px;
+        }
+
+        .itemoption>input[type="button"] {
+            box-sizing: border-box;
+            width: 175px;
+            height: 20px;
+            border: 0;
+            font-weight: bold;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.2s;
+        }
+        .itemoptioninfo .input-option{
+            box-sizing: border-box;
+            position: relative;
+            width: 330px;
+            margin: 5px auto;
+        }
+        .itemoptioninfo .input-option input[type="text"] {
+            box-sizing: border-box;
+            width: 100%;
+            height: 50px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            font-weight: bold;
+            padding: 20px 10px 10px;
+            border-radius: 5px;
+            transition: all 0.15s ease;
+        }
+
+        .itemoptioninfo .input-option input[type="text"]:focus{
+            box-shadow: 0 0 0 3px #00CD0850;
+            border: 1px solid #00CD08;
+        }
+
+        .itemoptioninfo .input-option input + span {
+            box-sizing: border-box;
+            position: absolute;
+            line-height: 50px;
+            font-size: 14px;
+            top: 0px;
+            left: 10px;
+            pointer-events: none;
+            color: #999;
+            font-weight: bold;
+            transition: all 0.15s ease;
+        }
+
+        .itemoptioninfo .input-option input:focus + span,
+        .itemoptioninfo .input-option input:not(:placeholder-shown) + span {
+            top: 5px;
+            line-height: 20px;
+            font-size: 10px;
+        }
+
+        .editer_box {
+            margin: 20px 0;
+        }
+
+        .editer_box h2 {
+            margin-bottom: 10px;
+        }
+
+        .item_write_btns {
+            float: right;
+            height: 100px;
+        }
+
+        label[for="item_submit_btn"] span {
+            box-sizing: border-box;
+            display: inline-block;
+            width: 100px;
+            line-height: 50px;
+            font-weight: bold;
+            text-align: center;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.2s;
+        }
+
+        label[for="item_submit_btn"] span:hover {
+            background-color: #00CD0899;
+            color: white;
+        }
+
+        #item_reset_btn,
+        #item_cancel_btn {
+            box-sizing: border-box;
+            display: inline-block;
+            width: 100px;
+            line-height: 50px;
+            font-weight: bold;
+            text-align: center;
+            background-color: #C3C3C3;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.2s;
+        }
+
+        #item_reset_btn:hover,
+        #item_cancel_btn:hover {
+            background-color: #44444499;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<div id="dataContainer"
+     th:data-context-path="@{/}"
+     th:data-image-upload-url="@{/tui-editor/image-upload}"
+     th:data-image-print-url="@{/tui-editor/image-print}"></div>
+<div class="wrap">
+    <header th:replace="~{seller/common/header :: sellerHeader}"></header>
+    <section>
+        <select name="" id="largeCategory" class="itemcategory">
+            <option value='0' th:text="#{select.default}" selected disabled hidden>===== 선택 =====</option>
+            <option value="a" th:text="#{category.digital}">디지털/가전</option>
+            <option value="b" th:text="#{category.interior}">인테리어</option>
+            <option value="c" th:text="#{category.food}">식품</option>
+            <option value="d" th:text="#{category.clothing}">의류</option>
+            <option value="e" th:text="#{category.living}">생활</option>
+        </select>
+        <span class="arrow_small"></span>
+        <select name="" id="smallCategory" class="itemcategory">
+            <option value='0' selected disabled hidden th:text="#{select.default}">===== 선택 =====</option>
+        </select>
+        <span class="arrow_small"></span>
+
+        <!-- --------------------------------------------------------------------------------------- -->
+        <form method="post" th:action="@{/item/writeProcess}" enctype="multipart/form-data">
+            <input type="hidden" name="c_idx" id="categoryidx">
+            <input type="hidden" name="s_idx" id="selleridx" th:value="${seller.s_idx}">
+            <input type="hidden" name="i_explain" id="itemexplain">
+            <div class="input-container">
+                <input type="text" name="i_name" class="itemtitle" placeholder=" ">
+                <span th:text="#{label.productName}">상품명</span>
+            </div>
+            <div class="input-container">
+                <input type="text" name="i_price" class="itemprice" placeholder=" ">
+                <span th:text="#{label.price}">가격</span>
+            </div>
+            <div class="input-container">
+                <input type="text" name="i_count" class="itemprice" placeholder=" ">
+                <span th:text="#{label.quantity}">수량</span>
+            </div>
+            <input type="submit" id="item_submit_btn">
+        </form>
+        <!-- --------------------------------------------------------------------------------------- -->
+        <div class="iteminfo">
+            <div>
+                <div class="imgbox">
+                    <div class="itemimgbox">
+                    </div>
+                </div>
+                <div class="itemImgButton">
+                    <div class="buttonImg">
+                    </div>
+                    <input type="button" id="btn-removeItemImg" class="remove" value="-">
+                    <input type="button" id="btn-addItemImg" class="add" value="+">
+                </div>
+            </div>
+            <div class="itemoptions">
+<!--                <h4>옵션</h4>-->
+<!--                <div class="itemoptionsbox">-->
+<!--                    <div class="hiddenoptions">-->
+<!--                    </div>-->
+<!--                    <div class="itemoptionsinput">-->
+<!--                    </div>-->
+<!--                    <div class="itemOptionButton">-->
+<!--                        <input type="button" id="btn-removeSelect" class="remove" value="-">-->
+<!--                        <input type="button" id="btn-addSelect" class="add" value="+">-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+        </div>
+        <div class="editer_box">
+            <h2 style="text-align: center;" th:text="#{heading.productDetails}">상품 상세 정보</h2>
+            <div id="editer_content">
+            </div>
+        </div>
+        <div class="item_write_btns">
+            <label for="item_submit_btn">
+                <span th:text="#{button.register}">등록</span>
+            </label>
+            <a id="item_reset_btn" href="" th:text="#{button.reset}">초기화</a>
+            <a id="item_cancel_btn" href="" th:text="#{button.cancel}">취소</a>
+        </div>
+    </section>
+</div>
+<footer>
+    <footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</footer>
+
+</body>
+
+</html>

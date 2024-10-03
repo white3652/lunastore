@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lunastore.BuyerMapper">
+
+
+    <insert id="join" parameterType="buyerVO">
+        insert into tb_buyer (b_firstname, b_lastname, b_tel, b_birth, b_email, b_pw)
+        values (#{b_firstname}, #{b_lastname}, #{b_tel}, #{b_birth}, #{b_email}, #{b_pw})
+
+        <selectKey keyProperty="b_idx" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="info" parameterType="int">
+        INSERT INTO tb_buyer_info (b_idx, b_profile, b_nickname)
+        VALUES (#{b_idx}, '기본!@프로필.jpg', CONCAT('lunauser', #{b_idx}));
+    </insert>
+    <insert id="insertBuyerAddress" parameterType="int">
+        INSERT INTO tb_buyer_address (b_idx, ba_address, ba_zipcode, ba_contact, ba_check)
+        VALUES (#{b_idx}, '기본 주소', '00000', '010-0000-0000', 'Y');
+    </insert>
+    <insert id="state" parameterType="int">
+        INSERT INTO tb_buyer_state (b_idx)
+        VALUES (#{b_idx})
+    </insert>
+
+    <select id="getBuyerById" parameterType="int" resultType="BuyerVO">
+        SELECT b_idx, b_nickname, b_profile, b_gender, b_grade, b_point
+        FROM tb_buyer_info
+        WHERE b_idx = #{b_idx}
+    </select>
+
+    <select id="getPassword" parameterType="string" resultType="string">
+        select b_pw from tb_buyer
+        where b_email = #{b_email}
+    </select>
+
+    <select id="login" parameterType="string" resultType="buyerVO">
+        SELECT *
+        FROM tb_buyer b
+        JOIN tb_buyer_state bs ON b.b_idx = bs.b_idx
+        JOIN tb_buyer_info bi ON b.b_idx = bi.b_idx
+        WHERE b.b_email = #{b_email}
+    </select>
+
+    <update id="lastLoginDate" parameterType="int">
+        update tb_buyer set
+        b_lastlogindate = now()
+        where b_idx = #{b_idx}
+    </update>
+
+    <update id="updateBuyer" parameterType="buyerVO">
+        update tb_buyer set
+        <choose>
+            <when test="b_firstname != null and b_lastname != null">
+                b_firstname = #{b_firstname}, b_lastname = #{b_lastname}, b_modifydate = now()
+            </when>
+            <when test="b_birth != null">
+                b_birth = #{b_birth}, b_modifydate = now()
+            </when>
+            <when test="b_tel != null">
+                b_tel = #{b_tel}, b_modifydate = now()
+            </when>
+            <when test="b_pw != null">
+                b_pw = #{b_pw}, b_modifydate = now(), b_pwmodifydate = now()
+            </when>
+        </choose>
+        where b_idx = #{b_idx}
+    </update>
+
+    <select id="getBuyer" parameterType="int" resultType="buyerVO">
+        select *
+        from tb_buyer b, tb_buyer_state bs, tb_buyer_info bi
+        where b.b_idx = bs.b_idx
+        and b.b_idx = bi.b_idx
+        and b.b_idx = #{b_idx}
+    </select>
+
+    <select id="getAddress" parameterType="int" resultType="addressVO">
+        SELECT b.*, a.*
+        FROM tb_buyer_address a
+        JOIN tb_buyer b ON a.b_idx = b.b_idx
+        WHERE a.b_idx = #{b_idx}
+        AND a.ba_check = 'Y'
+        ORDER BY a.ba_check DESC
+    </select>
+
+    <update id="changeDefaultAddress" parameterType="int">
+        update tb_buyer_address set ba_check = 'N'
+        where ba_check = 'Y'
+        and b_idx = #{b_idx}
+    </update>
+
+    <insert id="insertAddress" parameterType="addressVO">
+        insert into tb_buyer_address (b_idx, ba_firstname, ba_lastname, ba_address, ba_restaddress, ba_zipcode, ba_contact, ba_check)
+        values (#{b_idx}, #{ba_firstname}, #{ba_lastname}, #{ba_address}, #{ba_restaddress}, #{ba_zipcode}, #{ba_contact}, #{ba_check})
+    </insert>
+
+    <update id="insertContact" parameterType="addressVO">
+        update tb_buyer_address
+        set ba_contact = #{ba_contact}
+        where ba_check = 'Y'
+        and b_idx = #{b_idx}
+    </update>
+
+    <update id="infoUpdate" parameterType="buyerVO">
+        UPDATE tb_buyer_info bi
+        JOIN tb_buyer b ON bi.b_idx = b.b_idx
+        SET
+        <choose>
+            <when test="b_profile != null">
+                bi.b_profile = #{b_profile},
+                b.b_modifydate = NOW()
+            </when>
+            <when test="b_nickname != null">
+                bi.b_nickname = #{b_nickname},
+                b.b_modifydate = NOW()
+            </when>
+            <when test="b_gender != null">
+                bi.b_gender = #{b_gender},
+                b.b_modifydate = NOW()
+            </when>
+        </choose>
+        WHERE b.b_idx = #{b_idx};
+    </update>
+
+    <update id="cancel" parameterType="int">
+        UPDATE tb_buyer_state bs
+        JOIN tb_buyer b ON bs.b_idx = b.b_idx
+        SET bs.b_cancel = 'Y',
+        b.b_modifydate = NOW()
+        WHERE b.b_idx = #{b_idx};
+    </update>
+
+    <select id="nicknameCheck" parameterType="string" resultType="int">
+        select count(*)
+        from tb_buyer_info
+        where b_nickname = #{b_nickname}
+    </select>
+
+    <select id="emailCheck" parameterType="string" resultType="int">
+        select count(*)
+        from tb_buyer
+        where b_email = #{b_email}
+    </select>
+
+    <select id="telCheck" parameterType="string" resultType="int">
+        select count(*)
+        from tb_buyer
+        where b_tel = #{b_tel}
+    </select>
+
+    <update id="updatePassword" parameterType="buyerVO">
+        update tb_buyer
+        set b_pw = #{b_pw}
+        where b_email = #{b_email}
+    </update>
+
+    <select id="matchTelEmail" parameterType="buyerVO" resultType="int">
+        SELECT count(*)
+        FROM tb_buyer b, tb_buyer_state bs, tb_buyer_info bi
+        WHERE b.b_idx = bs.b_idx
+        AND b.b_idx = bi.b_idx
+        AND b.b_email = #{b_email}
+        AND b.b_tel = #{b_tel}
+    </select>
+
+    <select id="getPw" parameterType="int" resultType="string">
+        select b_pw
+        from tb_buyer
+        where b_idx = #{b_idx}
+    </select>
+
+    <update id="verifyEmail" parameterType="int">
+        update tb_buyer_state set b_check = 'Y'
+        where b_check = 'N'
+        and b_idx = #{b_idx}
+    </update>
+
+    <select id="getB_idx" parameterType="string" resultType="int">
+        SELECT b_idx
+        FROM tb_buyer
+        WHERE b_email = #{b_email}
+    </select>
+
+
+    <update id="updateBuyerName" parameterType="addressVO">
+        UPDATE tb_buyer
+        SET b_firstname = #{b_firstname},
+        b_lastname = #{b_lastname}
+        WHERE b_idx = #{b_idx}
+    </update>
+
+    <update id="updateBuyerAddress" parameterType="addressVO">
+        UPDATE tb_buyer_address
+        SET ba_zipcode = #{ba_zipcode},
+        ba_address = #{ba_address},
+        ba_restaddress = #{ba_restaddress},
+        ba_firstname = #{ba_firstname},
+        ba_lastname = #{ba_lastname},
+        ba_contact = #{ba_contact},
+        ba_check = #{ba_check}
+        WHERE b_idx = #{b_idx}
+    </update>
+
+    <update id="updateBuyerTel" parameterType="map">
+        UPDATE tb_buyer
+        SET b_tel = #{b_tel}
+        WHERE b_idx = #{b_idx}
+    </update>
+
+    <update id="updateBuyerAddressContact" parameterType="map">
+        UPDATE tb_buyer_address
+        SET ba_contact = #{ba_contact}
+        WHERE b_idx = #{b_idx}
+    </update>
+
+    <update id="updateBuyerOrderContact" parameterType="map">
+        UPDATE tb_buyer_order
+        SET bo_contact = #{bo_contact}
+        WHERE b_idx = #{b_idx}
+    </update>
+</mapper>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lunastore.CartMapper">
+    <resultMap id="CartResultMap" type="com.lunastore.vo.CartVO">
+        <id property="i_idx" column="i_idx" />
+        <result property="b_idx" column="b_idx" />
+        <result property="i_name" column="i_name" />
+        <result property="i_option" column="i_option" />
+        <result property="i_price" column="i_price" />
+        <result property="i_img" column="i_img" />
+        <result property="i_count" column="i_count" />
+        <result property="subtotal" column="subtotal" />
+        <!-- 추가적인 매핑 -->
+    </resultMap>
+    <select id="searchCart" parameterType="cartVO" resultType="int">
+        SELECT count(*)
+        FROM tb_buyer_cart
+        WHERE i_idx = #{i_idx}
+        AND i_option = #{i_option}
+        AND b_idx = #{b_idx}
+    </select>
+
+    <insert id="insertCart" parameterType="cartVO">
+        INSERT INTO tb_buyer_cart (b_idx, i_idx, i_name, i_option, i_price, i_img, i_count)
+        VALUES (#{b_idx}, #{i_idx}, #{i_name}, #{i_option}, #{i_price}, #{i_img}, #{i_count})
+    </insert>
+
+    <select id="getCarts" parameterType="int" resultType="cartVO">
+        SELECT *
+        FROM tb_buyer_cart
+        WHERE b_idx = #{b_idx}
+    </select>
+
+    <delete id="deleteCart" parameterType="cartVO">
+        DELETE FROM tb_buyer_cart
+        WHERE i_idx = #{i_idx}
+        AND b_idx = #{b_idx}
+    </delete>
+
+    <delete id="deleteCompleteCart" parameterType="cartVO">
+        DELETE FROM tb_buyer_cart
+        WHERE b_idx = #{b_idx}
+    </delete>
+
+    <update id="updateCartQuantity">
+        UPDATE tb_buyer_cart
+        SET i_count = #{i_count}
+        WHERE b_idx = #{b_idx} AND i_idx = #{i_idx}
+    </update>
+
+    <select id="getItemPrice" resultType="int" parameterType="int">
+        SELECT i_price FROM tb_item WHERE i_idx = #{i_idx}
+    </select>
+
+    <select id="getCartListTotalPrice" parameterType="int" resultType="com.lunastore.vo.CartVO">
+        SELECT * FROM tb_buyer_cart WHERE b_idx = #{b_idx}
+    </select>
+
+
+
+    <select id="getCartsByBuyerId" resultMap="CartResultMap">
+        SELECT *, (i_price * i_count) AS subtotal
+        FROM tb_buyer_cart
+        WHERE b_idx = #{b_idx}
+    </select>
+</mapper>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title th:text="#{ent.title}">ENT Luna Login</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+	<link th:href="@{/css/global.css}" rel="stylesheet">
+	<link th:href="@{/css/icon/icon.css}" rel="stylesheet">
+	<link th:href="@{/css/seller/user/sellerLogin.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script th:src="@{/js/seller/user/pagetrg.js}"></script>
+	<script th:src="@{/js/seller/user/sellerLogin.js}"></script>
+	<script th:src="@{/js/seller/user/sellerLoginMinor.js}"></script>
+	<script th:src="@{/js/seller/user/taxidAutoHyphen.js}"></script>
+</head>
+
+<body>
+<div class="wrap">
+	<header th:replace="~{buyer/common/global_header :: global_header}"></header>
+
+	<section>
+		<!-- #region 상단 타이틀 -->
+		<div class="m_sellerLogin_title">
+			<div class="m_sellerLogin_tiregion">
+				<div class="m_sellerLogin_tiregionti" th:text="#{login.ent.title}">ENT Luna ID</div>
+				<div class="m_sellerLogin_tiregionre">
+					<a th:href="@{/seller/sellerLogin}" class="m_sellerLogin_tiregionss" th:text="#{login.ent.loginbtn}">로그인</a>
+					<a th:href="@{/seller/sellerJoin}" class="m_sellerLogin_tiregionss" th:text="#{login.ent.create}">ENT Luna ID 생성</a>
+				</div>
+			</div>
+		</div>
+		<!-- #endregion -->
+
+		<!-- #region 페이지1 -->
+		<div class="m_sellerLogin_mainlogoregion">
+			<div class="m_sellerLogin_main_log">
+				<!-- #region svg로고 -->
+				<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" fill="none" id="mainLog">
+					<defs>
+						<linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%">
+							<stop offset="0%" stop-color="#6A11CB"/>
+							<stop offset="100%" stop-color="#2575FC"/>
+						</linearGradient>
+						<filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+							<feGaussianBlur stdDeviation="3" result="cb"/>
+							<feMerge>
+								<feMergeNode in="cb"/>
+								<feMergeNode in="SourceGraphic"/>
+							</feMerge>
+						</filter>
+					</defs>
+					<path d="M150 50C200 50 250 100 250 150S200 250 150 250 50 200 50 150 100 50 150 50Z" fill="url(#cg)" filter="url(#glow)"/>
+					<path d="M160 60C210 60 260 110 260 160S210 260 160 260 60 210 60 160 110 60 160 60Z" fill="#FFF" opacity="0.2"/>
+					<circle cx="120" cy="120" r="15" fill="#FFF" opacity="0.3"/>
+					<circle cx="180" cy="180" r="10" fill="#FFF" opacity="0.2"/>
+				</svg>
+				<!-- #endregion -->
+			</div>
+		</div>
+
+		<div id="joinPage1" class="m_sellerLogin_main">
+			<div class="m_sellerLogin_main_subtitle" th:text="#{login.ent.subtitle}">ENT Luna의 모든 서비스에 사용하는 계정입니다.</div>
+			<div class="m_sellerLogin_main_loginbtnregion">
+				<div id="nextPage" class="m_sellerLogin_main_loginbtn" th:text="#{login.ent.loginbtn}">로그인</div>
+			</div>
+		</div>
+		<!-- #endregion -->
+
+		<!-- #region 페이지2 -->
+		<div id="joinPage2" class="m_sellerLogin_2page">
+			<div class="m_sellerLogin_2title" th:text="#{login.ent.title}">ENT Luna ID</div>
+			<div class="m_sellerLogin_2subtitle" th:text="#{login.ent.id.subtitle}">나의 ENT Luna 계정 관리</div>
+
+			<div class="m_sellerLogin_2loginre">
+				<form name="sellerLogin" method="post" th:action="@{/seller/sellerLoginProcess}">
+					<div class="m_sellerLogin_buyerEmailRegion">
+						<div class="_inputRegion" id="taxidRegion">
+							<input placeholder=" " type="text" name="s_businessnum" id="taxidInput" maxlength="12">
+							<span class="" id="taxidTitle" th:text="#{login.ent.businessnum}">사업자번호</span>
+							<div class="arrow_small" id="emailArrowSmall"></div>
+						</div>
+					</div>
+
+					<div class="_inputRegion1" id="pwRegion">
+						<input placeholder=" " type="password" name="s_pw" id="pwInput">
+						<span class="" id="pwTitle" th:text="#{login.ent.password}">암호</span>
+						<label>
+							<div class="arrow_small" id="pwArrowSmall"></div>
+							<input type="submit" class="m_sellerLogin_submit" id="loginSubmit" disabled="disabled">
+						</label>
+					</div>
+
+					<div class="m_sellerLogin_buyerIDSmg" id="buyerIDSmg"></div>
+				</form>
+			</div>
+
+			<div class="m_sellerLogin_2seletatag">
+				<a th:href="@{/buyer/login}" class="m_sellerLogin_2entuser" th:text="#{login.ent.generaluser}">일반 회원입니다.</a>
+				<a th:href="@{/seller/findPw}" class="m_sellerLogin_2pwblive" th:text="#{login.ent.forgotpw}">암호를 잊으셨나요?</a>
+			</div>
+		</div>
+	</section>
+</div>
+<!-- #endregion -->
+
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+
+<!-- 로그인 실패 시 alert 띄우기 -->
+<script th:if="${loginError}">
+	alert("[[#{login.ent.error}]]");
+</script>
+
+</body>
+
+</html>

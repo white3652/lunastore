@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title th:text="#{seller.update.title}">정보수정 페이지</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+	<!-- CSS 파일 링크 -->
+	<link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+	<link rel="stylesheet" th:href="@{/css/global.css}">
+	<link rel="stylesheet" th:href="@{/css/seller/user/sellerUpdateService.css}">
+	<link rel="stylesheet" th:href="@{/css/seller/common/global_header.css}">
+	<link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+	<link rel="stylesheet" th:href="@{/css/seller/common/global_section.css}">
+	<!-- JS 파일 링크 -->
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var invalidMessage = {
+			invalidEmail: /*[[#{error.invalid.email}]]*/ '이메일 형식이 올바르지 않습니다.',
+			emailInUse: /*[[#{error.email.in.use}]]*/ '사용중인 이메일입니다.',
+			emailCheckFailed: /*[[#{error.email.check.failed}]]*/ '이메일 중복 확인 실패',
+			telEmpty: /*[[#{error.tel.empty}]]*/ '입력 되어 있지 않습니다.',
+			telInvalid: /*[[#{error.tel.invalid}]]*/ '번호가 유효하지 않습니다.',
+			nameTooLong: /*[[#{error.name.too.long}]]*/ '길이가 너무 깁니다.',
+			nameInvalid: /*[[#{error.name.invalid}]]*/ '한글 또는 일본어만 입력이 가능합니다.',
+			nameEmpty: /*[[#{error.name.empty}]]*/ '입력 되어 있지 않습니다.',
+			birthInvalid: /*[[#{error.birth.invalid}]]*/ '생년월일이 유효하지 않습니다.',
+			passwordTooShort: /*[[#{error.password.too.short}]]*/ '암호 길이는 최소 8자 이상입니다.',
+			passwordInvalid: /*[[#{error.password.invalid}]]*/ '암호는 대소문자, 숫자, 특수문자를 포함해야 합니다.',
+			passwordMismatch: /*[[#{error.password.mismatch}]]*/ '암호가 일치하지 않습니다.',
+			passwordInvalidFormat: /*[[#{password.invalidFormat}]]*/ "비밀번호가 잘못 입력되었습니다. 다시 시도해 주세요.",
+			date: {
+				yearSuffix: /*[[#{date.year}]]*/ '년',
+				monthSuffix: /*[[#{date.month}]]*/ '월',
+				daySuffix: /*[[#{date.day}]]*/ '일'
+			}
+		};
+		/*]]>*/
+	</script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script th:src="@{/js/seller/service/sellerupdate.js}"></script>
+	<script th:src="@{/js/buyer/user/telAutoHyphen.js}"></script>
+	<script th:src="@{/js/publicRegex/passwordRegex3.js}"></script>
+	<script th:src="@{/js/seller/user/sellerUpdatePage.js}"></script>
+	<script th:src="@{/js/publicRegex/nameRegex.js}"></script>
+	<script th:src="@{/js/publicRegex/emailRegex2.js}"></script>
+	<script th:src="@{/js/publicRegex/telRegex.js}"></script>
+	<script th:src="@{/js/publicRegex/birthdayRegex.js}"></script>
+	<script th:src="@{/js/buyer/user/birthdayIO.js}"></script>
+	<script th:src="@{/js/buyer/user/daumMapAPI.js}"></script>
+	<script th:src="@{/js/seller/service/service.js}"></script>
+	<script th:src="@{/js/seller/service/serviceSection.js}"></script>
+	<script th:src="@{/js/seller/common/globalNavigation.js}"></script>
+</head>
+
+<body>
+<div class="wrap">
+
+	<!-- 헤더 포함 -->
+	<header th:replace="~{seller/common/header :: sellerHeader}"></header>
+
+	<section>
+		<div class="seller_global_section">
+
+			<!-- 네비게이션 포함 -->
+			<nav th:replace="~{seller/common/navigation :: sellerNavigation}"></nav>
+
+			<div class="m_sellerUpdateService_mainRegion">
+
+				<div class="seller_update_contents_title">
+					<span th:text="#{seller.update.breadcrumb}">메인 > 회원정보관리</span>
+				</div>
+
+				<!-- 매장정보 수정 폼 -->
+				<form name="sellerInfoUpdate" method="post" th:action="@{/seller/sellerInfoUpdateProcess}" enctype="multipart/form-data">
+					<input type="hidden" name="s_idx" th:value="${seller.s_idx}">
+					<div class="m_sellerUpdateService_mainTitle" th:text="#{seller.update.mainTitle}">매장정보 수정</div>
+					<hr>
+					<div class="m_sellerUpdateService_profileRegion">
+						<label>
+							<!-- 프로필 이미지가 없으면 기본 이미지를 보여줌 -->
+							<img th:src="${seller.s_profile != null ? '/uploads/' + seller.s_profile : '/uploads/기본!@프로필.jpg'}"
+								 id="profileImg"
+								 class="m_sellerUpdateService_profileInput"
+								 alt="프로필 이미지"
+								 data-default-profile-image="[[@{'/uploads/default_profile.jpg'}]]">
+							<input type="file" id="profileImgInput" name="s_tempprofile" class="m_sellerUpdateService_input">
+						</label>
+						<div class="m_sellerUpdateService_profileTitle" th:text="#{seller.update.profileTitle}">프로필 이미지</div>
+						<label>
+							<div class="m_sellerUpdateService_returnSubmitTitle" id="returnBtn1" th:text="#{seller.update.resetImage}">이미지 초기화</div>
+							<input type="button" class="upSubmit" id="ReturnSellerprofileSubmit">
+						</label>
+					</div>
+					<hr>
+					<div class="displayF textHr">
+						<div class="allTitleText" th:text="#{seller.update.storeName}">매장 이름</div>
+						<input type="text" name="s_storename" class="inputBoxCss" id="sellerTitleInput" th:value="${seller.s_storename}" th:placeholder="#{seller.update.storeNamePlaceholder}" placeholder="매장 이름을 입력해주세요." th:data-storename-check-url="@{/seller/storenameCheckProcess}">
+						<div class="Msg" id="sellerTitleMsg"></div>
+					</div>
+					<div class="displayF">
+						<div class="allTitleText" th:text="#{seller.update.introduction}">소개글</div>
+						<textarea class="inputTextBoxCss" name="s_storeintro" th:placeholder="#{seller.update.introductionPlaceholder}" placeholder="소개글을 입력해주세요." th:text="${seller.s_storeintro}"></textarea>
+					</div>
+					<hr>
+					<div class="m_sellerUpdateService_submitRegion">
+						<label>
+							<div class="m_sellerUpdateService_submitTitle pointer" th:text="#{seller.update.updateButton}">수정</div>
+							<input type="submit" class="upSubmit" id="upSellerSubmit" disabled="disabled">
+						</label>
+					</div>
+				</form>
+
+				<div class="hr"></div>
+				<div class="m_sellerUpdateService_mainTitle" th:text="#{seller.update.passwordChange}">암호 수정</div>
+				<hr>
+				<div class="displayF">
+					<div class="allTitleText" th:text="#{seller.update.password}">암호</div>
+					<div class="Msg pointer" id="updatePwBtn" th:text="#{seller.update.change}">변경 하기</div>
+					<div class="Msg disnone pointer" id="cancelPwBtn" th:text="#{seller.update.cancel}">취소 하기</div>
+				</div>
+
+				<div class="disnone" id="updatePwPage">
+
+					<div class="displayF" id="existingPw">
+						<input type="hidden" id="hiddenS_idx" name="s_idx" th:value="${seller.s_idx}">
+						<div class="allTitleText" th:text="#{seller.update.password}">현재 암호</div>
+						<input type="password" class="inputBoxCss" name="s_pw" id="existingPwInput" data-password-check-url="/seller/passwordCheckProcess">
+						<div class="Msg" id="existingPwMsg"></div>
+					</div>
+
+					<form name="sellerUpdate" method="post" th:action="@{/seller/sellerUpdateProcess}">
+						<input type="hidden" name="s_idx" th:value="${seller.s_idx}">
+						<div class="displayF">
+							<div class="allTitleText" th:text="#{seller.update.password}">새로운 암호</div>
+							<input type="password" name="s_pw" class="inputBoxCss" id="newPwInput">
+							<div class="Msg" id="newPwMsg"></div>
+						</div>
+						<div class="displayF">
+							<div class="allTitleText" th:text="#{label.confirmPassword}">암호 확인</div>
+							<input type="password" class="inputBoxCss" id="checkPwInput">
+							<div class="Msg" id="checkPwMsg"></div>
+						</div>
+						<div class="m_sellerUpdateService_submitRegion">
+							<label>
+								<div class="m_sellerUpdateService_submitTitle pointer">수정</div>
+								<input type="submit" class="upSubmit" id="upPwSubmit" disabled="disabled">
+							</label>
+						</div>
+					</form>
+				</div>
+				<hr>
+
+
+				<!-- 회원정보 수정 폼 -->
+				<form name="sellerUpdate" method="post" th:action="@{/seller/sellerUpdateProcess}">
+					<input type="hidden" name="s_idx" th:value="${seller.s_idx}">
+					<div class="hr"></div>
+					<div class="m_sellerUpdateService_mainTitle" th:text="#{seller.update.updateProfile}">회원정보 수정</div>
+					<hr>
+					<div class="displayF">
+						<div class="allTitleText" th:text="#{payment.form.firstName}">성</div>
+						<input type="text" class="inputBoxCss" id="firstNameInput" name="s_firstname" th:value="${seller.s_firstname}" placeholder="성을 입력해주세요." th:placeholder="#{seller.update.firstNamePlaceholder}">
+						<div class="Msg" id="firstNameMsg"></div>
+					</div>
+					<div class="displayF">
+						<div class="allTitleText" th:text="#{payment.form.lastName}">이름</div>
+						<input type="text" class="inputBoxCss" id="lastNameInput" name="s_lastname" th:value="${seller.s_lastname}" placeholder="이름을 입력해주세요." th:placeholder="#{seller.update.lastNamePlaceholder}">
+						<div class="Msg" id="lastNameMsg"></div>
+					</div>
+					<div class="displayF">
+						<div class="allTitleText" th:text="#{buyer.tel}">전화번호</div>
+						<input type="tel" class="inputBoxCss" maxlength="13" id="telInput" name="s_tel" th:value="${seller.s_tel}" placeholder="전화번호를 입력해주세요." th:placeholder="#{seller.update.phoneNumberPlaceholder}">
+						<div class="Msg" id="telSmg"></div>
+					</div>
+					<div class="displayF">
+						<div class="allTitleText" id="yyyytext" th:text="#{seller.update.birthdate}">생년월일</div>
+						<label>
+							<input type="text" class="inputBoxCss" id="yyyyinput" maxlength="8" name="s_birth" th:value="${formattedBirth}">
+						</label>
+						<div class="Msg" id="resultmsg"></div>
+					</div>
+					<div class="displayF">
+						<div class="allTitleText" th:text="#{seller.update.address}">주소</div>
+						<div class="Msg pointer" id="updateAddBtn" th:text="#{seller.update.findAddress}">주소 찾기</div>
+						<div class="Msg disnone pointer" id="cancelAddBtn" th:text="#{seller.update.cancel}">취소 하기</div>
+					</div>
+					<div class="disnone" id="updateAddPage">
+						<div class="displayF">
+							<div class="allTitleText" th:text="#{seller.update.zipcode}">우편번호</div>
+							<input type="text" name="s_zipcode" class="inputBoxCss" id="zonecodeInput" th:value="${seller.s_zipcode}" th:placeholder="#{seller.update.zipcodePlaceholder}" placeholder="우편번호를 입력해주세요.">
+						</div>
+						<div class="displayF">
+							<div class="allTitleText" th:text="#{seller.update.address}">주소</div>
+							<input type="text" name="s_address" class="inputBoxCss" id="addressInput" th:value="${seller.s_address}" placeholder="주소를 입력해주세요." th:placeholder="#{seller.update.addressPlaceholder}">
+						</div>
+						<div class="displayF">
+							<div class="allTitleText" th:text="#{seller.update.detailedAddress}">상세 주소</div>
+							<input type="text" name="s_restaddress" class="inputBoxCss" th:value="${seller.s_restaddress}" placeholder="상세 주소를 입력해주세요." th:placeholder="#{seller.update.detailedAddressPlaceholder}">
+						</div>
+					</div>
+					<hr>
+					<div class="m_sellerUpdateService_submitRegion">
+						<label>
+							<div class="m_sellerUpdateService_submitTitle pointer">수정</div>
+							<input type="submit" class="upSubmit" id="upSubmit">
+						</label>
+					</div>
+				</form>
+
+				<!-- 계정 삭제 폼 -->
+				<form name="sellerCancel" method="get" th:action="@{/seller/sellerCancelProcess}">
+					<div class="m_sellerUpdateService_cancelOrNotRegion" id="cancelOrNotRegion">
+						<div class="m_sellerUpdateService_cancelTitle" id="cancelOpenPage" th:text="#{seller.update.deleteAccount}">계정 삭제</div>
+						<div class="m_sellerUpdateService_cancelPwRegin upSubmit" id="cancelPwPage">
+							<div class="m_sellerUpdateService_cancelPwTitle" th:text="#{seller.update.enterPasswordToDelete}">계정을 삭제하시려면 암호를 입력해 주세요</div>
+							<input type="password" placeholder="암호를 입력해 주세요" class="m_sellerUpdateService_cancelInput" th:placeholder="#{placeholder.password}">
+							<div class="m_sellerUpdateService_cancelBtnRegion" id="firstBtnRegion">
+								<div class="m_sellerUpdateService_cancelReturnBtn" id="firstReturnBtn" th:text="#{seller.update.cancel}">취소</div>
+								<div class="m_sellerUpdateService_cancelNextBtn" id="firstNextBtn" th:text="#{seller.update.next}">다음</div>
+							</div>
+						</div>
+						<div class="m_sellerUpdateService_cancelSelectRegion upSubmit" id="cancelSubmitPage">
+							<div class="m_sellerUpdateService_cancelSubTitle" th:text="#{seller.update.deleteWarning1}">계정을 삭제하면 등록된 모든 상품이 모두 삭제 됩니다.</div>
+							<div class="m_sellerUpdateService_cancelSubTitle" th:text="#{seller.update.deleteWarning2}">계속 할까요?</div>
+							<div class="m_sellerUpdateService_cancelBtnRegion">
+								<div class="m_sellerUpdateService_cancelReturnBtn" id="lastReturnBtn" th:text="#{seller.update.cancel}">취소</div>
+								<label>
+									<div class="m_sellerUpdateService_cancelNextBtn" th:text="#{seller.update.deleteAccountButton}">계정 삭제</div>
+									<input type="submit" class="upSubmit">
+								</label>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+</div>
+
+<footer>
+	<!-- 푸터 포함 -->
+	<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</footer>
+</body>
+
+</html>

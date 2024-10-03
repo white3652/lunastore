@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{order_list_title}">주문 목록 - Luna</title>
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_header.css}">
+    <link rel="stylesheet" th:href="@{/css/buyer/common/global_footer.css}">
+    <link th:href="@{/css/global.css}" rel="stylesheet">
+    <link th:href="@{/css/icon/icon.css}" rel="stylesheet">
+    <link th:href="@{/css/pagination.css}" rel="stylesheet">
+    <link th:href="@{/css/buyer/service/buyerOrderList.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var cart = {
+            cart: /*[[#{global.header.cart}]]*/ '장바구니',
+            cartEmpty: /*[[#{global.header.cartEmpty}]]*/ '장바구니가 비어 있습니다.',
+            productImageAlt: /*[[#{global.header.productImageAlt}]]*/ '상품이미지',
+            cartCheck: /*[[#{global.header.cartCheck}]]*/ '장바구니 확인',
+            cartViewMore: /*[[#{global.header.cartViewMore}]]*/ '개의 상품이 더 있습니다.',
+            loginPrompt: /*[[#{global.header.loginPrompt}]]*/ '저장해둔 항목이 있는지 확인하려면 ',
+            loginPrompt2: /*[[#{global.header.loginPrompt2}]]*/ '하세요. ',
+            login: /*[[#{global.header.login}]]*/ '로그인'
+
+        };
+        /*]]>*/
+    </script>
+    <script th:src="@{/js/buyer/common/globalNavigation.js}"></script>
+    <script th:src="@{/js/buyer/buyerCartNavigation.js}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var urls = {
+            buyerLogin: /*[[@{/buyer/login}]]*/ '/buyer/login',
+            insertCart: /*[[@{/cart/insertCart}]]*/ '/cart/insertCart',
+            // cart: /*[[@{/cart/cart}]]*/ '/cart/cart',
+            findOrder: /*[[@{/order/findOrder}]]*/ '/order/findOrder',
+            insertReview: /*[[@{/item/insertReview}]]*/ '/item/insertReview',
+            submitAnswer: /*[[@{/buyer/service/qna/{qnaIdx}/answer}]]*/ '/buyer/service/qna/{qnaIdx}/answer'
+        };
+        /*]]>*/
+    </script>
+</head>
+
+<body>
+<div class="warp">
+    <header th:replace="~{buyer/common/global_header :: global_header}"></header>
+    <section>
+        <div class="m_buyerOrderList_mainRegion">
+            <div class="m_buyerOrderList_mainTitle" th:text="#{ordered_products}">주문하신 제품</div>
+
+            <div id="order-list">
+                <!-- 주문 목록 서버 사이드 렌더링 -->
+                <div th:each="order : ${orders}" class="m_buyerOrderList_itemOneRegion">
+                    <div class="_displayFlex">
+                        <div class="m_buyerOrderList_orderTitle" th:text="#{order_number}">주문 번호:</div>
+                        <div class="m_buyerOrderList_orderTitle">
+                            <a th:href="@{/order/orderDetail(orderId=${order.bo_idx})}" th:text="${order.bo_idx}">24353453</a>
+                        </div>
+                    </div>
+                    <div class="_displayFlex">
+                        <div class="m_buyerOrderList_orderTitle" th:text="#{order_date}">주문 날짜:</div>
+                        <div class="m_buyerOrderList_orderTitle lastmarginbottom" th:text="${#dates.format(order.bo_orderdate, 'yyyy/MM/dd HH:mm')}">2024/01/01 12:34</div>
+                    </div>
+                    <div class="_hr"></div>
+                    <div class="m_buyerOrderList_itemRegion _displayFlex">
+                        <div class="m_buyerOrderList_itemTitle" th:text="#{shipping_item}">배송될 품목</div>
+                        <div class="m_buyerOrderList_itemInfo">
+                            <div class="m_buyerOrderList_state" th:switch="${order.bos_state}">
+                                <span th:case="1" th:text="#{payment_completed}">결제완료</span>
+                                <span th:case="2" th:text="#{preparing_for_shipping}">배송준비</span>
+                                <span th:case="3" th:text="#{shipping_in_progress}">배송중</span>
+                                <span th:case="4" th:text="#{shipping_completed}">배송완료</span>
+                                <span th:case="5" th:text="#{order_cancelled}">주문취소</span>
+                                <span th:case="6" th:text="#{refund}">환불</span>
+                                <span th:case="7" th:text="#{exchange}">교환</span>
+                                <span th:case="10" th:text="#{purchase_confirmed}">구매확정</span>
+                                <span th:case="*" th:text="#{unknown}">알 수 없음</span>
+                            </div>
+                            <div>
+                                <div class="m_buyerOrderList_targetBtn">
+                                    <a th:href="@{/order/orderDetail(orderId=${order.bo_idx})}" th:text="#{view_details}">상세 보기</a>
+                                </div>
+                            </div>
+                            <div class="_hr1"></div>
+                            <div class="_displayFlex">
+                                <!-- 이미지 경로 수정: /uploads/{filename} -->
+                                <img th:src="@{${order.itemImage}}" alt="상품 이미지" class="m_buyerOrderList_itemImg">
+                                <div class="m_buyerOrderList_itemInfo1">
+                                    <div class="m_buyerOrderList_itemMainTitle" th:text="${order.i_name}">상품 이름</div>
+                                    <div class="_hr1"></div>
+                                    <div class="m_buyerOrderList_itemCount" th:text="#{item_quantity(${order.bos_count})}">수량 1</div>
+                                    <div class="m_buyerOrderList_itemPrice" th:text="#{item_price(${order.formattedTotalPrice})}">가격 ₩10,000</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="_hr"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 페이징 프래그먼트 포함 시 추가 변수 전달 -->
+    <div th:replace="~{common/paging3 :: commonFragment3(buyerId=${buyerId}, pageNav=${pageNav}, url=${url}, lastSlashIndex=${lastSlashIndex}, jspPage=${jspPage})}"></div>
+</div>
+<footer th:replace="~{buyer/common/global_footer :: global_footer}"></footer>
+</body>
+
+</html>

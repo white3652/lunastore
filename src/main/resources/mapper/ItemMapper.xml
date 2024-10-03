@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lunastore.mapper.ItemMapper">
+
+    <insert id="insertItem" parameterType="itemVO">
+        INSERT INTO tb_item (c_idx, s_idx, i_name, i_price, i_explain, i_count)
+        VALUES (#{c_idx}, #{s_idx}, #{i_name}, #{i_price}, #{i_explain}, #{i_count})
+        <selectKey keyProperty="i_idx" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="insertItemOption" parameterType="itemVO">
+        INSERT INTO tb_item_option (i_idx, i_option0, i_option1, i_option2, i_option3, i_option4)
+        VALUES (#{i_idx}, #{i_option0}, #{i_option1}, #{i_option2}, #{i_option3}, #{i_option4})
+    </insert>
+
+    <insert id="insertItemImage" parameterType="itemVO">
+        INSERT INTO tb_item_img (i_idx, i_saveimg0, i_saveimg1, i_saveimg2, i_saveimg3, i_saveimg4)
+        VALUES (#{i_idx}, #{i_saveimg0}, #{i_saveimg1}, #{i_saveimg2}, #{i_saveimg3}, #{i_saveimg4})
+    </insert>
+
+    <insert id="insertItemThumbnail" parameterType="itemVO">
+        INSERT INTO tb_item_thumbnail (i_idx, i_thumbnail)
+        VALUES (#{i_idx}, #{i_thumbnail})
+    </insert>
+
+    <select id="getItem" parameterType="int" resultType="itemVO">
+        SELECT * FROM vw_item WHERE i_idx = #{i_idx}
+    </select>
+
+    <select id="indexGetItems" parameterType="searchVO" resultType="itemVO">
+        SELECT * FROM vw_item WHERE 1 = 1
+        <if test='c_idx != 0'>
+            AND c_idx = #{c_idx}
+        </if>
+        <if test='p_idx != 0'>
+            <choose>
+                <when test='p_idx == 1'>
+                    AND c_idx BETWEEN 1 AND 5
+                </when>
+                <when test='p_idx == 2'>
+                    AND c_idx BETWEEN 6 AND 10
+                </when>
+                <when test='p_idx == 3'>
+                    AND c_idx BETWEEN 11 AND 15
+                </when>
+                <when test='p_idx == 4'>
+                    AND c_idx BETWEEN 16 AND 20
+                </when>
+                <when test='p_idx == 5'>
+                    AND c_idx BETWEEN 21 AND 25
+                </when>
+            </choose>
+        </if>
+        <if test="searchWord != null">
+            <choose>
+                <when test='searchField == "i_name"'>
+                    AND i_name like CONCAT('%', #{searchWord}, '%')
+                </when>
+                <when test='searchField == "s_storename"'>
+                    AND s_storename like CONCAT('%', #{searchWord}, '%')
+                </when>
+            </choose>
+        </if>
+        AND i_state = 1
+        <if test="orderByType != null">
+            <choose>
+                <when test='orderByType == "pop"'>
+                    ORDER BY comment_count desc, avg_star desc
+                </when>
+                <when test='orderByType == "new"'>
+                    ORDER BY i_idx desc
+                </when>
+            </choose>
+        </if>
+        <choose>
+            <when test="viewNum != 0">
+                LIMIT #{startIdx}, #{viewNum}
+            </when>
+            <otherwise>
+                LIMIT 8
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getItems" parameterType="searchVO" resultType="itemVO">
+        SELECT * FROM vw_item WHERE 1 = 1
+        <if test='c_idx != 0'>
+            AND c_idx = #{c_idx}
+        </if>
+        <if test='p_idx != 0'>
+            <choose>
+                <when test='p_idx == 1'>
+                    AND c_idx BETWEEN 1 AND 5
+                </when>
+                <when test='p_idx == 2'>
+                    AND c_idx BETWEEN 6 AND 10
+                </when>
+                <when test='p_idx == 3'>
+                    AND c_idx BETWEEN 11 AND 15
+                </when>
+                <when test='p_idx == 4'>
+                    AND c_idx BETWEEN 16 AND 20
+                </when>
+                <when test='p_idx == 5'>
+                    AND c_idx BETWEEN 21 AND 25
+                </when>
+            </choose>
+        </if>
+        <if test="searchWord != null">
+            <choose>
+                <when test='searchField == "i_name"'>
+                    AND i_name like CONCAT('%', #{searchWord}, '%')
+                </when>
+                <when test='searchField == "s_storename"'>
+                    AND s_storename like CONCAT('%', #{searchWord}, '%')
+                </when>
+            </choose>
+        </if>
+        AND i_state = 1
+        <if test="orderByType != null">
+            <choose>
+                <when test='orderByType == "pop"'>
+                    ORDER BY comment_count desc, avg_star desc
+                </when>
+                <when test='orderByType == "new"'>
+                    ORDER BY i_idx desc
+                </when>
+            </choose>
+        </if>
+        <choose>
+            <when test="viewNum != 0">
+                LIMIT #{startIdx}, #{viewNum}
+            </when>
+            <otherwise>
+                LIMIT 8
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getTotalCount" parameterType="searchVO" resultType="int">
+        select count(*) from tb_category c, tb_item i, tb_seller_info si
+        where i.c_idx = c.c_idx
+        AND i.s_idx = si.s_idx
+        <if test='c_idx != 0'>
+            AND i.c_idx = #{c_idx}
+        </if>
+        <if test='p_idx != 0'>
+            <choose>
+                <when test='p_idx == 1'>
+                    AND i.c_idx BETWEEN 1 AND 5
+                </when>
+                <when test='p_idx == 2'>
+                    AND i.c_idx BETWEEN 6 AND 10
+                </when>
+                <when test='p_idx == 3'>
+                    AND i.c_idx BETWEEN 11 AND 15
+                </when>
+                <when test='p_idx == 4'>
+                    AND i.c_idx BETWEEN 16 AND 20
+                </when>
+                <when test='p_idx == 5'>
+                    AND i.c_idx BETWEEN 21 AND 25
+                </when>
+            </choose>
+        </if>
+        <if test="searchWord != null">
+            <choose>
+                <when test='searchField == "i_name"'>
+                    AND i_name like CONCAT('%', #{searchWord}, '%')
+                </when>
+                <when test='searchField == "s_storename"'>
+                    AND s_storename like CONCAT('%', #{searchWord}, '%')
+                </when>
+            </choose>
+        </if>
+        AND i_state = 1
+    </select>
+
+    <insert id="insertReview" parameterType="reviewVO">
+        INSERT INTO tb_buyer_review (bos_idx, br_content, br_star)
+        VALUES (#{bos_idx}, #{br_content}, #{br_star})
+    </insert>
+
+    <select id="getReviews" parameterType="searchVO" resultType="reviewVO">
+        SELECT * FROM tb_buyer_review br, tb_buyer_info bi, tb_buyer_order_state bos, tb_buyer_order bo
+        WHERE br.bos_idx = bos.bos_idx
+        AND bos.bo_idx = bo.bo_idx
+        AND bi.b_idx = bo.b_idx
+        <if test="searchWord != null">
+            AND bos_option like CONCAT('%', #{searchWord}, '%')
+        </if>
+        <if test="br_star != 0">
+            AND br_star = #{br_star}
+        </if>
+        AND i_idx = #{i_idx}
+    </select>
+
+    <select id="getReviewTotalCount" parameterType="searchVO" resultType="int">
+        SELECT count(*) FROM tb_buyer_review br, tb_buyer_info bi, tb_buyer_order_state bos, tb_buyer_order bo
+        WHERE br.bos_idx = bos.bos_idx
+        AND bos.bo_idx = bo.bo_idx
+        AND bi.b_idx = bo.b_idx
+        <if test="searchWord != null">
+            AND bos_option like CONCAT('%', #{searchWord}, '%')
+        </if>
+        <if test="br_star != 0">
+            AND br_star = #{br_star}
+        </if>
+        AND i_idx = #{i_idx}
+    </select>
+
+    <delete id="deleteItem" parameterType="int">
+        DELETE FROM tb_item WHERE i_idx = #{i_idx}
+    </delete>
+    <delete id="deleteBuyerOrderStateByItemIdx" parameterType="int">
+        DELETE FROM tb_buyer_order_state WHERE i_idx = #{i_idx}
+    </delete>
+    <delete id="deleteItemImgByItemIdx" parameterType="int">
+        DELETE FROM tb_item_img WHERE i_idx = #{i_idx}
+    </delete>
+
+    <!-- 자식 테이블(tb_item_option)에서 레코드 삭제 -->
+    <delete id="deleteItemOptionByItemIdx" parameterType="int">
+        DELETE FROM tb_item_option WHERE i_idx = #{i_idx}
+    </delete>
+
+    <!-- 자식 테이블(tb_item_thumbnail)에서 레코드 삭제 -->
+    <delete id="deleteItemThumbnailByItemIdx" parameterType="int">
+        DELETE FROM tb_item_thumbnail WHERE i_idx = #{i_idx}
+    </delete>
+
+    <select id="findRandomItems" parameterType="int" resultType="com.lunastore.vo.ItemVO">
+        SELECT i.*, img.i_saveimg0
+        FROM tb_item i
+        JOIN tb_item_img img ON i.i_idx = img.i_idx
+        ORDER BY RAND()
+        LIMIT #{limit}
+    </select>
+
+    <select id="getReviewCountByBosIdx" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM tb_buyer_order_state WHERE bos_idx = #{bos_idx}
+    </select>
+
+    <!-- 동일한 bos_idx에 리뷰가 이미 존재하는지 확인 -->
+    <select id="getExistingReviewCountByBosIdx" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM tb_buyer_review WHERE bos_idx = #{bos_idx}
+    </select>
+
+    <!-- 특정 리뷰 조회 -->
+    <select id="getReviewById" parameterType="int" resultType="ReviewVO">
+        SELECT br.*, bo.b_idx AS buyerId, i.i_idx AS itemId, b.b_profile, b.b_nickname
+        FROM tb_buyer_review br
+        JOIN tb_buyer_order_state bos ON br.bos_idx = bos.bos_idx
+        JOIN tb_buyer_order bo ON bos.bo_idx = bo.bo_idx
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        JOIN tb_buyer_info b ON bo.b_idx = b.b_idx
+        WHERE br.br_idx = #{reviewId}
+    </select>
+
+    <!-- 특정 사용자의 모든 리뷰 조회 -->
+    <select id="getReviewsByBuyerId" parameterType="int" resultType="ReviewVO">
+        SELECT br.*, bo.b_idx AS buyerId, i.i_idx AS itemId, b.b_profile, b.b_nickname
+        FROM tb_buyer_review br
+        JOIN tb_buyer_order_state bos ON br.bos_idx = bos.bos_idx
+        JOIN tb_buyer_order bo ON bos.bo_idx = bo.bo_idx
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        JOIN tb_buyer_info b ON bo.b_idx = b.b_idx
+        WHERE bo.b_idx = #{buyerId} <!-- 수정된 부분 -->
+        ORDER BY br.br_postdate DESC
+    </select>
+
+    <!-- 특정 상품의 모든 리뷰 조회 -->
+    <select id="getReviewsByItemId" parameterType="int" resultType="ReviewVO">
+        SELECT br.*, bo.b_idx AS buyerId, i.i_idx AS itemId, b.b_profile, b.b_nickname
+        FROM tb_buyer_review br
+        JOIN tb_buyer_order_state bos ON br.bos_idx = bos.bos_idx
+        JOIN tb_buyer_order bo ON bos.bo_idx = bo.bo_idx
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        JOIN tb_buyer_info b ON bo.b_idx = b.b_idx
+        WHERE i.i_idx = #{itemId} <!-- 수정된 부분 -->
+        ORDER BY br.br_postdate DESC
+    </select>
+</mapper>

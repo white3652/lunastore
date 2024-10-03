@@ -1,0 +1,240 @@
+/* #region 상단 타이틀 */
+.m_sellerFindPw_header1 {
+	width: 100%;
+	height: 60px;
+	background-color: #ffffff;
+}
+
+.arrow_small {
+	rotate: -90deg;
+	display: -webkit-inline-box;
+}
+
+.m_sellerFindPw_header {
+	margin: 0 auto;
+	width: 1200px;
+	height: 60px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #ffffff;
+}
+
+.m_sellerFindPw_header_acc {
+	font-size: 20px;
+	font-family: 'NEXONLv1GothicBold';
+	margin-left: 20px;
+}
+
+.m_sellerFindPw_logout {
+	text-decoration: none;
+	color: #0071e3;
+	font-size: 12px;
+	font-weight: 100;
+}
+
+.a12 {
+	width: 12px;
+	height: 10px;
+	margin-right: 20px;
+	background-size: 12px;
+	filter: invert(28%) sepia(26%) saturate(6131%) hue-rotate(195deg)
+		brightness(102%) contrast(107%);
+}
+/* #endregion */
+
+._hr{
+    width: 1200px;
+    margin: 0 auto;
+    border: 1px solid #858585;
+}
+
+.m_sellerFindPw_findPage1{
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.m_sellerFindPw_findPwTitle{
+    margin-left: 20px;
+    margin-top: 60px;
+    font-size: 26px;
+    font-family: 'NEXONLv1GothicBold';
+}
+
+.m_sellerFindPw_findPwSubTitle{
+    margin-top: 40px;
+    margin-left: 20px;
+    font-size: 16px;
+}
+
+.m_sellerFindPw_taxidRegion {
+    width: 400px;
+    height: 80px;
+    border: 1px solid #858585;
+    border-radius: 10px;
+    position: relative;
+    margin-left: 20px;
+    transition: 0.4s;
+    margin-top: 20px;
+}
+
+.m_sellerFindPw_taxidInput {
+    width: 360px;
+    height: 60px;
+    margin-top: 20px;
+    margin-left: 20px;
+    outline: none;
+    font-size: 20px;
+    border: none;
+}
+
+.m_sellerFindPw_taxidTitle {
+    position: absolute;
+    left: 20px;
+    bottom: 28px;
+    font-size: 20px;
+    color: #858585;
+    transition: 0.4s;
+}
+
+.m_sellerFindPw_nextRegion{
+    margin-top: 20px;
+    margin-left: 20px;
+    width: 120px;
+}
+
+.m_sellerFindPw_nextBtn{
+    width: 120px;
+    height: 40px;
+    background-color: #0071e3;
+    border-radius: 10px;
+    text-align: center;
+    color: #ffffff;
+    align-items: center;
+    display: grid;
+}
+
+
+
+.m_sellerFindPw_findPage2{
+    width: 1200px;
+    margin: 0 auto;
+    display: none;
+}
+
+.m_sellerFindPw_findPwTitle{
+    margin-left: 20px;
+    margin-top: 60px;
+    font-size: 26px;
+    font-family: 'NEXONLv1GothicBold';
+}
+
+.m_sellerFindPw_emailRegion {
+    width: 400px;
+    height: 80px;
+    border: 1px solid #858585;
+    border-radius: 10px;
+    position: relative;
+    margin-left: 20px;
+    transition: 0.4s;
+    margin-top: 20px;
+}
+
+.m_sellerFindPw_emailInput {
+    width: 360px;
+    height: 60px;
+    margin-top: 20px;
+    margin-left: 20px;
+    outline: none;
+    font-size: 20px;
+    border: none;
+}
+
+.m_sellerFindPw_emailTitle {
+    position: absolute;
+    left: 20px;
+    bottom: 28px;
+    font-size: 20px;
+    color: #858585;
+    transition: 0.4s;
+}
+
+.m_sellerFindPw_nextRegion{
+    margin-top: 20px;
+    margin-left: 20px;
+    width: 120px;
+}
+
+.m_sellerFindPw_nextBtn{
+    width: 120px;
+    height: 40px;
+    background-color: #0071e3;
+    border-radius: 10px;
+    text-align: center;
+    color: #ffffff;
+    align-items: center;
+    display: grid;
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+.m_sellerFindPw_nextBtn:hover{
+    width: 120px;
+    height: 40px;
+    background-color: #0f7fee;
+    border-radius: 10px;
+    text-align: center;
+    color: #ffffff;
+    align-items: center;
+    display: grid;
+}
+
+.m_sellerFindPw_submitRegion{
+    display: flex;
+    margin-left: 20px;
+    margin-top: 20px;;
+}
+
+.m_sellerFindPw_returnBtn{
+    width: 120px;
+    height: 40px;
+    background-color: #ababab;
+    border-radius: 10px;
+    display: grid;
+    text-align: center;
+    align-items: center;
+    margin-right: 20px;
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+.m_sellerFindPw_returnBtn:hover{
+    background-color: #c6c6c6;
+}
+.m_sellerFindPw_submitBtn{
+    width: 120px;
+    height: 40px;
+    background-color: #0071e3;
+    border-radius: 10px;
+    text-align: center;
+    color: #ffffff;
+    align-items: center;
+    display: grid;
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+.m_sellerFindPw_submitBtn:hover{
+    width: 120px;
+    height: 40px;
+    background-color: #0f7fee;
+    border-radius: 10px;
+    text-align: center;
+    color: #ffffff;
+    align-items: center;
+    display: grid;
+}
+
+.m_sellerFindPw_submit{
+    display: none;
+}
