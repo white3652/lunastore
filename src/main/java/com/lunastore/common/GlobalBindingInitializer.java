@@ -16,7 +16,6 @@ public class GlobalBindingInitializer {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        // 빈 문자열을 null로 변환
         binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
     }
 }

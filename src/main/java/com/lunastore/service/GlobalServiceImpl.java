@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -46,7 +45,6 @@ public class GlobalServiceImpl implements GlobalService {
     }
     @PostConstruct
     public void init() {
-        // 프로젝트 루트 디렉토리를 기준으로 'uploads/' 경로 설정
         absoluteUploadPath = Paths.get(System.getProperty("user.dir")).resolve(uploadDir).toAbsolutePath();
         File uploadDirectory = absoluteUploadPath.toFile();
         if (!uploadDirectory.exists()) {

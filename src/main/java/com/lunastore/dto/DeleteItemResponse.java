@@ -6,7 +6,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class DeleteItemResponse {
-    // Getters and Setters
     private boolean success;
     private String message;
 

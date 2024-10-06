@@ -162,7 +162,6 @@ public class SellerServiceImpl implements SellerService {
             msg += vo.getS_pw();
         }
 
-        // SimpleMailMessage 생성
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
         message.setFrom(fromEmail);
@@ -182,9 +181,7 @@ public class SellerServiceImpl implements SellerService {
         response.setContentType("text/html;charset=utf-8");
         PrintWriter out = response.getWriter();
 
-        // 가입된 아이디가 없으면
         if (dao.matchBusinessnumEmail(vo) == 1) {
-            // 새로운 비밀번호 생성
             String newS_pw = generateRandomPassword();
             vo.setS_pw(newS_pw);
             dao.updatePassword(vo);
@@ -357,24 +354,6 @@ public class SellerServiceImpl implements SellerService {
         return dao.getSellerWithStoreInfo(s_idx);
     }
 
-//    @Override
-//    @Transactional
-//    public void processPayment(PaymentDTO paymentDTO) throws Exception {
-//        // 주문 조회
-//        OrderVO order = orderDAO.findOrderByBoIdx(paymentDTO.getBo_idx());
-//        if (order == null) {
-//            throw new Exception("주문을 찾을 수 없습니다.");
-//        }
-//
-//        // 결제 금액 검증
-//        double expectedAmount = order.getTotalPrice() + 3000; // 배송비 포함
-//        if (expectedAmount != paymentDTO.getAmount()) {
-//            throw new Exception("결제 금액이 일치하지 않습니다.");
-//        }
-//
-//        // 결제 상태 업데이트
-//        orderDAO.updateOrderStatus(paymentDTO.getBo_idx(), "결제 완료");
-//    }
 @Override
 public List<ReviewVO> getReviewsBySellerId(int s_idx) {
     return dao.getReviewsBySellerId(s_idx);
@@ -396,7 +375,6 @@ public List<ReviewVO> getReviewsBySellerId(int s_idx) {
             result = dao.getNewOrderCount(sellerId);
         } catch (SQLException e) {
             e.printStackTrace();
-            // 필요한 경우 로깅 또는 예외 처리 추가
         }
         return result;
     }
@@ -562,10 +540,9 @@ public List<ReviewVO> getReviewsBySellerId(int s_idx) {
 
     @Override
     public List<StoreStatusDTO> getStoreStatusList(int s_idx, LocalDate startDate, LocalDate endDate, int page, int pageSize) {
+
         int offset = (page - 1) * pageSize;
         List<StoreStatusDTO> storeStatusList = dao.getStoreStatusList(s_idx, startDate, endDate, offset, pageSize);
-
-        // formattedSalesAmount 설정
         storeStatusList = storeStatusList.stream().map(dto -> {
             String formatted = NumberFormat.getNumberInstance(Locale.KOREA).format(dto.getSalesAmount());
             dto.setFormattedSalesAmount(formatted);

@@ -62,7 +62,7 @@ public class ApiController {
     }
     @GetMapping("/orderStatusCounts")
     public ResponseEntity<OrderStatusCountsDTO> getOrderStatusCounts(HttpSession session) {
-        SellerVO seller = (SellerVO) session.getAttribute("seller"); // 세션에서 SellerVO 가져오기
+        SellerVO seller = (SellerVO) session.getAttribute("seller");
         if (seller == null || seller.getS_idx() <= 0) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

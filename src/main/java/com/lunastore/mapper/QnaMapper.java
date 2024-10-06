@@ -18,17 +18,7 @@ public interface QnaMapper {
 
     void updateAnswer(@Param("qnaIdx") Integer qnaIdx, @Param("answer") String answer);
 
-    int countInquiries(@Param("productNum") String productNum,
-                       @Param("memberNum") String memberNum,
-                       @Param("answeredStatus") String answeredStatus,
-                       @Param("startDate") Date startDate,
-                       @Param("endDate") Date endDate);
+    int countInquiries(@Param("productNum") String productNum, @Param("memberNum") String memberNum, @Param("answeredStatus") String answeredStatus, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    List<QnaVO> getInquiries(@Param("productNum") String productNum,
-                             @Param("memberNum") String memberNum,
-                             @Param("answeredStatus") String answeredStatus,
-                             @Param("startDate") Date startDate,
-                             @Param("endDate") Date endDate,
-                             @Param("offset") int offset,
-                             @Param("rowsPage") int rowsPage);
+    List<QnaVO> getInquiries(@Param("productNum") String productNum, @Param("memberNum") String memberNum, @Param("answeredStatus") String answeredStatus, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("offset") int offset, @Param("rowsPage") int rowsPage);
 }

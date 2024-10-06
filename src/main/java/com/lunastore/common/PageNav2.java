@@ -15,8 +15,6 @@ public class PageNav2 {
     private int totalPageNum;
     private int last_pageBlock;
     public void calculate() {
-        // 페이지 네비게이션 계산 로직 구현
-        // 예시:
         totalPageNum = (int) Math.ceil((double) totalRows / rows_page);
         pageBlock = (int) Math.ceil((double) pageNum / pages_pageBlock);
         startNum = (pageBlock - 1) * pages_pageBlock + 1;

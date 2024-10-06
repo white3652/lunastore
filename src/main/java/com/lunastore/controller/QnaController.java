@@ -23,11 +23,7 @@ public class QnaController {
 
     @PostMapping("/submit")
     @Transactional
-    public String submitQuestion(@RequestParam("i_idx") Integer itemId,
-                                 @RequestParam("title") String title, // 제목 추가
-                                 @RequestParam("question") String question,
-                                 HttpSession session,
-                                 RedirectAttributes redirectAttributes) {
+    public String submitQuestion(@RequestParam("i_idx") Integer itemId, @RequestParam("title") String title, @RequestParam("question") String question, HttpSession session, RedirectAttributes redirectAttributes) {
         BuyerVO buyer = (BuyerVO) session.getAttribute("buyer");
 
         if (buyer == null) {
@@ -35,7 +31,6 @@ public class QnaController {
             return "redirect:/buyer/login";
         }
 
-        // 상품의 판매자 s_idx 가져오기
         ItemVO item = itemService.view(itemId);
         if (item == null) {
             redirectAttributes.addFlashAttribute("message", "존재하지 않는 상품입니다.");
@@ -46,7 +41,7 @@ public class QnaController {
         qnaVO.setI_idx(itemId);
         qnaVO.setB_idx(buyer.getB_idx());
         qnaVO.setS_idx(item.getS_idx());
-        qnaVO.setQna_title(title); // 제목 설정
+        qnaVO.setQna_title(title);
         qnaVO.setQna_question(question);
 
         try {
@@ -66,18 +61,14 @@ public class QnaController {
     // 답변 제출 처리
     @PostMapping("/{qnaIdx}/answer")
     @Transactional
-    public String submitAnswer(@PathVariable("qnaIdx") Integer qnaIdx,
-                               @RequestParam("answer") String answer,
-                               HttpSession session,
-                               RedirectAttributes redirectAttributes) {
+    public String submitAnswer(@PathVariable("qnaIdx") Integer qnaIdx, @RequestParam("answer") String answer, HttpSession session, RedirectAttributes redirectAttributes) {
         SellerVO seller = (SellerVO) session.getAttribute("seller");
 
         if (seller == null) {
             redirectAttributes.addFlashAttribute("message", "로그인이 필요합니다.");
-            return "redirect:/seller/login"; // 판매자 로그인 페이지로 리다이렉트
+            return "redirect:/seller/login";
         }
 
-        // 해당 Q&A 조회
         QnaVO qna = null;
         try {
             qna = qnaService.getQnaById(qnaIdx);

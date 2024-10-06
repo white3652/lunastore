@@ -44,7 +44,6 @@ public class CartController {
             return response;
         }
 
-        // 세션에서 b_idx 설정
         cartVO.setB_idx(buyerVO.getB_idx());
 
         try {
@@ -119,13 +118,11 @@ public class CartController {
             recommendList = new ArrayList<>();
         }
         int itemCount = cartList.size();
-        // formattedCartList를 모델에 추가
         model.addAttribute("cartList", formattedCartList);
         model.addAttribute("buyer", buyer);
         model.addAttribute("interestList", interestList);
         model.addAttribute("recommendList", recommendList);
         model.addAttribute("itemCount", itemCount);
-        // 로그로 리스트 크기 확인
         log.info("Interest List Size: {}", interestList.size());
         log.info("Recommend List Size: {}", recommendList.size());
         log.info("Item Count: {}", itemCount);
@@ -137,7 +134,6 @@ public class CartController {
     public Map<String, Object> updateCartQuantityWithPrice(@RequestBody CartVO cartVO) {
         Map<String, Object> result = new HashMap<>();
 
-        // 수량 업데이트 로직 (DB 업데이트)
         boolean isUpdated = cartService.updateCartQuantity(cartVO.getI_idx(), cartVO.getI_count());
 
         if (isUpdated) {

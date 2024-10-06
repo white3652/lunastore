@@ -142,23 +142,19 @@ public class BuyerController {
 
     @GetMapping("/buyerUpdatePage1")
     public String buyerUpdatePage1(@RequestParam int b_idx, Model model) throws SQLException {
-        // b_idx로 Buyer 정보 조회
+
         BuyerVO buyer = buyerService.getBuyerById(b_idx);
 
-        // b_birth가 String 타입일 경우
         if (buyer.getB_birth() != null && !buyer.getB_birth().isEmpty()) {
-            // b_birth가 'yyyy-MM-dd' 형식이라고 가정하고 LocalDate로 변환
             DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate birthDate = LocalDate.parse(buyer.getB_birth(), inputFormatter);
 
-            // 원하는 출력 형식으로 변환
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
             String formattedDate = birthDate.format(outputFormatter);
 
-            model.addAttribute("formattedDate", formattedDate);  // 포맷된 날짜 추가
+            model.addAttribute("formattedDate", formattedDate);
         }
 
-        // Model에 Buyer 객체 추가
         model.addAttribute("buyer", buyer);
 
         return "buyer/user/buyerUpdatePage1";
@@ -190,11 +186,8 @@ public class BuyerController {
         if (newVO != null) {
             updateSessionWithBuyer(request.getSession(), newVO);
 
-            // 리다이렉트 후에도 buyer 정보 유지
             redirectAttributes.addFlashAttribute("buyer", newVO);
 
-            // 리다이렉션할 URL 리턴
-            System.out.println("Redirecting to: " + viewPage);
             return viewPage;
         }
         return "buyer/user/buyerUpdatePage";
@@ -212,7 +205,6 @@ public class BuyerController {
             viewPage = "buyer/user/buyerUpdatePage1?b_idx=" + b_idx;
         }
 
-        // 파일 저장 디렉토리 경로 및 파일 처리
         try {
             MultipartFile tempProfile = buyerVO.getB_tempprofile();
             if (tempProfile != null && !tempProfile.isEmpty()) {
@@ -221,24 +213,19 @@ public class BuyerController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // 예외 발생 시 적절한 에러 페이지로 리다이렉트하거나 에러 메시지 설정
         }
 
-        // 성별 처리 및 업데이트
         if (buyerVO.getB_gender() != null) {
             buyerVO.setB_gender(buyerVO.getB_gender());
         }
 
-        // 서비스 호출로 업데이트
         BuyerVO newVO = buyerService.updateBuyerInfo(buyerVO);
 
         if (newVO != null) {
-            // 세션 업데이트
             HttpSession session = request.getSession();
             session.removeAttribute("buyer");
             session.setAttribute("buyer", newVO);
 
-            // 리다이렉트 경로 설정
             if (buyerVO.getB_tempprofile() != null || buyerVO.getB_nickname() != null) {
                 viewPage = "redirect:/buyer/buyerUpdatePage?b_idx=" + b_idx;
             } else if (buyerVO.getB_gender() != null) {

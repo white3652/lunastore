@@ -10,10 +10,8 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lunastore.common.PageNav;
-import com.lunastore.dao.BuyerDAO;
 import com.lunastore.dto.*;
 import com.lunastore.service.*;
-import com.lunastore.util.NumberUtils;
 import com.lunastore.vo.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -22,7 +20,6 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -172,7 +169,6 @@ public class OrderController {
                     return cart;
                 })
                 .collect(Collectors.toList());
-        // 관심 상품 및 추천 상품 조회
         List<ItemVO> interestList = itemService.getRandomItems(3);
         if (interestList == null) {
             interestList = new ArrayList<>();
@@ -203,7 +199,6 @@ public class OrderController {
             log.debug("Received OrderVO: {}", orderVO);
             int bo_idx = orderService.insertOrder(orderVO);
 
-            // bo_idx를 포함한 응답 객체 생성
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "주문이 성공적으로 처리되었습니다.");
@@ -225,7 +220,7 @@ public class OrderController {
     @ResponseBody
     public ResponseEntity<?> successOrder(@RequestBody OrderVO orderVO) {
         try {
-            orderService.updateOrderState(orderVO.getBo_idx(), 1); // bos_state = 1 (결제 완료)
+            orderService.updateOrderState(orderVO.getBo_idx(), 1);
             return ResponseEntity.ok(new ApiResponse(true, "결제가 성공적으로 완료되었습니다."));
         } catch (Exception e) {
             log.error("Order state update failed: ", e);
@@ -251,7 +246,7 @@ public class OrderController {
             return "redirect:/login";
         }
 
-        log.debug("orderList method START called with b_idx: {}", b_idx); // 시작 로그
+        log.debug("orderList method START called with b_idx: {}", b_idx);
         // 전체 주문 수 설정
         int totalOrders = orderService.getTotalCount(b_idx);
         pageNav.setTotalRows(totalOrders);
@@ -274,7 +269,7 @@ public class OrderController {
         model.addAttribute("lastSlashIndex", lastSlashIndex);
         model.addAttribute("jspPage", jspPage);
         log.debug("Fetched Orders Details: " + orders); // 상세 로그
-        log.debug("orderList method END called with b_idx: {}", b_idx); // 종료 로그
+        log.debug("orderList method END called with b_idx: {}", b_idx);
         return "buyer/service/buyerOrderList";
     }
 
@@ -322,10 +317,8 @@ public class OrderController {
                 return ResponseEntity.badRequest().body(new ApiResponse(false, "상품명이 누락되었습니다."));
             }
 
-            // 주문 생성 및 주소 저장
             orderService.submitNewOrder(orderVO);
 
-            // 응답 생성
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "주문이 성공적으로 처리되었습니다.");
@@ -370,7 +363,7 @@ public class OrderController {
         }
 
         List<OrderViewDTO> orders = orderService.getOrderViewByBoIdx(orderId);
-        log.debug("Fetched orders: {}", orders); // 데이터 로깅 추가
+        log.debug("Fetched orders: {}", orders);
 
         if (orders.isEmpty() || orders.get(0).getB_idx() != b_idx) {
             return "redirect:/order/orderList?error=notfound";

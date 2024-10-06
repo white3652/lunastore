@@ -12,7 +12,7 @@ import java.util.Map;
 @Repository
 @RequiredArgsConstructor
 public class SettlementDAO {
-    public static final String MAPPER = "com.lunastore.mapper.SettlementMapper"; // 별도의 Mapper 네임스페이스 사용 권장
+    public static final String MAPPER = "com.lunastore.mapper.SettlementMapper";
     private final SqlSession sqlSession;
 
     public List<SettlementDTO> getSettlementData(String startDate, String endDate, int s_idx) {

@@ -37,21 +37,18 @@ public class ItemVO {
     private String i_thumbnail;
     private Date i_regdate;
     private Date i_modifydate;
-
     private double avg_star;
     private int comment_count;
-    private int orderCount;    // 주문 수
-    private int inquiryCount;  // 문의 수
-    private int reviewCount;   // 리뷰 수
-    private Integer salesAmount;   // 매출액
+    private int orderCount;
+    private int inquiryCount;
+    private int reviewCount;
+    private Integer salesAmount;
     private MultipartFile i_img0;
     private MultipartFile i_img1;
     private MultipartFile i_img2;
     private MultipartFile i_img3;
     private MultipartFile i_img4;
-
     private String formattedSalesAmount;
-    // 숫자 타입의 가격을 반환하는 메서드 추가
     public double getNumericPrice() {
         if (i_price != null && !i_price.isEmpty()) {
             try {

@@ -46,8 +46,6 @@ public class QnaServiceImpl implements QnaService {
     public List<QnaVO> getInquiries(Integer i_idx, Integer b_idx, String answeredStatus, Date startDate, Date endDate, int pageNum, int rowsPage) throws Exception {
         int offset = (pageNum - 1) * rowsPage;
         List<QnaVO> inquiries = qnaDAO.getInquiries(i_idx, b_idx, answeredStatus, startDate, endDate, offset, rowsPage);
-
-        // 포맷된 상품번호와 회원번호 설정
         for (QnaVO inquiry : inquiries) {
             inquiry.formatNumbers();
         }

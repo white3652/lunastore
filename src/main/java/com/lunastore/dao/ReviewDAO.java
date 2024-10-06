@@ -17,6 +17,4 @@ public class ReviewDAO {
     public List<ReviewDTO> getRecentReviewsBySeller(int s_idx) {
         return sqlSession.selectList(MAPPER + ".getRecentReviewsBySeller", s_idx);
     }
-
-    // 필요한 추가 메서드가 있으면 여기에 추가
 }

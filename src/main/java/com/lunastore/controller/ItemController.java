@@ -110,7 +110,6 @@ public class ItemController {
 
         for (ItemVO item : itemList) {
             try {
-                // i_price에서 쉼표와 원화 기호 제거 후 BigDecimal로 변환
                 BigDecimal price = new BigDecimal(item.getI_price().replace(",", "").replace("원", ""));
                 String formatted = currencyFormatter.format(price);
                 formattedPriceMap.put(item.getI_idx(), formatted);
@@ -135,14 +134,12 @@ public class ItemController {
     private List<Map<String, Object>> getTranslatedCategories(Locale locale) {
         List<Map<String, Object>> categories = new ArrayList<>();
 
-        // 메인 카테고리 정의
         Map<Integer, String> mainCategories = new LinkedHashMap<>();
-//        mainCategories.put(0, "category.all");
-        mainCategories.put(1, "category.digital");      // 디지털/가전
-        mainCategories.put(2, "category.interior");     // 인테리어
-        mainCategories.put(3, "category.food");         // 식품
-        mainCategories.put(4, "category.clothing");     // 의류
-        mainCategories.put(5, "category.lifestyle");    // 생활
+        mainCategories.put(1, "category.digital");
+        mainCategories.put(2, "category.interior");
+        mainCategories.put(3, "category.food");
+        mainCategories.put(4, "category.clothing");
+        mainCategories.put(5, "category.lifestyle");
 
         // 각 메인 카테고리에 해당하는 서브카테고리 c_idx 목록
         Map<Integer, List<Integer>> subCategoryMap = new HashMap<>();
@@ -180,7 +177,7 @@ public class ItemController {
                         log.debug("Loaded sub category: key={}, name={}", subCatKey, subCatName);
                     } catch (NoSuchMessageException e) {
                         log.error("Message key '{}' not found for locale '{}'", subCatKey, locale);
-                        subCatName = "알 수 없음"; // 기본값 또는 다른 처리
+                        subCatName = "알 수 없음";
                     }
 
                     Map<String, Object> subCat = new HashMap<>();
@@ -206,7 +203,6 @@ public class ItemController {
         }
     }
 
-    // 가격을 포맷팅하는 메서드
     private String formatPrice(int price) {
         DecimalFormat formatter = new DecimalFormat("#,###");
         return formatter.format(price);
@@ -287,7 +283,6 @@ public class ItemController {
         model.addAttribute("starArr", starArr);
         int avgStarInt = (int) item.getAvg_star();
         model.addAttribute("avgStarInt", avgStarInt);
-        // Q&A 리스트 조회
         List<QnaVO> qnaList = null;
         try {
             qnaList = qnaService.getQnasByItemId(searchVO.getI_idx());
@@ -301,7 +296,6 @@ public class ItemController {
 
         model.addAttribute("qnaList", qnaList);
 
-        // 사용자 역할 확인 (구매자 또는 판매자)
         boolean isBuyer = buyer != null;
         boolean isSellerUser = seller != null && !isBuyer;
 
@@ -312,7 +306,7 @@ public class ItemController {
 
         log.debug("isBuyer: " + isBuyer + ", isSeller: " + isSellerUser);
 
-        return "buyer/service/view"; // 단일 템플릿 사용
+        return "buyer/service/view";
     }
 
 

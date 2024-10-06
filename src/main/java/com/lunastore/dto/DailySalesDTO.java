@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DailySalesDTO {
-    private String date; // 날짜 (예: "2023-09-27")
-    private int salesAmount; // 매출액
+    private String date;
+    private int salesAmount;
 }

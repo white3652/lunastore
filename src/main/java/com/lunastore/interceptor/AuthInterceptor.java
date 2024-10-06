@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Component
@@ -15,7 +14,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        HttpSession session = request.getSession(false); // 세션이 없으면 새로 생성하지 않음
+        HttpSession session = request.getSession(false);
 
         boolean isBuyerLoggedIn = false;
         boolean isSellerLoggedIn = false;
@@ -28,7 +27,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         String method = request.getMethod();
 
-        // 로그인, 회원가입, 비밀번호 찾기 등은 인증을 필요로 하지 않음
         if (
                 requestURI.startsWith("/buyer/login") ||
                         requestURI.startsWith("/buyer/buyerLoginProcess") ||
@@ -51,13 +49,12 @@ public class AuthInterceptor implements HandlerInterceptor {
                         requestURI.startsWith("/resources/") || // 정적 리소스 경로
                         requestURI.startsWith("/static/")
         ) {
-            return true; // 인증 없이 접근 허용
+            return true;
         }
 
-        // /api/** 경로에 대한 인증 검사
         if (requestURI.startsWith("/api/")) {
             if (isBuyerLoggedIn || isSellerLoggedIn) {
-                return true; // 인증된 사용자
+                return true;
             } else {
                 log.warn("Unauthorized API access attempt to: " + requestURI);
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -66,10 +63,9 @@ public class AuthInterceptor implements HandlerInterceptor {
             }
         }
 
-        // /buyer/** 경로에 대한 인증 검사
         if (requestURI.startsWith("/buyer/")) {
             if (isBuyerLoggedIn) {
-                return true; // 인증된 buyer
+                return true;
             } else {
                 log.warn("Unauthorized access attempt to: " + requestURI);
                 response.sendRedirect(request.getContextPath() + "/buyer/login");
@@ -77,30 +73,23 @@ public class AuthInterceptor implements HandlerInterceptor {
             }
         }
 
-        // /seller/** 경로에 대한 인증 검사
         if (requestURI.startsWith("/seller/")) {
             if (isSellerLoggedIn) {
-                return true; // 인증된 seller
+                return true;
             } else {
                 log.warn("Unauthorized access attempt to: " + requestURI);
                 response.sendRedirect(request.getContextPath() + "/seller/sellerLogin");
                 return false;
             }
         }
-
-        // 그 외의 경로는 인증 없이 접근 허용 (필요 시 수정)
         return true;
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-                           org.springframework.web.servlet.ModelAndView modelAndView) throws Exception {
-        // 추가적인 로직이 필요하면 여기에 작성
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, org.springframework.web.servlet.ModelAndView modelAndView) throws Exception {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
-                                Object handler, Exception ex) throws Exception {
-        // 클린업 작업이 필요하면 여기에 작성
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
     }
 }

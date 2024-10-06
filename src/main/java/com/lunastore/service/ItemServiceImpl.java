@@ -70,9 +70,7 @@ public class ItemServiceImpl implements ItemService {
     public int deleteItem(int i_idx) {
         dao.deleteBuyerOrderStateByItemIdx(i_idx);
         dao.deleteItemImgByItemIdx(i_idx);
-        // 자식 테이블(tb_item_option)의 레코드 삭제
         dao.deleteItemOptionByItemIdx(i_idx);
-        // 자식 테이블(tb_item_thumbnail)의 레코드 삭제
         dao.deleteItemThumbnailByItemIdx(i_idx);
         return dao.deleteItem(i_idx);
     }
@@ -84,14 +82,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public boolean insertReview(ReviewVO reviewVO) {
-        // bos_idx가 유효한지 확인
         int reviewCount = dao.getReviewCountByBosIdx(reviewVO.getBos_idx());
         if (reviewCount == 0) {
             log.warn("유효하지 않은 bos_idx: " + reviewVO.getBos_idx());
             return false;
         }
 
-        // 동일한 bos_idx에 리뷰가 이미 존재하는지 확인
         int existingCount = dao.getExistingReviewCountByBosIdx(reviewVO.getBos_idx());
         if (existingCount > 0) {
             log.warn("이미 리뷰가 존재하는 bos_idx: " + reviewVO.getBos_idx());
@@ -104,22 +100,17 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ReviewDetailsDTO getReviewDetails(int reviewId) throws Exception {
-        // 특정 리뷰 가져오기
         ReviewVO mainReview = dao.getReviewById(reviewId);
         if (mainReview == null) {
             throw new Exception("리뷰를 찾을 수 없습니다.");
         }
 
-        // 리뷰 작성자 프로필 URL 설정
         String buyerProfileUrl = (mainReview.getB_profile() != null) ? uploadUrl + mainReview.getB_profile() : "/css/img/defaultProfile.png";
 
-        // 리뷰 작성자에 대한 다른 리뷰 가져오기
         List<ReviewVO> userReviews = dao.getReviewsByBuyerId(mainReview.getBuyerId());
 
-        // 해당 상품에 대한 리뷰 가져오기
         List<ReviewVO> productReviews = dao.getReviewsByItemId(mainReview.getItemId());
 
-        // DTO로 묶어서 반환
         ReviewDetailsDTO dto = new ReviewDetailsDTO();
         dto.setBuyerId(mainReview.getBuyerId());
         dto.setItemId(mainReview.getItemId());

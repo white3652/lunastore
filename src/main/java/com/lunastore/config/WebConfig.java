@@ -120,7 +120,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/seller/findPwProcess",
                         "/seller/sellerVerifyEmail",
                         "/seller/sellerVerifyEmailProcess",
-                        "/api/**", // API 경로는 인터셉터에서 별도로 처리
+                        "/api/**",
                         "/resources/**",
                         "/static/**",
                         "/",

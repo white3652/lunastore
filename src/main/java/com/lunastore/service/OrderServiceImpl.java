@@ -99,16 +99,12 @@ public class OrderServiceImpl implements OrderService {
         double calculatedTotalPrice = getTotalPrice(orderVO.getB_idx());
         orderVO.setTotalPrice(calculatedTotalPrice);
         log.debug("Calculated totalPrice: {}", calculatedTotalPrice);
-        // 주문 생성
         orderDAO.insertOrder(orderVO);
         log.debug("Generated bo_idx: {}", orderVO.getBo_idx());
 
-
-        // 주문 상태 생성
         if (orderVO.getOrderStateVO() != null && !orderVO.getOrderStateVO().isEmpty()) {
             for (OrderStateVO stateVO : orderVO.getOrderStateVO()) {
                 stateVO.setBo_idx(orderVO.getBo_idx());
-                // bos_state 초기값 설정
                 stateVO.setBos_state(1);
                 orderDAO.insertOrderState(stateVO);
                 log.debug("Inserted OrderStateVO: {}", stateVO);
@@ -116,17 +112,14 @@ public class OrderServiceImpl implements OrderService {
         } else {
             log.warn("OrderStateVO list is empty!");
         }
-        // 주소 저장
         if (orderVO.getAddressVO() != null) {
             AddressVO addressVO = orderVO.getAddressVO();
             addressVO.setB_idx(orderVO.getB_idx());
             orderDAO.insertAddress(addressVO);
         }
-        // 7. 카트 삭제
         if (orderVO != null && orderVO.getB_idx() != 0) {
             CartVO cartVO = new CartVO();
             cartVO.setB_idx(orderVO.getB_idx());
-//            cartDAO.deleteCompleteCart(cartVO);
             log.debug("Deleted cart for b_idx: {}", orderVO.getB_idx());
         } else {
             log.warn("주문 정보가 유효하지 않아 카트 삭제를 수행할 수 없습니다.");
@@ -142,8 +135,6 @@ public class OrderServiceImpl implements OrderService {
         addressVO.setBa_zipcode(orderVO.getBa_zipcode());
         addressVO.setBa_address(orderVO.getBa_address());
         addressVO.setBa_restaddress(orderVO.getBa_restaddress());
-
-        // 주소를 저장하는 DAO 메서드 호출
         orderDAO.insertAddress(addressVO);
     }
 
@@ -172,12 +163,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void updateOrderState(int bo_idx, int state) {
-        // Map에 bo_idx와 state 값을 담기
         Map<String, Object> params = new HashMap<>();
         params.put("bo_idx", bo_idx);
         params.put("bos_state", state);
-
-        // Map을 전달하여 orderDAO 호출
         orderDAO.updateOrderState(params);
     }
 
@@ -215,18 +203,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void confirmPurchase(int bo_idx) {
-        // findOrderStateByBoIdx가 여러 상태를 반환하므로 List로 받음
+
         List<Integer> states = orderDAO.findOrderStateByBoIdx(bo_idx);
 
-        // 모든 상태가 배송 완료 상태(4)인지 확인
         boolean allCompleted = states.stream().allMatch(state -> state == 4);
 
-        // 하나라도 배송완료가 아니면 예외 처리
         if (!allCompleted) {
             throw new RuntimeException("구매확정은 모든 상품이 배송완료 상태에서만 가능합니다.");
         }
 
-        // 구매확정 업데이트 처리
         int updated = orderDAO.confirmPurchase(bo_idx);
         if (updated == 0) {
             throw new RuntimeException("구매확정에 실패했습니다.");
@@ -236,7 +221,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderViewDTO> getOrderViewByBoIdx(int bo_idx) {
         List<OrderViewDTO> orders = orderDAO.findOrderViewWithStateByBoIdx(bo_idx);
-        log.debug("Fetched orders: {}", orders); // 데이터 로깅 추가
+        log.debug("Fetched orders: {}", orders);
         return orders.stream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
