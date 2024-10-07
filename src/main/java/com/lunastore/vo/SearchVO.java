@@ -20,7 +20,8 @@ public class SearchVO {
     private Date startDate;
     private Date endDate;
     private Integer s_idx;
-
+    private int offset;
+    private int limit;
     private String searchWord;
     private String searchField;
     private String orderByType;
@@ -39,4 +40,9 @@ public class SearchVO {
     // 추가: 리뷰 및 Q&A 별도의 페이지 번호
     private int reviewPageNum = 1;
     private int qnaPageNum = 1;
+
+    public void calculateOffset() {
+        this.offset = (this.pageNum - 1) * this.viewNum;
+        this.limit = this.viewNum;
+    }
 }

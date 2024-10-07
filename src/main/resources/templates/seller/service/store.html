@@ -81,32 +81,51 @@
                             <!-- 주문수 -->
                             <td>
                                 <span>
-                                    <a th:href="@{/seller/orders(date=${item.date})}" th:text="${item.orderCount}"></a> <span th:text="#{unit.orders}">건</span>
+                                    <a href="#" th:text="${item.orderCount}"></a> <span th:text="#{unit.orders}">건</span>
                                 </span>
                             </td>
                             <!-- 문의 -->
                             <td>
                                 <span>
-                                    <a th:href="@{/seller/inquiries(date=${item.date})}" th:text="${item.inquiryCount}"></a> <span th:text="#{unit.orders}">건</span>
+                                    <a href="#" th:text="${item.inquiryCount}"></a> <span th:text="#{unit.orders}">건</span>
                                 </span>
                             </td>
                             <!-- 리뷰 -->
                             <td>
                                 <span>
-                                    <a th:href="@{/seller/reviews(date=${item.date})}" th:text="${item.reviewCount}"></a> <span th:text="#{unit.orders}">건</span>
+                                    <a href="#" th:text="${item.reviewCount}"></a> <span th:text="#{unit.orders}">건</span>
                                 </span>
                             </td>
                             <!-- 매출액 -->
                             <td>
                                 <span>
-                                    <a th:href="@{/seller/sales(date=${item.date})}" th:text="${item.formattedSalesAmount}"></a> <span th:text="#{unit.currency}">원</span>
+                                    <a href="#" th:text="${item.formattedSalesAmount}"></a> <span th:text="#{unit.currency}">원</span>
                                 </span>
                             </td>
                         </tr>
                     </table>
                 </div>
-                <div class="seller_contents_table_pasing" id="td_paging">
-                    <span th:replace="~{common/salesPaging :: salesFragment}"></span>
+                <!-- 페이지네이션 영역 -->
+                <div class="seller_contents_table_pasing" th:if="${pageNav.totalPageNum > 1}">
+                    <div class="pagination">
+                        <!-- 이전 페이지 블록으로 이동 -->
+                        <th:block th:if="${pageNav.startPage > 1}">
+                            <a th:href="@{|${requestUrl}?pageNum=${pageNav.startPage - pageNav.pagesPerBlock < 1 ? 1 : pageNav.startPage - pageNav.pagesPerBlock}&startDate=${startDate}&endDate=${endDate}|}">&laquo;</a>
+                        </th:block>
+
+                        <!-- 페이지 번호 출력 -->
+                        <th:block th:each="p : ${#numbers.sequence(pageNav.startPage, pageNav.endPage)}">
+                            <a th:href="@{|${requestUrl}?pageNum=${p}&startDate=${startDate}&endDate=${endDate}|}"
+                               th:classappend="${p == pageNav.pageNum} ? 'active'">
+                                <span th:text="${p}"></span>
+                            </a>
+                        </th:block>
+
+                        <!-- 다음 페이지 블록으로 이동 -->
+                        <th:block th:if="${pageNav.endPage < pageNav.totalPageNum}">
+                            <a th:href="@{|${requestUrl}?pageNum=${pageNav.endPage + 1}&startDate=${startDate}&endDate=${endDate}|}">&raquo;</a>
+                        </th:block>
+                    </div>
                 </div>
             </div>
         </div>

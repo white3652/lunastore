@@ -282,7 +282,6 @@ public class BuyerController {
     @PostMapping("/passwordCheckProcess")
     @ResponseBody
     public int passwordCheckProcess(@RequestParam int b_idx, @RequestParam String b_pw) {
-        System.out.println("passwordCheckProcess 호출됨: b_idx=" + b_idx + ", b_pw=" + b_pw);
         return buyerService.passwordCheck(b_idx, b_pw);
     }
 
@@ -310,7 +309,6 @@ public class BuyerController {
 
     private String determineUpdatePage(BuyerVO buyerVO) {
         int b_idx = buyerVO.getB_idx();
-        System.out.println("Redirecting to page based on condition, b_idx: " + b_idx);
         if (buyerVO.getB_firstname() != null && buyerVO.getB_lastname() != null) {
             return "redirect:/buyer/buyerUpdatePage1?b_idx=" + b_idx;
         } else if (buyerVO.getB_tel() != null || buyerVO.getB_pw() != null) {

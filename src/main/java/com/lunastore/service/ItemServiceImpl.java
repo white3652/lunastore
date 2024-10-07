@@ -128,4 +128,8 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDTO> getItemsBySeller(int s_idx) {
         return dao.getItemsBySeller(s_idx);
     }
+    @Override
+    public int getListTotalCount(SearchVO searchVO) { // 새로운 메서드 추가
+        return dao.getListTotalCount(searchVO);
+    }
 }

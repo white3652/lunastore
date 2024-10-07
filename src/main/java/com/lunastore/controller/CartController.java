@@ -79,8 +79,6 @@ public class CartController {
     @PostMapping("/updateQuantity")
     @ResponseBody
     public Map<String, Object> updateCartQuantity(@RequestBody CartVO cartVO) {
-        System.out.println("b_idx: " + cartVO.getB_idx());
-        System.out.println("i_idx: " + cartVO.getI_idx());
         Map<String, Object> result = new HashMap<>();
         try {
             int updateResult = cartService.updateCartQuantity(cartVO);

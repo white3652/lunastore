@@ -530,37 +530,37 @@
             <when test="itemNum != '' or buyerNickname != '' or startDate != null or endDate != null">
                 SELECT count(*)
                 FROM tb_item
-                JOIN tb_buyer_info ON tb_item.s_idx = tb_buyer_info.b_idx
+                JOIN tb_seller ON tb_item.s_idx = tb_seller.s_idx
                 JOIN tb_buyer_order_state ON tb_item.i_idx = tb_buyer_order_state.i_idx
                 JOIN tb_buyer_order ON tb_buyer_order_state.bo_idx = tb_buyer_order.bo_idx
-                JOIN tb_seller ON tb_item.s_idx = tb_seller.s_idx
+                JOIN tb_buyer_info ON tb_buyer_order.b_idx = tb_buyer_info.b_idx
                 JOIN tb_buyer_review ON tb_buyer_order_state.bos_idx = tb_buyer_review.bos_idx
                 WHERE tb_seller.s_idx = #{s_idx}
                 <if test="itemNum != ''">
-                    and tb_item.i_idx = #{itemNum}
+                    AND tb_item.i_idx = #{itemNum}
                 </if>
                 <if test="buyerNickname != ''">
-                    and b_nickname like CONCAT('%', #{buyerNickname}, '%')
+                    AND tb_buyer_info.b_nickname LIKE CONCAT('%', #{buyerNickname}, '%')
                 </if>
                 <if test="startDate != null">
                     <![CDATA[
-                        and br_postdate >= #{startDate}
-                     ]]>
+                    AND br_postdate >= #{startDate}
+                ]]>
                 </if>
-                <if test="startDate != null">
+                <if test="endDate != null">
                     <![CDATA[
-                        and br_postdate <= CONCAT(#{endDate}, ' 23:59:59')
-                     ]]>
+                    AND br_postdate <= #{endDate}
+                ]]>
                 </if>
             </when>
 
             <otherwise>
                 SELECT count(*)
                 FROM tb_item
-                JOIN tb_buyer_info ON tb_item.s_idx = tb_buyer_info.b_idx
+                JOIN tb_seller ON tb_item.s_idx = tb_seller.s_idx
                 JOIN tb_buyer_order_state ON tb_item.i_idx = tb_buyer_order_state.i_idx
                 JOIN tb_buyer_order ON tb_buyer_order_state.bo_idx = tb_buyer_order.bo_idx
-                JOIN tb_seller ON tb_item.s_idx = tb_seller.s_idx
+                JOIN tb_buyer_info ON tb_buyer_order.b_idx = tb_buyer_info.b_idx
                 JOIN tb_buyer_review ON tb_buyer_order_state.bos_idx = tb_buyer_review.bos_idx
                 WHERE tb_seller.s_idx = #{s_idx}
             </otherwise>

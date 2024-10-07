@@ -58,7 +58,6 @@ public class QnaController {
         return "redirect:/item/view?i_idx=" + itemId;
     }
 
-    // 답변 제출 처리
     @PostMapping("/{qnaIdx}/answer")
     @Transactional
     public String submitAnswer(@PathVariable("qnaIdx") Integer qnaIdx, @RequestParam("answer") String answer, HttpSession session, RedirectAttributes redirectAttributes) {

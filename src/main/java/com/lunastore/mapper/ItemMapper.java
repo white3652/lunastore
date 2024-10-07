@@ -26,4 +26,5 @@ public interface ItemMapper {
     ReviewVO getReviewById(@Param("reviewId") int reviewId);
     List<ReviewVO> getReviewsByBuyerId(@Param("buyerId") int buyerId);
     List<ReviewVO> getReviewsByItemId(@Param("itemId") int itemId);
+    int getListTotalCount(SearchVO searchVO);
 }

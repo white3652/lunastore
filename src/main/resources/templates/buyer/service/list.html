@@ -109,7 +109,6 @@
                 </div>
                 <th:block th:unless="${#lists.isEmpty(itemList)}">
                     <a th:each="item, iterStat : ${itemList}"
-                       th:if="${(iterStat.index + 1) ge pageNav.startNum and (iterStat.index + 1) le pageNav.endNum}"
                        th:href="@{/item/view(i_idx=${item.i_idx})}" class="m_list_item">
                         <div class="m_list_item_info">
                             <img th:src="@{'/uploads/' + ${item.i_saveimg0}}" alt="Item Image">
@@ -123,8 +122,28 @@
                         </div>
                     </a>
                 </th:block>
-                <div id="td_paging" th:if="${not #lists.isEmpty(itemList)}">
-                    <span th:replace="~{common/paging :: commonFragment}"></span>
+                <!-- 페이지네이션 영역 -->
+                <div id="td_paging" th:if="${pageNav.totalPageNum > 1}">
+                    <div class="pagination">
+                        <!-- 이전 페이지로 이동 -->
+                        <th:block th:if="${pageNav.pageNum > 1}">
+                            <a th:href="@{|/item/list?pageNum=1|}">&laquo;</a>&nbsp;
+                            <a th:href="@{|/item/list?pageNum=${pageNav.pageNum - 1}|}">&lt;</a>
+                        </th:block>
+
+                        <!-- 페이지 번호 -->
+                        <th:block th:each="p : ${#numbers.sequence(pageNav.startPage, pageNav.endPage)}">
+                            <a th:href="@{|/item/list?pageNum=${p}|}" th:classappend="${p == pageNav.pageNum} ? 'active'">
+                                <span th:text="${p}"></span>
+                            </a>
+                        </th:block>
+
+                        <!-- 다음 페이지로 이동 -->
+                        <th:block th:if="${pageNav.pageNum < pageNav.totalPageNum}">
+                            <a th:href="@{|/item/list?pageNum=${pageNav.pageNum + 1}|}">&gt;</a>&nbsp;
+                            <a th:href="@{|/item/list?pageNum=${pageNav.totalPageNum}|}">&raquo;</a>
+                        </th:block>
+                    </div>
                 </div>
             </div>
         </div>

@@ -172,7 +172,7 @@ public class SellerServiceImpl implements SellerService {
             mailSender.send(message);
             dao.updatePassword(vo);
         } catch (Exception e) {
-            System.out.println("메일발송 실패 : " + e);
+            e.printStackTrace();
         }
     }
 
@@ -539,10 +539,13 @@ public List<ReviewVO> getReviewsBySellerId(int s_idx) {
     }
 
     @Override
-    public List<StoreStatusDTO> getStoreStatusList(int s_idx, LocalDate startDate, LocalDate endDate, int page, int pageSize) {
+    public List<StoreStatusDTO> getStoreStatusList(int s_idx, LocalDate startDate, LocalDate endDate,  int offset, int limit) {
 
-        int offset = (page - 1) * pageSize;
-        List<StoreStatusDTO> storeStatusList = dao.getStoreStatusList(s_idx, startDate, endDate, offset, pageSize);
+        if (offset < 0) {
+            System.out.println("서비스 레이어: 음수 offset 감지. offset을 0으로 설정.");
+            offset = 0;
+        }
+        List<StoreStatusDTO> storeStatusList = dao.getStoreStatusList(s_idx, startDate, endDate, offset, limit);
         storeStatusList = storeStatusList.stream().map(dto -> {
             String formatted = NumberFormat.getNumberInstance(Locale.KOREA).format(dto.getSalesAmount());
             dto.setFormattedSalesAmount(formatted);

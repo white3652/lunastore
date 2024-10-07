@@ -17,6 +17,7 @@
         <typeAlias alias="orderDTO" type="com.lunastore.dto.OrderDTO"/>
         <typeAlias alias="orderViewDTO" type="com.lunastore.dto.OrderViewDTO"/>
         <typeAlias alias="settlementDTO" type="com.lunastore.dto.SettlementDTO"/>
+        <typeAlias alias="storeStatusDTO" type="com.lunastore.dto.StoreStatusDTO"/>
         <typeAlias alias="qnaVO" type="com.lunastore.vo.QnaVO"/>
         <typeAlias alias="deliveryVO" type="com.lunastore.vo.DeliveryVO"/>
     </typeAliases>

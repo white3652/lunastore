@@ -1,9 +1,11 @@
 package com.lunastore.mapper;
 
+import com.lunastore.dto.StoreStatusDTO;
 import com.lunastore.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Mapper
@@ -62,5 +64,11 @@ public interface SellerMapper {
 
     int getUpcomingSettlement(@Param("s_idx") int sellerId);
 
-
+    List<StoreStatusDTO> getStoreStatusList(
+            @Param("s_idx") int s_idx,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("offset") int offset,
+            @Param("limit") int limit
+    );
 }

@@ -34,8 +34,6 @@ public class SettlementServiceImpl implements SettlementService {
     @Override
     @Transactional
     public boolean updateSettlement(SettlementDTO settlementDTO) {
-        // 정산 데이터 업데이트 로직 구현
-        // 예: DAO를 통해 데이터베이스 업데이트
         return settlementDAO.updateSettlement(settlementDTO) > 0;
     }
 }

@@ -35,7 +35,7 @@ public class FileApiController {
         BuyerVO buyerVO = (BuyerVO) session.getAttribute("buyer");
 
         if (sellerVO == null && buyerVO == null) {
-            return ""; // 인증되지 않은 사용자
+            return "";
         }
 
         if (image.isEmpty()) {

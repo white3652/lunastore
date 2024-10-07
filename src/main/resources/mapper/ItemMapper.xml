@@ -142,7 +142,43 @@
         </choose>
     </select>
 
-    <select id="getTotalCount" parameterType="searchVO" resultType="int">
+    <select id="getListTotalCount" parameterType="searchVO" resultType="int">
+        SELECT COUNT(*) FROM vw_item WHERE 1 = 1
+        <if test='c_idx != 0'>
+            AND c_idx = #{c_idx}
+        </if>
+        <if test='p_idx != 0'>
+            <choose>
+                <when test='p_idx == 1'>
+                    AND c_idx BETWEEN 1 AND 5
+                </when>
+                <when test='p_idx == 2'>
+                    AND c_idx BETWEEN 6 AND 10
+                </when>
+                <when test='p_idx == 3'>
+                    AND c_idx BETWEEN 11 AND 15
+                </when>
+                <when test='p_idx == 4'>
+                    AND c_idx BETWEEN 16 AND 20
+                </when>
+                <when test='p_idx == 5'>
+                    AND c_idx BETWEEN 21 AND 25
+                </when>
+            </choose>
+        </if>
+        <if test="searchWord != null and searchWord != ''">
+            <choose>
+                <when test='searchField == "i_name"'>
+                    AND i_name LIKE CONCAT('%', #{searchWord}, '%')
+                </when>
+                <when test='searchField == "s_storename"'>
+                    AND s_storename LIKE CONCAT('%', #{searchWord}, '%')
+                </when>
+            </choose>
+        </if>
+        AND i_state = 1
+    </select>
+    <select id="getTotalCount" parameterType="com.lunastore.vo.SearchVO" resultType="int">
         select count(*) from tb_category c, tb_item i, tb_seller_info si
         where i.c_idx = c.c_idx
         AND i.s_idx = si.s_idx

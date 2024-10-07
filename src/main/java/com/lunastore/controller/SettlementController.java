@@ -36,7 +36,6 @@ public class SettlementController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
 
-        // startDate 설정 (기본값: 7일 전)
         if (startDate == null || startDate.isEmpty()) {
             calendar.add(Calendar.DAY_OF_MONTH, -30);
             startDate = formatter.format(calendar.getTime());
@@ -69,7 +68,6 @@ public class SettlementController {
         return "seller/service/settlement";
     }
 
-    // 정산 데이터 업데이트 예시 (필요 시)
     @PostMapping("/update")
     public String updateSettlement(@ModelAttribute SettlementDTO settlementDTO, RedirectAttributes redirectAttributes) {
         try {

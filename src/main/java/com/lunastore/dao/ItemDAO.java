@@ -87,4 +87,8 @@ public class ItemDAO {
     public List<ItemDTO> getItemsBySeller(int s_idx) {
         return sqlSession.selectList(MAPPER + ".getItemsBySeller", s_idx);
     }
+
+    public int getListTotalCount(SearchVO vo) { // 새로운 메서드 추가
+        return sqlSession.selectOne(MAPPER + ".getListTotalCount", vo);
+    }
 }

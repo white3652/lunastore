@@ -24,7 +24,5 @@ public class GlobalModelAttributes {
         pageNav.setTotalRows(itemService.getTotalCount(searchVO));
         PageNav updatedPageNav = globalService.setPageNav(pageNav, searchVO.getPageNum(), searchVO.getPageBlock(), searchVO.getViewNum());
         model.addAttribute("pageNav", updatedPageNav);
-        // 로그 추가
-        System.out.println("pageNav 추가됨: " + updatedPageNav);
     }
 }

@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import com.lunastore.common.CustomIntEditor;
+import com.lunastore.common.ListPageNav;
 import com.lunastore.dto.DeleteItemResponse;
 import com.lunastore.dto.ItemDeleteRequest;
 import com.lunastore.service.QnaService;
@@ -14,6 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import com.lunastore.common.PageNav;
@@ -42,6 +47,10 @@ public class ItemController {
     private final SellerService sellerService;
     private final MessageSource messageSource;
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(int.class, "i_idx", new CustomIntEditor());
+    }
     @GetMapping("/write")
     public String write(Model model, HttpSession session) {
         SellerVO seller = (SellerVO) session.getAttribute("seller");
@@ -104,7 +113,25 @@ public class ItemController {
             searchVO.setOrderByType("pop");
         }
 
+        // 총 개수 조회
+        int totalCount = itemService.getListTotalCount(searchVO);
+        log.debug("Total count (List): {}", totalCount);
+        model.addAttribute("totalCount", totalCount);
+
+        // 새로운 ListPageNav 인스턴스 생성 및 설정
+        ListPageNav pageNav = new ListPageNav();
+        pageNav.setTotalRows(totalCount);
+        pageNav.setPageNum(searchVO.getPageNum());
+        pageNav.setRowsPerPage(searchVO.getViewNum());
+        pageNav.setPagesPerBlock(5); // 한 블록당 페이지 수 설정
+        pageNav.calculatePageNav();
+        model.addAttribute("pageNav", pageNav);
+        searchVO.calculateOffset();
         List<ItemVO> itemList = itemService.getItems(searchVO);
+        log.debug("Fetched itemList size: {}", itemList.size());
+        for (ItemVO item : itemList) {
+            log.debug("Item: {}", item);
+        }
         Map<Integer, String> formattedPriceMap = new HashMap<>();
         DecimalFormat currencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(Locale.KOREA);
 
@@ -123,11 +150,6 @@ public class ItemController {
         model.addAttribute("formattedPriceMap", formattedPriceMap);
         model.addAttribute("requestURI", request.getRequestURI());
 
-        pageNav.setTotalRows(itemService.getTotalCount(searchVO));
-        PageNav updatedPageNav = globalService.setPageNav(pageNav, searchVO.getPageNum(), searchVO.getPageBlock(), searchVO.getViewNum());
-        model.addAttribute("pageNav", updatedPageNav);
-        log.debug("itemList size: " + itemList.size());
-        log.debug("pageNav: startNum = " + updatedPageNav.getStartNum() + ", endNum = " + updatedPageNav.getEndNum());
         return "buyer/service/list";
     }
 
@@ -155,10 +177,8 @@ public class ItemController {
             String mainCatName;
             try {
                 mainCatName = messageSource.getMessage(mainCatKey, null, locale);
-                log.debug("Loaded main category: key={}, name={}", mainCatKey, mainCatName);
             } catch (NoSuchMessageException e) {
-                log.error("Message key '{}' not found for locale '{}'", mainCatKey, locale);
-                throw e; // 또는 적절한 예외 처리
+                throw e;
             }
 
             Map<String, Object> mainCat = new HashMap<>();
@@ -210,7 +230,6 @@ public class ItemController {
 
     @GetMapping("/view")
     public String view(@ModelAttribute("sVO") SearchVO searchVO, Model model, HttpSession session) {
-        log.debug("Received i_idx: " + searchVO.getI_idx());
         BuyerVO buyer = (BuyerVO) session.getAttribute("buyer");
         SellerVO seller = (SellerVO) session.getAttribute("seller");
         model.addAttribute("buyer", buyer);
@@ -227,7 +246,6 @@ public class ItemController {
         // Item 조회
         ItemVO item = itemService.view(searchVO.getI_idx());
         if (item == null) {
-            log.warn("Item not found for i_idx: " + searchVO.getI_idx());
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
             return "error/itemNotFound"; // 커스텀 에러 페이지
         }

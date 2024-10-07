@@ -21,4 +21,6 @@ public interface ItemService {
     List<ItemVO> getRandomItems(int limit);
     ReviewDetailsDTO getReviewDetails(int reviewId) throws Exception;
     List<ItemDTO> getItemsBySeller(int s_idx);
+    int getListTotalCount(SearchVO searchVO);
+
 }

@@ -8,7 +8,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
+import com.lunastore.common.ListPageNav;
 import com.lunastore.common.PageNav2;
+import com.lunastore.common.ValidatedListPageNav;
 import com.lunastore.dto.ReviewDetailsDTO;
 import com.lunastore.dto.StoreStatusDTO;
 import com.lunastore.service.*;
@@ -247,7 +249,6 @@ public class SellerController {
     @PostMapping("/businessnumCheckProcess")
     @ResponseBody
     public int businessnumCheckProcess(@RequestParam("s_businessnum") String s_businessnum) {
-        System.out.println("Received business number: " + s_businessnum);
         return sellerService.businessnumCheck(s_businessnum);
     }
 
@@ -476,7 +477,7 @@ public class SellerController {
         return "seller/service/sales";
     }
     @GetMapping("/review")
-    public String review(@ModelAttribute("sVO") SearchVO searchVO, String sDate, String eDate, Model model, HttpServletRequest request) {
+    public String review(@ModelAttribute("sVO") SearchVO searchVO, @RequestParam(required = false) String sDate, @RequestParam(required = false) String eDate, Model model, HttpServletRequest request) {
 
         if (searchVO.getPageNum() == 0) {
             searchVO.setPageNum(1);
@@ -490,8 +491,9 @@ public class SellerController {
             searchVO.setBuyerNickname("");
         }
 
-        if (sDate != null && eDate != null) {
+        if (sDate != null && eDate != null && !eDate.trim().isEmpty()) {
             SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dtFormat.setLenient(false);
             try {
                 Calendar calendar = Calendar.getInstance();
 
@@ -511,7 +513,8 @@ public class SellerController {
                 calendar.set(Calendar.MILLISECOND, 999);
                 searchVO.setEndDate(calendar.getTime());
             } catch (ParseException e) {
-                e.printStackTrace();
+                log.error("날짜 파싱 오류: {}", e.getMessage());
+                model.addAttribute("error", "날짜 형식이 올바르지 않습니다. (예: yyyy-MM-dd)");
             }
         }
 
@@ -529,7 +532,7 @@ public class SellerController {
         model.addAttribute("pageType", "review");
         model.addAttribute("requestUrl", requestUrl);
 
-
+        log.debug("SearchVO: {}", searchVO);
         return "seller/service/review";
     }
 
@@ -668,7 +671,11 @@ public class SellerController {
     }
 
     @GetMapping("/store")
-    public String storeStatus(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum, @RequestParam(value = "pageBlock", defaultValue = "1") int pageBlock, @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate, @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate, Model model, HttpSession session) {
+    public String storeStatus(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                              @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                              @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+                              Model model,
+                              HttpSession session) {
 
         SellerVO seller = (SellerVO) session.getAttribute("seller");
         if (seller == null) {
@@ -676,30 +683,28 @@ public class SellerController {
         }
 
         int s_idx = seller.getS_idx();
-        int pageSize = 10;
 
-        List<StoreStatusDTO> items = sellerService.getStoreStatusList(s_idx, startDate, endDate, pageNum, pageSize);
+        // 총 항목 수 가져오기
         int totalItems = sellerService.getTotalStoreStatusCount(s_idx, startDate, endDate);
-        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
-        int lastPageBlock = (int) Math.ceil((double) totalPages / 5);
 
-        int startNum = (pageBlock - 1) * 5 + 1;
-        int endNum = Math.min(startNum + 5 - 1, totalPages);
+        ListPageNav pageNav = new ListPageNav();
+        pageNav.setTotalRows(totalItems);
+        pageNav.setPageNum(pageNum);
+        pageNav.setRowsPerPage(10);
+        pageNav.calculatePageNav();
 
+        int offset = (pageNav.getPageNum() - 1) * pageNav.getRowsPerPage();
+        offset = Math.max(0, offset);
+
+        List<StoreStatusDTO> items = sellerService.getStoreStatusList(s_idx, startDate, endDate, offset, pageNav.getRowsPerPage());
         model.addAttribute("items", items);
-        model.addAttribute("totalItems", totalItems);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("pageNav", pageNav);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("pageBlock", pageBlock);
-        model.addAttribute("startNum", startNum);
-        model.addAttribute("endNum", endNum);
-        model.addAttribute("lastPageBlock", lastPageBlock);
         model.addAttribute("s_idx", s_idx);
+        model.addAttribute("currentPage", pageNav.getPageNum());
+        model.addAttribute("pageSize", pageNav.getRowsPerPage());
         model.addAttribute("requestUrl", "/seller/store");
-
         return "seller/service/store";
     }
 }
