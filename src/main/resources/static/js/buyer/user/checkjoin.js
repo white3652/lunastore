@@ -1,23 +1,28 @@
+// main.js
+var nextPage = document.getElementById('nextPage');
+var lastPage = document.getElementById('lastPage');
+var joinSubmit = document.getElementById('joinSubmit');
+
 function globaldisable() {
     if (telValid && termsValid && telCheckValid){
-        nextPage.disabled = false
-        $('#nextPageBtn').css("background-color", "#0071e3")
+        nextPage.disabled = false;
+        $('#nextPageBtn').css("background-color", "#0071e3");
     } else {
-        nextPage.disabled = true
-        $('#nextPageBtn').css("background-color", "#80befb")
+        nextPage.disabled = true;
+        $('#nextPageBtn').css("background-color", "#80befb");
     }
-    if(firstNameValid && lastNameValid&&birdayValid){
-        lastPage.disabled = false
-        $('#lastPageBtn').css("background-color", "#0071e3")
+    if(firstNameValid && lastNameValid && birdayValid){
+        lastPage.disabled = false;
+        $('#lastPageBtn').css("background-color", "#0071e3");
     } else {
-        lastPage.disabled = true
-        $('#lastPageBtn').css("background-color", "#80befb")
+        lastPage.disabled = true;
+        $('#lastPageBtn').css("background-color", "#80befb");
     }
-    if(emailValid && newPwValid&&ckeckPwValid && emailCheckValid){
-        joinSubmit.disabled = false
-        $('#joinSubmitBtn').css("background-color", "#0071e3")
+    if(emailValid && newPwValid && ckeckPwValid && emailCheckValid){
+        joinSubmit.disabled = false;
+        $('#joinSubmitBtn').css("background-color", "#0071e3");
     } else {
-        joinSubmit.disabled = true
-        $('#joinSubmitBtn').css("background-color", "#80befb")
+        joinSubmit.disabled = true;
+        $('#joinSubmitBtn').css("background-color", "#80befb");
     }
 }

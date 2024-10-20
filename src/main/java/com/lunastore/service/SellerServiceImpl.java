@@ -542,7 +542,6 @@ public List<ReviewVO> getReviewsBySellerId(int s_idx) {
     public List<StoreStatusDTO> getStoreStatusList(int s_idx, LocalDate startDate, LocalDate endDate,  int offset, int limit) {
 
         if (offset < 0) {
-            System.out.println("서비스 레이어: 음수 offset 감지. offset을 0으로 설정.");
             offset = 0;
         }
         List<StoreStatusDTO> storeStatusList = dao.getStoreStatusList(s_idx, startDate, endDate, offset, limit);

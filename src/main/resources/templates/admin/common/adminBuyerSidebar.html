@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="sidebar">
+<body>
+<div class="admin_sidebar">
+    <div class="admin_global_sidebar">
+        <div class="admin_global_snb">
+            <div class="admin_global_snb_header">
+                <h2 th:text="#{sidebar.member.management}">회원 관리</h2>
+            </div>
+            <button class="admin_menu_toggle" th:text="#{sidebar.member.management}">
+                회원관리<span class="arrow_small_left"></span>
+            </button>
+            <div class="admin_menu_list">
+                <div>
+                    <a th:href="@{/admin/buyerList}" th:text="#{sidebar.member.info.management}">회원 정보관리</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

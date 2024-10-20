@@ -1,0 +1,150 @@
+.admin_content {
+	margin-left: 260px;
+	padding-bottom: 100px;
+}
+
+.admin_content_head {
+	padding: 0 0 0 25px;
+	color: #000;
+	line-height: 34px;
+	border-bottom: 1px solid #e9e9e9;
+	text-align: left;
+	font-size: 14px;
+}
+
+.arrow_small_right {
+	position: relative;
+	text-align: center;
+	top: 4px;
+	margin-right: 5px;
+	background-size: 16px;
+	width: 18px;
+	height: 18px;
+}
+
+.admin_setting_wrap {
+	margin: 30px 25px;
+}
+
+.admin_setting_wrap h1 {
+	margin: 0 0 20px;
+	padding-bottom: 27px;
+	border-bottom: 4px solid #c3c3c3;
+	font-size: 20px;
+	line-height: 1em;
+	letter-spacing: -1px;
+}
+
+.admin_setting_form {
+	font-size: 13px;
+	vertical-align: middle;
+	text-align: left;
+	width: 100%;
+}
+
+.admin_setting_form table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.admin_setting_form th {
+	font-weight: 600;
+	padding: 8px 14px;
+	height: 23px;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.admin_setting_form tr {
+	display: table-row;
+	border-bottom: 1px solid #cfcfcf;
+}
+
+.admin_setting_form input {
+	background-color: transparent;
+	border: 1px solid #b4b4b4;
+	border-radius: 5px;
+	height: 20px;
+}
+
+.l180 {
+	background-color: transparent;
+	text-align: left;
+	width: 180px !important;
+}
+
+.admin_btn_posi {
+	margin-top: 40px;
+	margin-bottom: 40px;
+	text-align: center;
+}
+
+.admin_btn_posi .admin_btn1 {
+	margin-right: 30px;
+}
+
+.admin_btn1 {
+	cursor: pointer;
+	width: 120px;
+	height: 30px;
+	color: #ffffff;
+	background-color: #3d3d3d;
+	font-size: 14px;
+	font-weight: bold;
+	transition: 0.5s;
+	border: 1px solid black;
+}
+
+.admin_btn1:hover {
+	transition: 0.7s;
+	background-color: #000000;
+	color: #ffffff;
+}
+
+.admin_btn2 {
+	cursor: pointer;
+	width: 120px;
+	height: 30px;
+	color: #111111;
+	background-color: #ffffff;
+	font-size: 14px;
+	font-weight: bold;
+	transition: 0.5s;
+	border: 1px solid black;
+}
+
+.admin_btn2:hover {
+	outline: 0;
+	background-color: #F74848;
+	color: #ffffff;
+	border-color: #F74848;
+}
+
+.tit_name {
+	margin: 30px 0 0;
+	position: relative;
+	font-size: 16px;
+	font-weight: 600;
+	letter-spacing: -1px;
+	line-height: 1em;
+	padding: 0 0 10px 10px;
+}
+
+.tit_name::before {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 4px;
+	height: 16px;
+	background: #F74848;
+	content: '';
+}
+
+.btn_small {
+	text-align: center;
+	color: black;
+	border: 1px solid black;
+	padding: 3px;
+	background-color: #F74848;
+}

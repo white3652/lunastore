@@ -49,4 +49,5 @@ public class OrderVO {
     private String ba_restaddress;
     private String bos_option;
     private AddressVO addressVO;
+    private PaymentInfo paymentInfo;
 }

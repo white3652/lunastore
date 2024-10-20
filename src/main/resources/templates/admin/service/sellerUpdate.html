@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{admin.memberUpdate}">회원정보수정</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/global.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/adminCSS/admin_updateUser.css}">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:src="@{/js/admin/daumMapAPI.js}"></script>
+
+</head>
+<body>
+<div class="admin_wrap">
+    <span class="logo"></span>
+    <form name="admin_memberform" method="post" th:action="@{/admin/sellers/{s_idx}/update(s_idx=${seller.s_idx})}">
+        <input type="hidden" name="s_idx" th:value="${seller.s_idx}">
+        <div class="admin_memberform_pop">
+            <h1 th:text="#{admin.memberUpdate}">회원정보수정</h1>
+            <section class="admin_section">
+                <ul>
+                    <li><a href="#" th:text="#{admin.memberUpdate}">회원정보수정</a></li>
+                </ul>
+                <h3 class="admin_frm_title1" th:text="#{admin.basicInfo}">기본정보</h3>
+                <div class="admin_frm">
+                    <table class="admin_tb_form">
+                        <colgroup>
+                            <col class="w130">
+                            <col>
+                            <col class="w130">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row" th:text="#{seller.mallName}">쇼핑몰명</th>
+                            <td>
+                                <input type="text" name="s_storename" th:value="${seller.s_storename}" class="admin_frm_input">
+                                <button type="button" id="Cancel_btn2" class="admin_leave_btn" th:onclick="'cancelSeller(' + ${seller.s_idx} + ')'" th:text="#{admin.withdrawal}">회원탈퇴</button>
+                            </td>
+                            <th scope="row" th:text="#{seller.businessNumber}">사업자번호</th>
+                            <td>
+                                <input type="text" name="s_businessnum" th:value="${seller.s_businessnum}" itemname="사업자번호" class="admin_frm_input" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" th:text="#{admin.password}">비밀번호</th>
+                            <td>
+                                <input type="text" name="s_pw" th:value="${seller.s_pw}" itemname="비번" class="admin_frm_input">
+                            </td>
+                            <th scope="row" th:text="#{admin.birth}">생년월일</th>
+                            <td>
+                                <input type="text" name="s_birth" th:value="${seller.s_birth}" itemname="생년월일" class="admin_frm_input">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">E-Mail</th>
+                            <td>
+                                <input type="text" name="s_email" th:value="${seller.s_email}" itemname="이메일" class="admin_frm_input">
+                            </td>
+                            <th scope="row" th:text="#{admin.phoneNumber}">전화번호</th>
+                            <td>
+                                <input type="text" name="s_tel" th:value="${seller.s_tel}" itemname="전화번호" class="admin_frm_input">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" th:text="#{admin.address}">주소</th>
+                            <td colspan="3">
+                                <input type="text" name="s_zipcode" th:value="${seller.s_zipcode}" class="frm_input" size="8" maxlength="5" id="zonecodeInput" readonly>
+                                <p class="mart5">
+                                    <input type="text" name="s_address" th:value="${seller.s_address}" class="frm_input" size="60" id="addressInput" readonly>
+                                    <span th:text="#{admin.baseAddress}">기본주소</span>
+                                </p>
+                                <p class="mart5">
+                                    <input type="text" name="s_restaddress" th:value="${seller.s_restaddress}" class="frm_input" size="60" readonly>
+                                    <span th:text="#{admin.detailAddress}">상세주소</span>
+                                </p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="admin_frm_title2" th:text="#{admin.otherInfo}">기타정보</h3>
+                <div class="admin_frm">
+                    <table class="admin_tb_form">
+                        <colgroup>
+                            <col class="w130">
+                            <col>
+                            <col class="w130">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row" th:text="#{admin.mailReception}">메일수신</th>
+                            <td>
+                                <input type="radio" name="s_check" value="Y" th:checked="${seller.s_check == 'Y'}">
+                                <label for="admin_mb_mail_yes" th:text="#{admin.yes}">예</label>
+                                <input type="radio" name="s_check" value="N" th:checked="${seller.s_check == 'N'}">
+                                <label for="admin_mb_mail_no" th:text="#{admin.no}">아니오</label>
+                            </td>
+                            <th scope="row" th:text="#{seller.termsAgreement}">약관동의</th>
+                            <td>
+                                <input type="radio" name="s_terms" value="Y" th:checked="${seller.s_terms == 'Y'}">
+                                <label for="admin_mb_sms_yes" th:text="#{admin.yes}">예</label>
+                                <input type="radio" name="s_terms" value="N" th:checked="${seller.s_terms == 'N'}">
+                                <label for="admin_mb_sms_no" th:text="#{admin.no}">아니오</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" th:text="#{seller.memberName}">회원이름</th>
+                            <td scope="col" th:text="${seller.s_firstname + ' ' + seller.s_lastname}"></td>
+                            <th scope="row" th:text="#{seller.lastLoginDate}">최근접속일</th>
+                            <td scope="col" th:text="${#dates.format(seller.s_lastlogindate, 'yyyy-MM-dd')}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" th:text="#{seller.adminMemo}">관리자메모</th>
+                            <td colspan="3">
+                                <textarea name="s_memo" class="admin_frm_textbox" rows="9" cols="80" th:text="${seller.s_memo}"></textarea>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="admin_btn2_box">
+                    <button type="submit" class="admin_save_btn1" th:text="#{admin.save}">저장</button>
+                    <button type="button" class="admin_close_btn2" th:text="#{admin.close}">닫기</button>
+                </div>
+            </section>
+        </div>
+    </form>
+</div>
+<script th:inline="javascript">
+    var messages = {
+        confirmWithdrawal: /*[[#{admin.confirmWithdrawal}]]*/ '정말로 회원탈퇴 하시겠습니까?',
+        withdrawalComplete: /*[[#{admin.withdrawalComplete}]]*/ '회원탈퇴가 완료되었습니다.',
+        withdrawalFailed: /*[[#{admin.withdrawalFailed}]]*/ '회원탈퇴에 실패했습니다.'
+    };
+
+    function cancelSeller(s_idx) {
+        if (confirm(messages.confirmWithdrawal)) {
+            $.ajax({
+                url: '/admin/sellers/' + s_idx + '/cancel',
+                type: 'POST',
+                success: function(response) {
+                    alert(messages.withdrawalComplete);
+                    window.location.href = '/admin/close';
+                },
+                error: function() {
+                    alert(messages.withdrawalFailed);
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

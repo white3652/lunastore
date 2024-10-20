@@ -2,12 +2,14 @@ package com.lunastore.vo;
 
 import java.util.Date;
 
+import com.lunastore.typehandler.GradeTypeHandler;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 import lombok.Data;
+
 
 @Data
 public class BuyerVO {
@@ -45,11 +47,11 @@ public class BuyerVO {
     private String b_cancel;
     private String b_check;
     private String b_terms;
-    private String b_grade;
+    private Grade b_grade;
     private String b_gender;
     private String b_nickname;
     private String b_profile;
     private String b_point;
     private MultipartFile b_tempprofile;
-
+    private AddressVO address;
 }

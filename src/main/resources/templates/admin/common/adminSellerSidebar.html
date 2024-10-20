@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+
+<body>
+<div th:fragment="sidebar" class="admin_sidebar">
+    <div class="admin_global_sideber">
+        <div class="admin_global_snb">
+            <div class="admin_global_snb_header">
+                <h2 th:text="#{sidebar.merchant.management}">가맹점 관리</h2>
+            </div>
+            <button class="admin_menu_toggle" th:text="#{sidebar.merchant.management}">
+                가맹점 관리<span class="arrow_small_left"></span>
+            </button>
+            <div class="admin_menu_list">
+                <dd>
+                    <a th:href="@{/admin/sellerList}" th:text="#{sidebar.merchant.management}">가맹점관리</a>
+                    <a href="#" class="not-ready"><del th:text="#{sidebar.merchant.sales.details}">가맹점 매출내역</del></a>
+                    <a href="#" class="not-ready"><del th:text="#{sidebar.merchant.fee.view}">가맹점 수수료보기</del></a>
+                    <a href="#" class="not-ready"><del th:text="#{sidebar.merchant.settlement.request}">가맹점 정산요청</del></a>
+                </dd>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

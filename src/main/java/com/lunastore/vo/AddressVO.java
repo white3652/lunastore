@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class AddressVO {
-    private int ba_idx;
+    private Integer ba_idx;
     private int b_idx;
     private String ba_firstname;
     private String ba_lastname;

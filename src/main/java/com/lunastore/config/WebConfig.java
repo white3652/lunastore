@@ -102,7 +102,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/buyer/**", "/seller/**", "/cart/**", "/item/**", "/tui-editor/**", "/file-upload/**", "/order/**") // 필요한 모든 패턴 추가
+                .addPathPatterns("/buyer/**", "/seller/**", "/admin/**", "/cart/**", "/item/**", "/tui-editor/**", "/file-upload/**", "/order/**") // 필요한 모든 패턴 추가
                 .excludePathPatterns(
                         "/buyer/login",
                         "/buyer/buyerLoginProcess",
@@ -120,6 +120,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/seller/findPwProcess",
                         "/seller/sellerVerifyEmail",
                         "/seller/sellerVerifyEmailProcess",
+                        "/admin/login",
+                        "/admin/logout",
                         "/api/**",
                         "/resources/**",
                         "/static/**",

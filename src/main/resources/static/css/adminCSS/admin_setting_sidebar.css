@@ -1,0 +1,89 @@
+/* #region 사이드 카테고리 시작 */
+.admin_sidebar {
+	float: left;
+}
+
+.admin_global_sideber {
+	width: 100%;
+	margin: 0 auto;
+	padding: 0 auto;
+}
+
+.admin_global_snb {
+	height: 952px;
+	width: 260px;
+	background: #ffffff;
+	opacity: 0.7;
+	border-right: 1px solid #c3c3c3;
+}
+
+.admin_global_snb:after {
+	display: block;
+	visibility: hidden;
+	clear: both;
+	content: "";
+}
+
+.admin_global_snb_header {
+	border-bottom: 1px solid #c3c3c3;
+	text-align: center;
+	width: 260px;
+	height: 156px;
+}
+
+.admin_global_snb_header h2 {
+	position: relative;
+	top: 60px;
+	bottom: 60px;
+	font-size: 32px;
+}
+
+.admin_global_snb button {
+	background-color: transparent;
+	display: block;
+	padding: 0 0 0 17px;
+	font-size: 16px;
+	line-height: 2.8;
+	font-weight: 600;
+	cursor: pointer;
+	border-bottom: 1px solid #cfcfcf;
+}
+
+.admin_global_snb dd {
+	margin: 0;
+	padding: 0;
+	display: block;
+	position: relative;
+}
+
+.admin_global_snb dd a {
+	font-weight: bold;
+	display: block;
+	color: black;
+	font-size: 12px;
+	padding: 7px 0 7px 17px;
+	text-decoration: none;
+}
+
+.admin_menu_toggle {
+	color: black;
+	cursor: pointer;
+	padding: 18px;
+	width: 100%;
+	border: none;
+	text-align: left;
+	outline: none;
+	font-size: 15px;
+}
+
+.admin_menu_list {
+	width: 100%;
+	/* overflow: hidden; */
+	background-color: #ffffff;
+	height: 0;
+	transition: 0.6s;
+}
+
+.admin_menu_list a:hover {
+	color: #F74848;
+}

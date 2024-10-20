@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="header">
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a th:href="@{/admin/buyerList}">
+                    <img th:src="@{/icon/logo.svg}" alt="Logo">
+                </a>
+            </div>
+            <nav class="navigation">
+                <ul>
+                    <li><a th:href="@{/admin/buyerList}" th:text="#{header.member.management}">회원관리</a></li>
+                    <li><a th:href="@{/admin/sellerList}" th:text="#{header.merchant.management}">가맹점관리</a></li>
+                    <li><a th:href="@{/admin/logout}" th:text="#{header.logout}">로그아웃</a></li>
+                </ul>
+            </nav>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+</th:block>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{excel.download.title}">엑셀 다운로드</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/global.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/adminCSS/admin_sendmail.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/adminCSS/admin_Excel.css}">
+    <script th:src="@{/resources/js/admin/cancel.js}"></script>
+</head>
+<body>
+<div class="admin_box">
+    <h1 class="admin_h1" th:text="#{member.download}">회원 내려받기</h1>
+    <form th:action="@{/admin/downloads/excel}" method="post">
+        <button type="submit">Excel</button>
+    </form>
+</div>
+</body>
+</html>

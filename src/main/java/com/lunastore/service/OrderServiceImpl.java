@@ -222,8 +222,12 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderViewDTO> getOrderViewByBoIdx(int bo_idx) {
         List<OrderViewDTO> orders = orderDAO.findOrderViewWithStateByBoIdx(bo_idx);
         log.debug("Fetched orders: {}", orders);
+
         return orders.stream()
                 .filter(Objects::nonNull)
+                .collect(Collectors.toMap(OrderViewDTO::getI_idx, order -> order, (existing, replacement) -> existing))
+                .values()
+                .stream()
                 .collect(Collectors.toList());
     }
     @Override

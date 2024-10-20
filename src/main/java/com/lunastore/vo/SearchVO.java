@@ -23,7 +23,11 @@ public class SearchVO {
     private int offset;
     private int limit;
     private String searchWord;
+    private String searchWord2;
+    private String searchWord3;
     private String searchField;
+    private String searchField2;
+    private String searchField3;
     private String orderByType;
     private int br_star;
 

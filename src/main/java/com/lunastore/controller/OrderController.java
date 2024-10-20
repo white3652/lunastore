@@ -212,8 +212,13 @@ public class OrderController {
 
     @PostMapping("/deleteOrder")
     @ResponseBody
-    public int deleteOrder(int bo_idx) {
-        return orderService.deleteOrder(bo_idx);
+    public ResponseEntity<?> deleteOrder(@RequestBody Map<String, Integer> payload) {
+        Integer bo_idx = payload.get("bo_idx");
+        if (bo_idx == null) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "bo_idx가 제공되지 않았습니다."));
+        }
+        orderService.deleteOrder(bo_idx);
+        return ResponseEntity.ok(new ApiResponse(true, "주문이 취소되었습니다."));
     }
 
     @PostMapping("/successOrder")

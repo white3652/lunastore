@@ -333,6 +333,7 @@
     <select id="findOrderStateByBoIdx" parameterType="int" resultType="int">
         SELECT bos_state FROM tb_buyer_order_state WHERE bo_idx = #{bo_idx}
     </select>
+
     <!-- 새로운 매퍼 추가 -->
     <select id="findOrderViewWithStateByBoIdx" parameterType="int" resultType="com.lunastore.dto.OrderViewDTO">
         SELECT
@@ -352,7 +353,7 @@
         ba.ba_contact,
 
         i.i_name,
-        img.i_saveimg0,
+        MAX(img.i_saveimg0) AS i_saveimg0,
 
         bos.bos_idx,
         bos.i_idx,
@@ -370,10 +371,15 @@
         tb_buyer_address ba ON bo.b_idx = ba.b_idx
         JOIN
         tb_item i ON bos.i_idx = i.i_idx
-        JOIN
+        LEFT JOIN
         tb_item_img img ON i.i_idx = img.i_idx
         WHERE
         bo.bo_idx = #{bo_idx} AND bos.bos_state IS NOT NULL
+        GROUP BY
+        bo.bo_idx, bo.b_idx, bo.bo_itemname, bo.bo_name, bo.bo_zipcode, bo.bo_address,
+        bo.bo_contact, bo.bo_orderdate, ba.ba_firstname, ba.ba_lastname, ba.ba_zipcode,
+        ba.ba_address, ba.ba_contact, i.i_name, bos.bos_idx, bos.i_idx, bos.bos_option,
+        bos.bos_price, bos.bos_count, bos.bos_settle, bos.bos_state, bos.bos_postdate
     </select>
 
     <select id="countPurchaseConfirmedBySeller" parameterType="int" resultType="int">

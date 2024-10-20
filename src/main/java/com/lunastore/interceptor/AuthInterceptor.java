@@ -18,10 +18,12 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         boolean isBuyerLoggedIn = false;
         boolean isSellerLoggedIn = false;
+        boolean isAdminLoggedIn = false;
 
         if (session != null) {
             isBuyerLoggedIn = session.getAttribute("buyer") != null;
             isSellerLoggedIn = session.getAttribute("seller") != null;
+            isAdminLoggedIn = session.getAttribute("admin") != null;
         }
 
         String requestURI = request.getRequestURI();
@@ -36,6 +38,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                         requestURI.startsWith("/buyer/findPwProcess") ||
                         requestURI.startsWith("/buyer/verifyEmail") ||
                         requestURI.startsWith("/buyer/buyerVerifyEmail") ||
+                        requestURI.startsWith("/buyer/emailCheckProcess") || // 이메일 중복 체크 경로 추가
                         requestURI.startsWith("/seller/sellerLogin") ||
                         requestURI.startsWith("/seller/sellerLoginProcess") ||
                         requestURI.startsWith("/seller/sellerJoin") ||
@@ -44,6 +47,8 @@ public class AuthInterceptor implements HandlerInterceptor {
                         requestURI.startsWith("/seller/findPwProcess") ||
                         requestURI.startsWith("/seller/sellerVerifyEmail") ||
                         requestURI.startsWith("/seller/sellerVerifyEmailProcess") ||
+                        requestURI.startsWith("/admin/login") || // Admin 로그인 경로 추가
+                        requestURI.startsWith("/admin/logout") || // Admin 로그아웃 경로 추가
                         requestURI.startsWith("/api/") || // API 경로는 별도로 처리
                         requestURI.startsWith("/tui-editor/") ||
                         requestURI.startsWith("/resources/") || // 정적 리소스 경로
@@ -53,7 +58,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         if (requestURI.startsWith("/api/")) {
-            if (isBuyerLoggedIn || isSellerLoggedIn) {
+            if (isBuyerLoggedIn || isSellerLoggedIn || isAdminLoggedIn) {
                 return true;
             } else {
                 log.warn("Unauthorized API access attempt to: " + requestURI);
@@ -79,6 +84,16 @@ public class AuthInterceptor implements HandlerInterceptor {
             } else {
                 log.warn("Unauthorized access attempt to: " + requestURI);
                 response.sendRedirect(request.getContextPath() + "/seller/sellerLogin");
+                return false;
+            }
+        }
+
+        if (requestURI.startsWith("/admin/")) {
+            if (isAdminLoggedIn) {
+                return true;
+            } else {
+                log.warn("Unauthorized access attempt to: " + requestURI);
+                response.sendRedirect(request.getContextPath() + "/admin");
                 return false;
             }
         }

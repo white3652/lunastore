@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luna | AdminLogin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/adminCSS/admin_Login.css}">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:src="@{/js/admin/adminLogin.js}"></script>
+    <script th:src="@{/js/admin/checkAdminLogin.js}"></script>
+</head>
+
+<body>
+<div class="wrap">
+    <section>
+        <div class="m_adminLogin_topSection">
+            <div class="m_adminLogin_topRegion">
+                <div class="m_adminLogin_topTitle">
+                    <a th:href="@{/admin/login}" th:text="#{login.adminLunaID}">Admin Luna ID</a>
+                </div>
+            </div>
+        </div>
+        <div class="m_adminLogin_mainRegion">
+            <div class="m_adminLogin_mainLogo">
+                <!-- 로고 SVG 코드 -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" fill="none" id="mainLog">
+                    <defs>
+                        <linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#6A11CB"/>
+                            <stop offset="100%" stop-color="#2575FC"/>
+                        </linearGradient>
+                        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="3" result="cb"/>
+                            <feMerge>
+                                <feMergeNode in="cb"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <path d="M150 50C200 50 250 100 250 150S200 250 150 250 50 200 50 150 100 50 150 50Z" fill="url(#cg)" filter="url(#glow)"/>
+                    <path d="M160 60C210 60 260 110 260 160S210 260 160 260 60 210 60 160 110 60 160 60Z" fill="#FFF" opacity="0.2"/>
+                    <circle cx="120" cy="120" r="15" fill="#FFF" opacity="0.3"/>
+                    <circle cx="180" cy="180" r="10" fill="#FFF" opacity="0.2"/>
+                </svg>
+            </div>
+            <div class="m_adminLogin_title" th:text="#{login.adminLunaID}">Admin Luna ID</div>
+            <div class="m_adminLogin_subTitle" th:text="#{login.adminLunaSubTitle}">Admin Luna 계정 관리</div>
+
+            <!-- 로그인 폼 -->
+            <form method="post" th:action="@{/admin/login}">
+                <div class="m_adminLogin_idRegion" id="idRegion">
+                    <label style="position: relative; display: block;">
+                        <input type="text" name="a_id" class="m_adminLogin_idInput" id="idInput" required th:value="${a_id}">
+                        <div class="m_adminLogin_idTitle" id="idTitle" th:text="#{login.id}">아이디</div>
+                    </label>
+                    <img th:src="@{/icon/arrow_small.svg}" class="arrow_small" id="idArrowSmall" aria-label="비밀번호 입력 표시 화살표" tabindex="0">
+                </div>
+
+                <!-- 비밀번호 입력 필드 -->
+                <div class="m_adminLogin_codeRegion" id="codeRegion">
+                    <label style="position: relative; display: block;">
+                        <input type="password" name="a_pw" class="m_adminLogin_codeInput" id="codeInput" required>
+                        <div class="m_adminLogin_codeTitle" id="codeTitle" th:text="#{login.password}">비밀번호</div>
+                    </label>
+                    <img th:src="@{/icon/arrow_small.svg}" class="arrow_small" id="codeArrowSmall" aria-label="로그인 제출 화살표" tabindex="0">
+                </div>
+                <div class="m_adminLogin_adminIDSmg" id="adminIDSmg" th:if="${msg}" th:text="${msg}"></div>
+            </form>
+        </div>
+    </section>
+</div>
+</body>
+
+</html>

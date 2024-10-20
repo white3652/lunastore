@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{merchant_management}">가맹점관리</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/adminCSS/admin_header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/icon/icon.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/adminCSS/admin_seller_tb.css}">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:src="@{/js/admin/openBox2.js}"></script>
+</head>
+
+<body>
+<th:block th:replace="~{admin/common/header :: header}"></th:block>
+<th:block th:replace="~{admin/common/adminSellerSidebar :: sidebar}"></th:block>
+
+<section>
+    <div class="admin_content">
+        <div class="admin_content_head">
+            <span th:text="#{home}">HOME</span> <i class="arrow_small_right"></i>
+            <span th:text="#{merchant_management}">가맹점관리</span> <i class="arrow_small_right"></i>
+            <span th:text="#{merchant_list}">가맹점 전체목록</span>
+        </div>
+        <div class="admin_mall_wrap">
+            <h1 th:text="#{merchant_management}">가맹점 관리</h1>
+            <form name="admin_form" id="admin_form" method="post" th:action="@{/admin/sellers/search}">
+                <div class="admin_tbl_form">
+                    <table>
+                        <colgroup>
+                            <col class="admin_left_col">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row" th:text="#{search_keyword}">검색어</th>
+                            <td>
+                                <select class="admin_dropdown" name="searchField">
+                                    <option value="s_businessnum" th:text="#{business_number}">사업자번호</option>
+                                    <option value="s_storename" th:text="#{store_name}">쇼핑몰이름</option>
+                                </select>
+                                <input type="text" name="searchWord" class="frm_input" size="30">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" th:text="#{period_search}">기간검색</th>
+                            <td>
+                                <select class="admin_dropdown" name="searchField2">
+                                    <option value="s_regdate" th:text="#{registration_date}">가입날짜</option>
+                                </select>
+                                <input type="date" name="searchWord2" class="frm_input" min="2024-02-01" max="2030-01-01"> ~
+                                <input type="date" name="searchWord3" class="frm_input" min="2024-02-01" max="2030-01-01" placeholder="날짜를 입력해주세요.">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="admin_btn_posi">
+                    <button type="submit" class="admin_btn1" th:text="#{search}">검색</button>
+                    <button type="reset" class="admin_btn2" th:text="#{reset}">초기화</button>
+                </div>
+            </form>
+            <div class="admin_total_sales_box">
+                <span th:text="#{admin.totalSales}">총 매출액</span> :
+                <b class="admin_total_sales" th:text="${totalSales}"></b>
+                <span th:text="#{admin.currency}">원</span>
+            </div>
+            <div class="admin_seller_box">
+                <table class="admin_partner_list">
+                    <colgroup>
+                        <col class="l100">
+                        <col class="l100">
+                        <col class="l100">
+                        <col class="l100">
+                        <col class="r50">
+                        <col class="r50">
+
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th scope="col" rowspan="3" th:text="#{store_name_header}">쇼핑몰명</th>
+                        <th scope="col" rowspan="3" th:text="#{member_name_header}">회원명</th>
+                        <th scope="col" rowspan="4" th:text="#{business_number_header}">사업자 번호</th>
+                        <th scope="col" colspan="3" th:text="#{commission_settlement}">수수료 집계</th>
+                    </tr>
+                    <tr class="rows">
+                        <th scope="col" class="th_bg_yellow" th:text="#{paid}">지급</th>
+                        <th scope="col" class="th_bg_yellow" th:text="#{unpaid}">미지급</th>
+                        <th scope="col" class="th_bg_yellow" th:text="#{total_amount}">총 금액</th>
+                    </tr>
+                    </thead>
+                    <tbody class="admin_tb_list_box">
+                    <tr th:each="sellerSales : ${sellerSalesList}" class="admin_tb_list">
+                        <td th:text="${sellerSales.seller.s_storename}"></td>
+                        <td th:text="${sellerSales.seller.s_firstname + ' ' + sellerSales.seller.s_lastname}"></td>
+                        <td>
+                            <span class="sv_wrap">
+                                <a href="#" class="sv_member" th:text="${sellerSales.seller.s_businessnum}"></a>
+                                <span class="sv">
+                                    <a th:href="@{/admin/sellers/{s_idx}/edit(s_idx=${sellerSales.seller.s_idx})}" class="openNewWindow3" th:text="#{edit_member_info}">회원정보수정<br></a>
+                                    <a th:href="@{/admin/sellers/{s_idx}/send-email(s_idx=${sellerSales.seller.s_idx})}" class="openNewWindow4" th:text="#{send_email}">메일보내기<br></a>
+                                </span>
+                            </span>
+                        </td>
+                        <td th:text="${sellerSales.sales != null ? sellerSales.sales.settledAmountFormatted : '0'}"></td>
+                        <td th:text="${sellerSales.sales != null ? sellerSales.sales.unsettledAmountFormatted : '0'}"></td>
+                        <td th:text="${sellerSales.sales != null ? sellerSales.sales.totalAmountFormatted : '0'}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function(){
+        // .sv_member 클릭 시 토글
+        $('.sv_member').on('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();  // 이벤트 버블링 방지
+            $(this).next('.sv').toggle();
+        });
+
+        // document 클릭 시 모든 .sv 닫기
+        $(document).on('click', function(e){
+            if(!$(e.target).closest('.sv_wrap').length) {
+                $('.sv').hide();
+            }
+        });
+
+        // .sv 내부 클릭 시 이벤트 전파 중단
+        $('.sv').on('click', function(e){
+            e.stopPropagation();
+        });
+
+        // 기존의 admin_btn2 이벤트 리스너
+        $(".admin_btn2").on("click", function () {
+            $("#admin_form")[0].reset();
+            window.location.href = "/admin/sellerList";
+        });
+    });
+</script>
+</body>
+</html>

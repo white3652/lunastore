@@ -87,7 +87,7 @@
 					<div class="m_info_werll">
 						<div class="m_info_mr">
 							<span th:text="#{grade.label}">등급</span>
-							<div class="m_info_mrp" th:text="${buyer.b_grade}"></div>
+							<div class="m_info_mrp" th:text="${buyer.b_grade.name()}"></div>
 						</div>
 						<div class="m_info_point">
 							<span th:text="#{point.label}">포인트</span>
@@ -186,6 +186,7 @@
 <form method="post" th:action="@{/buyer/buyerInsertAddressProcess}">
 	<input type="hidden" name="b_idx" th:value="${buyer.b_idx}">
 	<input type="hidden" name="ba_contact" th:value="${buyer.b_tel}">
+	<input type="hidden" name="ba_idx" th:value="${address.ba_idx}">
 	<input type="hidden" name="ba_check" value="Y">
 	<div class="m_buyerServiceInfo_delRegion" id="delRegion">
 		<div class="m_buyerServiceInfo_delTitle" th:text="#{edit.shipping.address}">배송 주소를 편집하세요.</div>
@@ -234,7 +235,7 @@
 		</div>
 	</div>
 </form>
-<form method="post" th:action="@{/buyer/buyerInsertContactProcess}">
+<form method="post" th:action="@{/buyer/buyerUpdateAddressProcess}">
 	<input type="hidden" name="b_idx" th:value="${buyer.b_idx}">
 	<input type="hidden" name="ba_idx" th:value="${address.ba_idx}">
 	<div class="m_buyerServiceInfo_telMainRegion" id="telMainRegion">

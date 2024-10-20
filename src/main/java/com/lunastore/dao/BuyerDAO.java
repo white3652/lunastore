@@ -165,4 +165,5 @@ public class BuyerDAO {
         params.put("b_tel", b_tel);
         sqlSession.update(MAPPER + ".updateBuyerTel", params);
     }
+
 }

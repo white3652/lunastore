@@ -1,6 +1,6 @@
 package com.lunastore.service;
 
-import java.io.PrintWriter;
+import org.springframework.transaction.annotation.Transactional;
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Random;
@@ -82,6 +82,7 @@ public class BuyerServiceImpl implements BuyerService {
     }
 
     @Override
+    @Transactional
     public int insertAddress(AddressVO addressVO) {
         try {
             dao.changeDefaultAddress(addressVO.getB_idx());

@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lunastore.mapper.AdminMapper">
+
+    <select id="adminlogin" parameterType="com.lunastore.vo.AdminVO" resultType="com.lunastore.vo.AdminVO">
+        SELECT *
+        FROM tb_admin
+        WHERE a_id = #{a_id}
+        AND a_pw = #{a_pw}
+    </select>
+
+    <select id="adminFindById" parameterType="com.lunastore.vo.AdminVO" resultType="com.lunastore.vo.AdminVO">
+        SELECT *
+        FROM tb_admin
+        WHERE a_id = #{a_id}
+        AND a_pw = #{a_pw}
+        AND a_name = #{a_name}
+        AND a_ename = #{a_ename}
+        AND a_company = #{a_company}
+        AND a_representative = #{a_representative}
+        AND a_business = #{a_business}
+        AND a_event = #{a_event}
+        AND a_address = #{a_address}
+        AND a_tel = #{a_tel}
+        AND a_manager_name = #{a_manager_name}
+        AND a_manager_email = #{a_manager_email}
+    </select>
+
+    <select id="getTotalBuyer" parameterType="com.lunastore.vo.BuyerVO" resultType="buyerVO">
+        SELECT *
+        FROM tb_buyer
+        JOIN tb_buyer_info ON tb_buyer.b_idx = tb_buyer_info.b_idx
+        JOIN tb_buyer_state ON tb_buyer.b_idx = tb_buyer_state.b_idx
+        JOIN tb_buyer_address ON tb_buyer.b_idx = tb_buyer_address.b_idx
+        WHERE ba_check = 'Y'
+    </select>
+
+    <sql id="bWhere">
+        <where>
+            AND tb_buyer_state.b_cancel IN ('N')
+            <if test="searchWord != null and searchWord != ''">
+                <choose>
+                    <when test="searchField == 'b_email'">
+                        AND b_email LIKE CONCAT('%', #{searchWord}, '%')
+                    </when>
+                    <when test="searchField == 'b_firstname'">
+                        AND b_firstname LIKE CONCAT('%', #{searchWord}, '%')
+                    </when>
+                    <when test="searchField == 'b_lastname'">
+                        AND b_lastname LIKE CONCAT('%', #{searchWord}, '%')
+                    </when>
+                    <when test="searchField == 'b_tel'">
+                        AND b_tel LIKE CONCAT('%', #{searchWord}, '%')
+                    </when>
+                </choose>
+            </if>
+            <if test="searchWord2 != null and searchWord2 != ''">
+                AND b_regdate BETWEEN #{searchWord2} AND #{searchWord3}
+            </if>
+            <choose>
+                <when test="searchField3 == 0">
+                    <!-- 전체 검색 시, b_grade에 대한 추가 조건 없음 -->
+                </when>
+
+                <!-- 표준 검색: searchField3 = '1' -->
+                <when test="searchField3 == 1">
+                    AND (b_grade = 1 OR b_grade IS NULL)
+                </when>
+
+                <!-- 기타 특정 b_grade 검색 (2, 3 등) -->
+                <otherwise>
+                    <if test="searchField3 != null and searchField3 != ''">
+                        AND b_grade = #{searchField3}
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
+    </sql>
+
+    <sql id="sWhere">
+        <where>
+            <if test="searchWord != null and searchWord != ''">
+                <choose>
+                    <when test="searchField == 's_businessnum'">
+                        AND s_businessnum LIKE CONCAT('%', #{searchWord}, '%')
+                    </when>
+                    <when test="searchField == 's_storename'">
+                        AND s_storename LIKE CONCAT('%', #{searchWord}, '%')
+                    </when>
+                </choose>
+            </if>
+            <if test="searchWord2 != null and searchWord2 != ''">
+                AND s_regdate BETWEEN #{searchWord2} AND #{searchWord3}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="iWhere">
+        <where>
+            <if test="searchWord != null and searchWord != ''">
+                <choose>
+                    <when test="searchField == 'i_name'">
+                        AND tb_item.i_name LIKE CONCAT('%', #{searchWord}, '%')
+                    </when>
+                    <when test="searchField == 's_businessnum'">
+                        AND s_businessnum LIKE CONCAT('%', #{searchWord}, '%')
+                    </when>
+                    <when test="searchField == 's_storename'">
+                        AND tb_seller_info.s_storename LIKE CONCAT('%', #{searchWord}, '%')
+                    </when>
+                </choose>
+            </if>
+            <if test="c_idx != 0">
+                AND vw_item.c_idx = #{c_idx}
+            </if>
+            <if test="p_idx != 0">
+                <choose>
+                    <when test="p_idx == 1">
+                        AND vw_item.c_idx BETWEEN 1 AND 5
+                    </when>
+                    <when test="p_idx == 2">
+                        AND vw_item.c_idx BETWEEN 6 AND 10
+                    </when>
+                    <when test="p_idx == 3">
+                        AND vw_item.c_idx BETWEEN 11 AND 15
+                    </when>
+                    <when test="p_idx == 4">
+                        AND vw_item.c_idx BETWEEN 16 AND 20
+                    </when>
+                    <when test="p_idx == 5">
+                        AND vw_item.c_idx BETWEEN 21 AND 25
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </sql>
+
+    <select id="getSearchBuyer" parameterType="searchVO" resultType="buyerVO">
+        SELECT *
+        FROM tb_buyer
+        JOIN tb_buyer_info ON tb_buyer.b_idx = tb_buyer_info.b_idx
+        JOIN tb_buyer_state ON tb_buyer.b_idx = tb_buyer_state.b_idx
+        <include refid="bWhere" />
+        ORDER BY tb_buyer.b_idx DESC
+    </select>
+
+    <select id="getTotalList" parameterType="searchVO" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_buyer
+        JOIN tb_buyer_info ON tb_buyer.b_idx = tb_buyer_info.b_idx
+        JOIN tb_buyer_state ON tb_buyer.b_idx = tb_buyer_state.b_idx
+        <include refid="bWhere" />
+    </select>
+
+    <select id="getSearchSeller" parameterType="searchVO" resultType="sellerVO">
+        SELECT *
+        FROM tb_seller
+        JOIN tb_seller_info ON tb_seller.s_idx = tb_seller_info.s_idx
+        JOIN tb_seller_state ON tb_seller.s_idx = tb_seller_state.s_idx
+        <include refid="sWhere" />
+        ORDER BY tb_seller.s_idx DESC
+    </select>
+
+    <select id="getSearchItem" parameterType="searchVO" resultType="itemVO">
+        SELECT *
+        FROM tb_item
+        JOIN tb_seller ON tb_item.s_idx = tb_seller.s_idx
+        JOIN vw_item ON tb_item.i_idx = vw_item.i_idx
+        JOIN tb_seller_info ON tb_seller.s_idx = tb_seller_info.s_idx
+        <include refid="iWhere" />
+        ORDER BY vw_item.i_idx
+    </select>
+
+    <select id="getItemTotal" parameterType="searchVO" resultType="int">
+        SELECT COUNT(*)
+        FROM tb_item
+        JOIN vw_item ON tb_item.i_idx = vw_item.i_idx
+        JOIN tb_seller_info ON vw_item.s_idx = tb_seller_info.s_idx
+        JOIN tb_seller ON tb_item.s_idx = tb_seller.s_idx
+        <include refid="iWhere" />
+    </select>
+
+    <select id="findBySeller" parameterType="int" resultType="sellerVO">
+        SELECT *
+        FROM tb_seller
+        JOIN tb_seller_info ON tb_seller.s_idx = tb_seller_info.s_idx
+        JOIN tb_seller_state ON tb_seller.s_idx = tb_seller_state.s_idx
+        WHERE tb_seller.s_idx = #{s_idx}
+    </select>
+
+    <select id="findByBuyer" parameterType="int" resultType="com.lunastore.vo.BuyerVO">
+        SELECT tb_buyer.*, tb_buyer_info.*, tb_buyer_state.*, tb_buyer_address.*
+        FROM tb_buyer
+        LEFT JOIN tb_buyer_info ON tb_buyer.b_idx = tb_buyer_info.b_idx
+        LEFT JOIN tb_buyer_state ON tb_buyer.b_idx = tb_buyer_state.b_idx
+        LEFT JOIN tb_buyer_address ON tb_buyer.b_idx = tb_buyer_address.b_idx
+        WHERE tb_buyer.b_idx = #{b_idx} AND tb_buyer_address.ba_check = 'Y'
+    </select>
+
+    <select id="findAdminBuyerDetails" parameterType="int" resultType="com.lunastore.vo.AdminBuyerDetailsVO">
+        SELECT tb_buyer.*, tb_buyer_info.*, tb_buyer_state.*, tb_buyer_address.*
+        FROM tb_buyer
+        JOIN tb_buyer_info ON tb_buyer.b_idx = tb_buyer_info.b_idx
+        JOIN tb_buyer_state ON tb_buyer.b_idx = tb_buyer_state.b_idx
+        JOIN tb_buyer_address ON tb_buyer.b_idx = tb_buyer_address.b_idx
+        WHERE tb_buyer.b_idx = #{b_idx} AND tb_buyer_address.ba_check = 'Y'
+    </select>
+    <select id="getBAddress" parameterType="int" resultType="addressVO">
+        SELECT *
+        FROM tb_buyer_address
+        WHERE b_idx = #{b_idx}
+        AND ba_check = 'Y'
+        ORDER BY ba_check DESC
+    </select>
+
+    <select id="getSAddress" parameterType="int" resultType="addressVO">
+        SELECT *
+        FROM tb_seller_address
+        WHERE s_idx = #{s_idx}
+        AND s_check = 'Y'
+        ORDER BY s_idx DESC
+    </select>
+
+    <update id="updateBuyerBasicInfo" parameterType="com.lunastore.vo.BuyerVO">
+        UPDATE tb_buyer
+        SET
+        b_pw = #{b_pw},
+        b_tel = #{b_tel},
+        b_email = #{b_email},
+        b_modifydate = NOW()
+        WHERE b_idx = #{b_idx};
+    </update>
+
+    <update id="updateBuyerInfo" parameterType="com.lunastore.vo.BuyerVO">
+        UPDATE tb_buyer_info
+        SET
+        b_gender = #{b_gender},
+        b_grade = #{b_grade, typeHandler=com.lunastore.typehandler.GradeTypeHandler}
+        WHERE b_idx = #{b_idx};
+    </update>
+
+    <select id="getBuyer" parameterType="int" resultType="buyerVO">
+        SELECT *
+        FROM tb_buyer
+        JOIN tb_buyer_info ON tb_buyer.b_idx = tb_buyer_info.b_idx
+        JOIN tb_buyer_state ON tb_buyer.b_idx = tb_buyer_state.b_idx
+        JOIN tb_buyer_address ON tb_buyer.b_idx = tb_buyer_address.b_idx
+        WHERE tb_buyer.b_idx = #{b_idx}
+    </select>
+
+    <update id="updateSellerBasicInfo" parameterType="com.lunastore.vo.SellerVO">
+        UPDATE tb_seller
+        SET
+        s_pw = #{s_pw},
+        s_tel = #{s_tel},
+        s_birth = #{s_birth},
+        s_email = #{s_email},
+        s_address = #{s_address},
+        s_restaddress = #{s_restaddress},
+        s_zipcode = #{s_zipcode},
+        s_modifydate = NOW()
+        WHERE s_idx = #{s_idx}
+    </update>
+
+    <update id="updateSellerInfo" parameterType="com.lunastore.vo.SellerVO">
+        UPDATE tb_seller_info si
+        JOIN tb_seller_state ss ON si.s_idx = ss.s_idx
+        SET
+        si.s_storename = #{s_storename},
+        si.s_memo = #{s_memo},
+        ss.s_cancel = #{s_cancel},
+        ss.s_check = #{s_check},
+        ss.s_terms = #{s_terms}
+        WHERE si.s_idx = #{s_idx}
+    </update>
+
+    <select id="getSeller" parameterType="int" resultType="sellerVO">
+        SELECT *
+        FROM tb_seller
+        JOIN tb_seller_info ON tb_seller.s_idx = tb_seller_info.s_idx
+        JOIN tb_seller_state ON tb_seller.s_idx = tb_seller_state.s_idx
+        WHERE tb_seller.s_idx = #{s_idx}
+    </select>
+
+    <select id="getAllBuyerMail" parameterType="com.lunastore.vo.BuyerVO" resultType="String">
+        SELECT b_email
+        FROM tb_buyer
+    </select>
+
+    <update id="cancelB" parameterType="int">
+        UPDATE tb_buyer_state bs
+        JOIN tb_buyer b ON bs.b_idx = b.b_idx
+        SET
+        bs.b_cancel = 'Y',
+        bs.b_check = 'Y',
+        b.b_modifydate = NOW()
+        WHERE bs.b_idx = #{b_idx}
+    </update>
+
+    <update id="cancelS" parameterType="int">
+        UPDATE tb_seller_state ss
+        JOIN tb_seller s ON ss.s_idx = s.s_idx
+        SET
+        ss.s_cancel = 'Y',
+        ss.s_check = 'Y',
+        s.s_modifydate = NOW()
+        WHERE ss.s_idx = #{s_idx}
+    </update>
+
+    <select id="getAllBuyers" resultType="com.lunastore.vo.BuyerVO">
+        SELECT * FROM tb_buyer
+        JOIN tb_buyer_info ON tb_buyer.b_idx = tb_buyer_info.b_idx
+    </select>
+
+    <update id="updateBuyerAddress" parameterType="com.lunastore.vo.AddressVO">
+        UPDATE tb_buyer_address
+        SET
+        ba_zipcode = #{ba_zipcode},
+        ba_address = #{ba_address},
+        ba_restaddress = #{ba_restaddress},
+        ba_contact = #{ba_contact},
+        ba_check = #{ba_check}
+        WHERE b_idx = #{b_idx}
+        AND ba_check = 'Y';
+    </update>
+
+    <select id="getAdminBuyerDetails" parameterType="int" resultType="com.lunastore.vo.AdminBuyerDetailsVO">
+        SELECT
+        b.b_idx,
+        b.b_firstname,
+        b.b_lastname,
+        b.b_tel,
+        b.b_email,
+        b.b_birth,
+        b.b_pw,
+        bs.b_cancel,
+        bs.b_check,
+        bs.b_terms,
+        b.b_regdate,
+        b.b_lastlogindate,
+        b.b_pwmodifydate,
+        b.b_modifydate,
+        bi.b_gender,
+        bi.b_grade,
+        bi.b_nickname,
+        bi.b_profile,
+        bi.b_point,
+        ba.ba_address,
+        ba.ba_zipcode,
+        ba.ba_contact,
+        COUNT(DISTINCT bo.bo_idx) AS purchaseCount,
+        COALESCE(SUM(bos.bos_price * bos.bos_count), 0) AS totalPurchaseAmount
+        FROM
+        tb_buyer b
+        LEFT JOIN
+        tb_buyer_info bi ON b.b_idx = bi.b_idx
+        LEFT JOIN
+        tb_buyer_state bs ON b.b_idx = bs.b_idx
+        LEFT JOIN
+        tb_buyer_address ba ON b.b_idx = ba.b_idx AND ba.ba_check = 'Y'
+        LEFT JOIN
+        tb_buyer_order bo ON b.b_idx = bo.b_idx
+        LEFT JOIN
+        tb_buyer_order_state bos ON bo.bo_idx = bos.bo_idx AND bos.bos_state IN (1,2,3,5,10)
+        WHERE
+        b.b_idx = #{b_idx}
+        GROUP BY
+        b.b_idx,
+        bi.b_gender,
+        bi.b_grade,
+        bi.b_nickname,
+        bi.b_profile,
+        bi.b_point,
+        ba.ba_address,
+        ba.ba_zipcode,
+        ba.ba_contact,
+        bs.b_terms,
+        b.b_firstname,
+        b.b_lastname,
+        b.b_tel,
+        b.b_email,
+        b.b_birth,
+        b.b_pw,
+        b.b_regdate,
+        b.b_lastlogindate,
+        b.b_pwmodifydate,
+        b.b_modifydate,
+        bs.b_cancel,
+        bs.b_check
+    </select>
+
+    <select id="findByAdminBuyer" parameterType="int" resultType="com.lunastore.vo.AdminBuyerDetailsVO">
+        SELECT
+        b.b_idx,
+        b.b_firstname,
+        b.b_lastname,
+        b.b_tel,
+        b.b_email,
+        b.b_birth,
+        b.b_pw,
+        bs.b_cancel,
+        bs.b_check,
+        bs.b_terms,
+        b.b_regdate,
+        b.b_lastlogindate,
+        b.b_pwmodifydate,
+        b.b_modifydate,
+        bi.b_gender,
+        bi.b_grade,
+        bi.b_nickname,
+        bi.b_profile,
+        bi.b_point,
+        ba.ba_address,
+        ba.ba_zipcode,
+        ba.ba_contact,
+        COUNT(DISTINCT bo.bo_idx) AS purchaseCount,
+        COALESCE(SUM(bos.bos_price * bos.bos_count), 0) AS totalPurchaseAmount
+        FROM
+        tb_buyer b
+        LEFT JOIN
+        tb_buyer_info bi ON b.b_idx = bi.b_idx
+        LEFT JOIN
+        tb_buyer_state bs ON b.b_idx = bs.b_idx
+        LEFT JOIN
+        tb_buyer_address ba ON b.b_idx = ba.b_idx AND ba.ba_check = 'Y'
+        LEFT JOIN
+        tb_buyer_order bo ON b.b_idx = bo.b_idx
+        LEFT JOIN
+        tb_buyer_order_state bos ON bo.bo_idx = bos.bo_idx AND bos.bos_state IN (1,2,3,5,10)
+        WHERE
+        b.b_idx = #{b_idx}
+        GROUP BY
+        b.b_idx,
+        bi.b_gender,
+        bi.b_grade,
+        bi.b_nickname,
+        bi.b_profile,
+        bi.b_point,
+        ba.ba_address,
+        ba.ba_zipcode,
+        ba.ba_contact,
+        bs.b_terms,
+        b.b_firstname,
+        b.b_lastname,
+        b.b_tel,
+        b.b_email,
+        b.b_birth,
+        b.b_pw,
+        b.b_regdate,
+        b.b_lastlogindate,
+        b.b_pwmodifydate,
+        b.b_modifydate,
+        bs.b_cancel,
+        bs.b_check
+    </select>
+
+    <update id="updateAdminBuyerBasicInfo" parameterType="com.lunastore.vo.AdminBuyerDetailsVO">
+        UPDATE tb_buyer b
+        LEFT JOIN tb_buyer_state bs ON b.b_idx = bs.b_idx
+        LEFT JOIN tb_buyer_info bi ON b.b_idx = bi.b_idx
+        SET
+        b.b_firstname = #{b_firstname},
+        b.b_lastname = #{b_lastname},
+        b.b_tel = #{b_tel},
+        b.b_email = #{b_email},
+        b.b_birth = #{b_birth},
+        b.b_pw = #{b_pw},
+        b.b_modifydate = NOW(),
+        bs.b_cancel = #{b_cancel},
+        bs.b_check = #{b_check},
+        bs.b_terms = #{b_terms},
+        bi.b_gender = #{b_gender},
+        bi.b_grade = #{b_grade},
+        bi.b_nickname = #{b_nickname},
+        bi.b_point = #{b_point}
+        WHERE
+        b.b_idx = #{b_idx}
+    </update>
+
+    <update id="updateAdminBuyerAddress" parameterType="com.lunastore.vo.AddressVO">
+        UPDATE tb_buyer_address
+        SET
+        ba_address = #{address},
+        ba_zipcode = #{zipcode},
+        ba_restaddress = #{restAddress},
+        ba_contact = #{contact}
+        WHERE
+        b_idx = #{b_idx}
+        AND ba_check = 'Y'
+    </update>
+
+    <select id="getAllSellers" resultType="com.lunastore.vo.SellerVO">
+        SELECT s.*, si.s_storename, si.s_storeintro
+        FROM tb_seller s
+        JOIN tb_seller_info si ON s.s_idx = si.s_idx
+        JOIN tb_seller_state ss ON s.s_idx = ss.s_idx
+        WHERE ss.s_cancel = 'N'
+    </select>
+
+    <select id="getTotalSalesAmount" resultType="int">
+        SELECT IFNULL(SUM(bos.bos_price * bos.bos_count), 0) AS totalSales
+        FROM tb_buyer_order_state bos
+        JOIN tb_item i ON bos.i_idx = i.i_idx
+        JOIN tb_seller s ON i.s_idx = s.s_idx
+        JOIN tb_seller_state ss ON s.s_idx = ss.s_idx
+        WHERE bos.bos_state = 10
+        AND ss.s_cancel = 'N'
+    </select>
+
+    <select id="getStoreSalesDetails" resultType="com.lunastore.dto.StoreSalesDTO">
+        SELECT
+        s.s_idx,
+        si.s_storename AS storeName,
+        IFNULL(SUM(CASE WHEN bos.bos_state = 10 THEN bos.bos_price * bos.bos_count END), 0) AS settledAmount,
+        IFNULL(SUM(CASE WHEN bos.bos_state != 10 THEN bos.bos_price * bos.bos_count END), 0) AS unsettledAmount,
+        IFNULL(SUM(bos.bos_price * bos.bos_count), 0) AS totalAmount
+        FROM tb_seller s
+        JOIN tb_seller_info si ON s.s_idx = si.s_idx
+        LEFT JOIN tb_item i ON s.s_idx = i.s_idx
+        LEFT JOIN tb_buyer_order_state bos ON i.i_idx = bos.i_idx
+        GROUP BY s.s_idx, si.s_storename
+    </select>
+</mapper>

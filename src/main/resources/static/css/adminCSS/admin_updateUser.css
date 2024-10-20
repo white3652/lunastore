@@ -1,0 +1,222 @@
+.logo {
+	z-index: -5;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	left: 50px;
+	width: calc(100% - 100%);
+	background-size: 600px;
+	opacity: 0.12;
+	min-width: 1000px;
+}
+
+.admin_wrap {
+	width: 1250px;
+	overflow: hidden;
+}
+
+.admin_memberform {
+	display: block;
+}
+
+.admin_memberform_pop {
+	min-width: 1000px;
+	max-width: 1200px;
+}
+
+.admin_memberform_pop h1 {
+	margin-bottom: 20px;
+	padding: 0 20px;
+	min-width: 1000px;
+	height: 60px;
+	border-bottom: 2px solid #c3c3c3;
+	background: #fff;
+	font-size: 1.2em;
+	line-height: 5em;
+	display: block;
+}
+
+.admin_section {
+	margin: 0 20px;
+	margin-bottom: 50px m !important;
+	display: block;
+}
+
+.admin_section ul {
+	display: block;
+	margin: 0 0 10px 0;
+	height: 30px;
+	position: static;
+}
+
+.admin_section li {
+	padding: 0px 10px 0 10px;
+	float: left;
+	line-height: 25px;
+	display: inline;
+	border: 1px solid #c3c3c3
+}
+
+.admin_section a {
+	font-size: 12px;
+	color: #707070;
+	font-weight: bold;
+}
+
+.admin_section .admin_frm_title1 {
+	display: block;
+	padding: 0 0 7px 10px;
+	font-size: 14px;
+	font-weight: 600;
+	position: relative;
+}
+
+.admin_section .admin_frm_title2 {
+	margin-top: 25px;
+	display: block;
+	padding: 0 0 7px 10px;
+	font-size: 14px;
+	font-weight: 600;
+	position: relative;
+}
+
+.admin_section h3::after {
+	width: 4px;
+	height: 14px;
+	background-color: #F74848;
+	display: inline-block;
+	position: absolute;
+	left: 0;
+	top: 1px;
+	content: '';
+}
+
+.admin_frm {
+	border-top: 2px solid #c3c3c3;
+	font-size: 13px;
+}
+
+.admin_tb_form {
+	width: 100%;
+	min-width: 600px;
+	table-layout: fixed;
+	outline: 0;
+	border-collapse: collapse;
+}
+
+colgroup {
+	display: table-column-group;
+}
+
+.w130 {
+	width: 130px !important;
+}
+
+col {
+	display: table-column;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+input {
+	vertical-align: middle;
+}
+
+.admin_tb_form tbody {
+	display: table-row-group;
+	vertical-align: middle;
+}
+
+.admin_tb_form input {
+	height: 25px;
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px solid #b4b2b2;
+}
+
+.admin_tb_form td {
+	padding: 9px 14px;
+	height: 24px;
+	border-bottom: 1px solid #e4e5e7;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.admin_tb_form td label {
+	text-align: left;
+	vertical-align: middle;
+}
+
+.admin_tb_form tr {
+	display: table-row;
+	vertical-align: middle;
+	border-bottom: 1px solid #e4e5e7;
+}
+
+.admin_tb_form th {
+	padding: 8px 14px;
+	height: 23px;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.admin_leave_btn {
+	cursor: pointer;
+	margin-left: 5px;
+	padding: 0 5px 0 5px;
+	height: 25px;
+	border: none;
+	background-color: #F74848;
+	color: #ffffff;
+}
+
+.admin_address_btn {
+	text-align: center;
+    color: #F74848;
+    display: inline-block;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+    width: 60px;
+    height: 28px;
+}
+
+.admin_btn2_box {
+	margin-top: 50px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.admin_save_btn1 {
+	cursor: pointer;
+	width: 120px;
+	height: 40px;
+	color: #ffffff;
+	background-color: #3d3d3d;
+	font-size: 14px;
+	font-weight: bold;
+	border: 1px solid black;
+	transition: 0.5s;
+}
+
+.admin_save_btn1:hover {
+	background-color: #000000;
+}
+
+.admin_close_btn2 {
+	cursor: pointer;
+	width: 120px;
+	height: 40px;
+	color: #111111;
+	background-color: #ffffff;
+	font-size: 14px;
+	font-weight: bold;
+	transition: 0.5s;
+	border: 1px solid black;
+}
+
+.admin_close_btn2:hover {
+	background-color: #F74848;
+}

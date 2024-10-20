@@ -1,6 +1,7 @@
 package com.lunastore.controller;
 
 import com.lunastore.service.GlobalService;
+import com.lunastore.service.OrderService;
 import com.lunastore.vo.AddressVO;
 import com.lunastore.vo.BuyerVO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ public class BuyerController {
 
     private final BuyerService buyerService;
     private final GlobalService globalService;
+    private final OrderService orderService;
 
     @GetMapping("/join")
     public String buyerJoin() {
@@ -118,7 +120,24 @@ public class BuyerController {
 
     @PostMapping("/buyerInsertAddressProcess")
     public String buyerInsertAddressProcess(AddressVO addressVO, RedirectAttributes ra) {
-        if (buyerService.insertAddress(addressVO) == 1) {
+        int result = 0;
+        if (addressVO.getBa_idx() != null) {
+            // ba_idx가 존재하면 주소 업데이트
+            try {
+                orderService.updateAddress(addressVO);
+                result = 1; // 업데이트 성공
+            } catch (Exception e) {
+                // 업데이트 실패 시 처리
+                e.printStackTrace();
+                // 에러 페이지로 이동하거나 에러 메시지를 표시할 수 있습니다.
+                return "buyer/user/buyerServiceInfo";
+            }
+        } else {
+            // ba_idx가 없으면 새로운 주소 추가
+            result = buyerService.insertAddress(addressVO);
+        }
+
+        if (result == 1) {
             ra.addAttribute("b_idx", addressVO.getB_idx());
             return "redirect:/buyer/buyerServiceInfo";
         }
@@ -255,14 +274,13 @@ public class BuyerController {
 
     @PostMapping("/emailCheckProcess")
     @ResponseBody
-    public int emailCheckProcess(@RequestParam String b_email) {
+    public int emailCheckProcess(@RequestParam("b_email") String b_email) {
         return buyerService.emailCheck(b_email);
     }
 
     @PostMapping("/telCheckProcess")
     @ResponseBody
     public int telCheckProcess(@RequestParam String b_tel) {
-        System.out.println("telCheckProcess 호출됨: " + b_tel);
         return buyerService.telCheck(b_tel);
     }
 

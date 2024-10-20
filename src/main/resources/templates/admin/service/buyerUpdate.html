@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{admin.memberUpdate}">회원정보수정</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/global.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/icon/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/adminCSS/admin_updateUser.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:src="@{/js/admin/daumMapAPI.js}"></script>
+</head>
+<body>
+<div class="admin_wrap">
+    <span class="logo"></span>
+    <form th:action="@{'/admin/buyers/' + ${adminBuyer.b_idx} + '/update'}" method="post">
+        <div th:object="${adminBuyer}">
+            <input type="hidden" th:value="${adminBuyer.b_idx}" name="b_idx"/>
+            <div class="admin_memberform_pop">
+                <h1 th:text="#{admin.memberUpdate}">회원정보수정</h1>
+                <section class="admin_section">
+                    <ul>
+                        <li><a href="#" th:text="#{admin.memberUpdate}">회원정보수정</a></li>
+                    </ul>
+                    <h3 class="admin_frm_title1" th:text="#{admin.basicInfo}">기본정보</h3>
+                    <div class="admin_frm">
+                        <table class="admin_tb_form">
+                            <colgroup>
+                                <col class="w130">
+                                <col>
+                                <col class="w130">
+                                <col>
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th scope="row" th:text="#{admin.nickname}">닉네임</th>
+                                <td>
+                                    <input type="text" th:field="*{b_nickname}" class="admin_frm_input">
+                                    <button type="button" id="Cancel_btn" class="admin_leave_btn"
+                                            th:onclick="'cancelBuyer(' + ${adminBuyer.b_idx} + ')'" th:text="#{admin.withdrawal}">
+                                        회원탈퇴
+                                    </button>
+                                    <div th:if="${#fields.hasErrors('b_nickname')}" class="error">
+                                        <p th:errors="*{b_nickname}" th:text="#{admin.errorNickname}">닉네임 에러</p>
+                                    </div>
+                                </td>
+                                <th scope="row" th:text="#{login.id}">아이디</th>
+                                <td>
+                                    <span th:text="*{b_email}">이메일</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" th:text="#{admin.password}">비밀번호</th>
+                                <td>
+                                    <input type="text" th:field="*{b_pw}" class="admin_frm_input">
+                                    <div th:if="${#fields.hasErrors('b_pw')}" class="error">
+                                        <p th:errors="*{b_pw}" th:text="#{admin.errorPassword}">비밀번호 에러</p>
+                                    </div>
+                                </td>
+                                <th scope="row" th:text="#{admin.birth}">생년월일</th>
+                                <td>
+                                    <input type="text" th:field="*{b_birth}" class="admin_frm_input">
+                                    <div th:if="${#fields.hasErrors('b_birth')}" class="error">
+                                        <p th:errors="*{b_birth}" th:text="#{admin.errorBirth}">생년월일 에러</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" th:text="#{admin.email}">E-Mail</th>
+                                <td>
+                                    <input type="email" th:field="*{b_email}" class="admin_frm_input">
+                                    <div th:if="${#fields.hasErrors('b_email')}" class="error">
+                                        <p th:errors="*{b_email}">이메일 에러</p>
+                                    </div>
+                                </td>
+                                <th scope="row" th:text="#{admin.phoneNumber}">전화번호</th>
+                                <td>
+                                    <input type="text" th:field="*{b_tel}" class="admin_frm_input">
+                                    <div th:if="${#fields.hasErrors('b_tel')}" class="error">
+                                        <p th:errors="*{b_tel}" th:text="#{admin.errorPhoneNumber}">전화번호 에러</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" th:text="#{admin.address}">주소</th>
+                                <td colspan="3">
+                                    <div>
+                                        <input type="text" th:field="*{ba_zipcode}" class="frm_input" size="8" maxlength="5" id="zonecodeInput" readonly>
+                                        <p class="mart5">
+                                            <input type="text" th:field="*{ba_address}" class="frm_input" size="60" id="addressInput" readonly>
+                                            <span th:text="#{admin.baseAddress}">기본주소</span>
+                                        </p>
+                                        <p class="mart5">
+                                            <input type="text" th:field="*{ba_restaddress}" class="frm_input" size="60" readonly>
+                                            <span th:text="#{admin.detailAddress}">상세주소</span>
+                                        </p>
+                                        <div th:if="${#fields.hasErrors('ba_zipcode')}" class="error">
+                                            <p th:errors="*{ba_zipcode}" th:text="#{admin.errorZipcode}">우편번호 에러</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" th:text="#{admin.agreeToReceiveAds}">광고수신동의</th>
+                                <td>
+                                    <input type="radio" th:field="*{b_check}" value="Y" id="admin_mb_certify_hp">
+                                    <label for="admin_mb_certify_hp" th:text="#{admin.agree}">동의</label>
+                                    <input type="radio" th:field="*{b_check}" value="N" id="admin_mb_certify_email">
+                                    <label for="admin_mb_certify_email" th:text="#{admin.disagree}">비동의</label>
+                                    <div th:if="${#fields.hasErrors('b_check')}" class="error">
+                                        <p th:errors="*{b_check}" th:text="#{admin.errorCheck}">본인확인방법 에러</p>
+                                    </div>
+                                </td>
+                                <th scope="row" th:text="#{admin.gender}">성별</th>
+                                <td>
+                                    <input type="radio" th:field="*{b_gender}" value="M" id="admin_gender1">
+                                    <label for="admin_gender1" th:text="#{admin.male}">남자</label>
+                                    <input type="radio" th:field="*{b_gender}" value="F" id="admin_gender2">
+                                    <label for="admin_gender2" th:text="#{admin.female}">여자</label>
+                                    <input type="radio" th:field="*{b_gender}" value="D" id="admin_gender3">
+                                    <label for="admin_gender3" th:text="#{admin.notSelected}">미선택</label>
+                                    <div th:if="${#fields.hasErrors('b_gender')}" class="error">
+                                        <p th:errors="*{b_gender}" th:text="#{admin.errorGender}">성별 에러</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" th:text="#{admin.grade}">등급</th>
+                                <td>
+                                    <select th:field="*{b_grade}" id="admin_mb_grade">
+                                        <option value="" disabled selected th:text="#{admin.select}">선택</option>
+                                        <option th:each="grade : ${grades}"
+                                                th:value="${grade.getCode()}"
+                                                th:text="${grade}">선택</option>
+                                    </select>
+                                    <div th:if="${#fields.hasErrors('b_grade')}" class="error">
+                                        <p th:errors="*{b_grade}" th:text="#{admin.errorGrade}">등급 에러</p>
+                                    </div>
+                                </td>
+                                <th scope="row" th:text="#{admin.point}">포인트</th>
+                                <td><b th:text="*{b_point}">0</b> Point</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 class="admin_frm_title2" th:text="#{admin.otherInfo}">기타정보</h3>
+                    <div class="admin_frm">
+                        <table class="admin_tb_form">
+                            <colgroup>
+                                <col class="w130">
+                                <col>
+                                <col class="w130">
+                                <col>
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th scope="row" th:text="#{admin.mailReception}">메일수신</th>
+                                <td>
+                                    <input type="radio" th:field="*{b_terms}" value="Y" id="admin_mb_mail_yes">
+                                    <label for="admin_mb_mail_yes" th:text="#{admin.yes}">예</label>
+                                    <input type="radio" th:field="*{b_terms}" value="N" id="admin_mb_mail_no">
+                                    <label for="admin_mb_mail_no" th:text="#{admin.no}">아니오</label>
+                                    <div th:if="${#fields.hasErrors('b_terms')}" class="error">
+                                        <p th:errors="*{b_terms}" th:text="#{admin.errorTerms}">메일수신 에러</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" th:text="#{admin.registrationDate}">회원가입일</th>
+                                <td th:text="${#dates.format(adminBuyer.b_regdate, 'yyyy-MM-dd')}">2024-01-01</td>
+                                <th scope="row" th:text="#{admin.lastLoginDate}">최근접속일</th>
+                                <td th:text="${#dates.format(adminBuyer.b_lastlogindate, 'yyyy-MM-dd')}">2024-01-01</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" th:text="#{admin.purchaseCount}">구매횟수</th>
+                                <td><span th:text="${adminBuyer.purchaseCount}">0</span> <span th:text="#{admin.times}">회</span></td>
+                                <th scope="row" th:text="#{admin.totalPurchaseAmount}">총구매금액</th>
+                                <td><span th:text="${adminBuyer.totalPurchaseAmount}">0</span> <span th:text="#{admin.won}">원</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="admin_btn2_box">
+                        <button type="submit" class="admin_save_btn1" th:text="#{admin.save}">저장</button>
+                        <button type="button" class="admin_close_btn2" onclick="window.close()" th:text="#{admin.close}">닫기</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </form>
+    <form id="cancelForm" th:action="@{'/admin/buyers/' + ${adminBuyer.b_idx} + '/cancel'}" method="post" style="display:none;">
+    </form>
+
+    <script th:inline="javascript">
+        var messages = {
+            confirmWithdrawal: /*[[#{admin.confirmWithdrawal}]]*/ '정말로 회원탈퇴 하시겠습니까?',
+            withdrawalComplete: /*[[#{admin.withdrawalComplete}]]*/ '회원탈퇴가 완료되었습니다.',
+            withdrawalFailed: /*[[#{admin.withdrawalFailed}]]*/ '회원탈퇴에 실패했습니다.'
+        };
+
+        function cancelBuyer(b_idx) {
+            if (confirm(messages.confirmWithdrawal)) {
+                $.ajax({
+                    url: '/admin/buyers/' + b_idx + '/cancel',
+                    type: 'POST',
+                    success: function(response) {
+                        if(response.success){
+                            alert(messages.withdrawalComplete);
+                            window.location.href = '/admin/close';
+                        } else {
+                            alert(messages.withdrawalFailed + ": " + response.message);
+                            if(response.adminBuyer){
+                                window.location.reload();
+                            }
+                        }
+                    },
+                    error: function() {
+                        alert(messages.withdrawalFailed);
+                    }
+                });
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

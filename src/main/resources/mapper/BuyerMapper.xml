@@ -34,12 +34,12 @@
         WHERE b_idx = #{b_idx}
     </select>
 
-    <select id="getPassword" parameterType="string" resultType="string">
+    <select id="getPassword" parameterType="String" resultType="string">
         select b_pw from tb_buyer
         where b_email = #{b_email}
     </select>
 
-    <select id="login" parameterType="string" resultType="buyerVO">
+    <select id="login" parameterType="String" resultType="buyerVO">
         SELECT *
         FROM tb_buyer b
         JOIN tb_buyer_state bs ON b.b_idx = bs.b_idx
@@ -136,19 +136,19 @@
         WHERE b.b_idx = #{b_idx};
     </update>
 
-    <select id="nicknameCheck" parameterType="string" resultType="int">
+    <select id="nicknameCheck" parameterType="String" resultType="int">
         select count(*)
         from tb_buyer_info
         where b_nickname = #{b_nickname}
     </select>
 
-    <select id="emailCheck" parameterType="string" resultType="int">
+    <select id="emailCheck" parameterType="String" resultType="int">
         select count(*)
         from tb_buyer
         where b_email = #{b_email}
     </select>
 
-    <select id="telCheck" parameterType="string" resultType="int">
+    <select id="telCheck" parameterType="String" resultType="int">
         select count(*)
         from tb_buyer
         where b_tel = #{b_tel}
